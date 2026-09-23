@@ -67,7 +67,7 @@ def main():
                            for i, l in enumerate(script["lines"]))
         telegram.send_video(video, f"OUTPOST DRAFT {script['stamp']}\n{script['headline']}")
         telegram.send_text("SCRIPT\n" + review + "\n\nCAPTION\n" + cap +
-                           "\n\nApprove or reject in GitHub > Actions.")
+                           "\n\nPost it if you like it. Caption above, ready to paste.")
     # expose paths to GitHub Actions
     gh = config.ROOT / "out" / "latest.txt"
     gh.write_text(str(out))
