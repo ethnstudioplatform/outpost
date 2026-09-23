@@ -1,0 +1,40 @@
+name: OUTPOST voice samples
+
+# Run from the Actions tab. Sends each female voice option to Telegram so you can pick one.
+on:
+  workflow_dispatch:
+
+jobs:
+  samples:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: OUTPOST_UPLOAD
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - run: pip install -r requirements.txt
+      - name: Render and send samples
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          mkdir -p assets/voices out
+          LINE="Outpost live. The BBC reports new strikes near the front line overnight. Outpost will keep monitoring."
+          for V in en_GB-cori-high en_GB-jenny_dioco-medium en_GB-alba-medium en_GB-southern_english_female-low en_US-amy-medium en_US-kristin-medium; do
+            LANGR=${V%%-*}; REST=${V#*-}; Q=${REST##*-}; N=${REST%-*}; L=${LANGR%%_*}
+            B=https://huggingface.co/rhasspy/piper-voices/resolve/main/$L/$LANGR/$N/$Q
+            curl -fsSL -o assets/voices/$V.onnx $B/$V.onnx && curl -fsSL -o assets/voices/$V.onnx.json $B/$V.onnx.json || { echo "skip $V"; continue; }
+            OUTPOST_VOICE=$V python -c "
+          import sys; from pathlib import Path
+          from outpost import voice
+          voice.speak(sys.argv[1], Path('out/$V.wav'))" "$LINE"
+            ffmpeg -loglevel error -y -i out/$V.wav -c:a libmp3lame -b:a 128k out/$V.mp3
+            curl -s -F chat_id="$TELEGRAM_CHAT_ID" -F title="$V" -F caption="VOICE: $V" \
+              -F audio=@out/$V.mp3 "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendAudio" > /dev/null
+            echo "sent $V"
+          done
