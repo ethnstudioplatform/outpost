@@ -1,0 +1,125 @@
+name: OUTPOST transmission
+
+on:
+  schedule:
+    - cron: "0 7 * * *"    # 08:00 UK summer time
+    - cron: "0 17 * * *"   # 18:00 UK summer time
+  workflow_dispatch:
+    inputs:
+      demo:
+        description: "Use placeholder test data"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    working-directory: OUTPOST_UPLOAD
+
+concurrency:
+  group: outpost
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      made: ${{ steps.run.outputs.made }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: OUTPOST_UPLOAD/requirements.txt
+
+      - name: System packages
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg espeak-ng
+
+      - name: Python packages
+        run: pip install -r requirements.txt
+
+      - name: Cache font + voice
+        uses: actions/cache@v4
+        with:
+          path: |
+            OUTPOST_UPLOAD/assets/fonts/VT323-Regular.ttf
+            OUTPOST_UPLOAD/assets/voices
+          key: outpost-assets-v1
+
+      - name: Fetch font + voice
+        run: |
+          mkdir -p assets/fonts assets/voices
+          [ -f assets/fonts/VT323-Regular.ttf ] || curl -fsSL -o assets/fonts/VT323-Regular.ttf \
+            https://github.com/google/fonts/raw/main/ofl/vt323/VT323-Regular.ttf
+          V=en_GB-alan-medium
+          B=https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_GB/alan/medium
+          [ -f assets/voices/$V.onnx ] || curl -fsSL -o assets/voices/$V.onnx $B/$V.onnx
+          [ -f assets/voices/$V.onnx.json ] || curl -fsSL -o assets/voices/$V.onnx.json $B/$V.onnx.json
+
+      - name: Generate video
+        id: run
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          RELIEFWEB_APPNAME: ${{ secrets.RELIEFWEB_APPNAME }}
+        run: |
+          if [ "${{ inputs.demo }}" = "true" ]; then python run.py --demo; else python run.py; fi
+          if [ -f out/latest.txt ]; then
+            echo "made=true" >> $GITHUB_OUTPUT
+            echo "DIR=$(cat out/latest.txt)" >> $GITHUB_ENV
+          else
+            echo "made=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload draft
+        if: steps.run.outputs.made == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: outpost-draft
+          path: ${{ env.DIR }}
+          retention-days: 7
+
+      - name: Remember used headlines
+        if: steps.run.outputs.made == 'true' && inputs.demo != true
+        run: |
+          git config user.name "outpost-bot"
+          git config user.email "outpost-bot@users.noreply.github.com"
+          git add state/seen.json
+          git diff --cached --quiet || (git commit -m "state: seen headlines" && git push)
+
+  # Human check. This job waits until you press Approve in GitHub (web or mobile app).
+  approve:
+    needs: render
+    if: needs.render.outputs.made == 'true'
+    runs-on: ubuntu-latest
+    environment: publish
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: outpost-draft
+          path: draft
+
+      - name: Send approved file to phone
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          if [ -n "$TELEGRAM_BOT_TOKEN" ]; then
+            curl -s -F chat_id="$TELEGRAM_CHAT_ID" \
+              -F caption="APPROVED. Ready to post. Caption follows." \
+              -F video=@draft/outpost.mp4 \
+              "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendVideo" > /dev/null
+            curl -s --data-urlencode chat_id="$TELEGRAM_CHAT_ID" \
+              --data-urlencode text@draft/caption.txt \
+              "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" > /dev/null
+          fi
+          echo "Approved. Auto-upload to TikTok / Reels / Shorts is step 2."
