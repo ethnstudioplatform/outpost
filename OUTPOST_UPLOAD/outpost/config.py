@@ -46,11 +46,11 @@ GDELT_TIMESPAN = os.getenv("OUTPOST_TIMESPAN", "12h")
 # ---- script writer ----
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 ANTHROPIC_MODEL = os.getenv("OUTPOST_MODEL", "claude-haiku-4-5")
-MAX_LINES = 7          # narrated lines per video
+MAX_LINES = 8          # narrated lines per video
 MAX_LINE_CHARS = 110   # keeps each line readable on screen
 
 # ---- voice ----
-PIPER_VOICE = os.getenv("OUTPOST_VOICE", "en_GB-alan-medium")
+PIPER_VOICE = os.getenv("OUTPOST_VOICE", "en_GB-cori-high")
 
 # ---- telegram preview ----
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
