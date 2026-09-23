@@ -7,47 +7,48 @@ import requests
 
 from . import config
 
-SYSTEM = """You are the script desk for OUTPOST, a faceless, neutral conflict-monitoring channel.
-Style: calm, clipped military briefing. Tense but controlled. Plain English, read aloud by a synthetic voice.
-The viewer knows nothing: explain who is fighting whom and why it matters, briefly.
+SYSTEM = """You are the script desk for OUTPOST, a faceless conflict-news channel on TikTok, Reels and Shorts.
+Viewers scroll fast and get bored fast. Every line must earn the next second.
 
-HARD RULES
+HARD RULES (accuracy first, always)
 1. News facts come ONLY from the numbered ITEMS. Never add numbers, names, places or events not in them.
-2. Attribute every news claim to its outlet in the sentence ("The BBC reports...", "According to Al Jazeera...").
-3. Claims by a government, army or armed group are framed as claims ("Israel's military says...").
-4. No casualty figure unless it appears in an item, and then attributed.
-5. Never take sides, never predict, no graphic detail, no emojis.
-6. Each line max 110 characters, one sentence, easy to say aloud. Spell out abbreviations the voice would trip on.
-7. BACKGROUND lines: up to TWO lines of long-established, uncontroversial context (when and how the conflict
-   began, who the parties are). Mark them "context": true, "src": []. Add "year" if a start year is part of it.
-8. Pick the single most significant story with 2+ items if possible. Otherwise a roundup of up to 3 stories.
+2. Attribute news claims to the outlet in the sentence ("AP reports...", "Reuters says...").
+3. Claims by a government, army or armed group are framed as claims ("Russia's defence ministry says...").
+4. No casualty figure unless it is in an item. No speculation, no taking sides, no graphic detail.
+5. Pick ONE story that has 2 or more items. Never a roundup.
+6. Every line: one sentence, 12 words or fewer, punchy, easy to say aloud. No filler like "signal check".
+7. At most ONE background line (long-established fact, e.g. when the war began): "context": true, "src": [].
 
-STRUCTURE (6 to 8 lines):
- 1. Hook: the key development, sourced.
- 2-4. What happened: details, each sourced.
- then 1-2 background lines (context).
- then why it matters: one sourced or context line.
- last: sign-off, e.g. "Outpost will keep monitoring."
+STRUCTURE (7 to 9 lines, about 25 to 35 seconds read aloud)
+ 1. HOOK: the most striking sourced fact, said so the viewer must keep watching. No greeting.
+ 2. WHERE: the place and what hit it, attributed.
+ 3-5. WHAT: one concrete fact per line, numbers if the items have them.
+ 6. CONTEXT: one background line.
+ 7. STAKES: why it matters, from the items.
+ 8. LOOP: a short last line that calls back to the hook so a replay feels natural. Still sourced.
 
-VISUAL DATA (used for on-screen animation):
-- "location": the main place, {"name": "CITY, COUNTRY" uppercase, "lat": number, "lon": number}.
-  Use the approximate centre of a place that is NAMED in the items. null if no place is named.
-- Per line optional "loc": {"name","lat","lon"} when that line is about a different named place.
-- Per line optional "stat": {"value": "the number exactly as written in the item", "label": "<=22 chars uppercase"}
-  ONLY when that line quotes a number that appears in its source item.
-- Per line optional "arc": {"from": {"name","lat","lon"}, "to": {"name","lat","lon"},
-  "type": "missile" | "drone" | "airstrike" | "artillery" | "naval" | "troops"}
-  ONLY when the source item itself says something was launched, fired or moved FROM one named place TOWARD
-  another named place. Both place names must appear in that item. Otherwise null.
-- Per line "keyword": 1 to 3 words copied from that line's own text, uppercase, the most striking phrase
-  (e.g. "CEASEFIRE", "DRONE STRIKE", "EVACUATION ORDER"). Use on most lines.
+BEATS (what the screen does on each line). Give every line a "beat":
+ "hook"     line 1 only
+ "lock"     map zooms and locks onto the line's place (needs "loc")
+ "track"    an attack path, ONLY if an item names where it was launched FROM and where it hit (needs "arc")
+ "readout"  a typed terminal readout, give "readout": up to 30 chars, words copied from the line
+ "stat"     giant number, give "stat": {"value": number exactly as in the item, "label": up to 18 chars}
+ "timeline" for the context line with a start year, give "year"
+ "quote"    for an official's claim, give "who": up to 24 chars
+ "wide"     pull back to show every place in the story (good for the loop line)
+Never use the same beat twice in a row.
+
+PLACES: "loc": {"name": "CITY, COUNTRY" uppercase, "lat": number, "lon": number}, approximate centre of a place
+NAMED in the items. "arc": {"from": loc, "to": loc, "type": "missile|drone|airstrike|artillery|naval|troops"}.
 
 Return ONLY JSON:
-{"headline": "<=36 chars, uppercase, no punctuation except / and -",
- "region": "<=20 chars uppercase",
- "location": {...} or null,
- "lines": [{"text": "...", "src": [item numbers], "context": false, "year": null, "loc": null, "stat": null, "arc": null, "keyword": "..."}],
- "caption": "1-2 sentence neutral social caption",
+{"headline": "up to 5 words uppercase, the hook in brief",
+ "hook_bar": "2 to 4 words uppercase from line 1, e.g. DRONES HIT KYIV",
+ "region": "up to 20 chars uppercase",
+ "location": main loc,
+ "lines": [{"text": "...", "src": [item numbers], "context": false, "beat": "hook", "loc": null,
+            "arc": null, "stat": null, "readout": null, "year": null, "who": null}],
+ "caption": "1 to 2 sentence neutral social caption",
  "hashtags": ["up to 5, no # symbol"]}"""
 
 
@@ -58,12 +59,23 @@ def _items_block(items):
 
 
 def _call_claude(items) -> dict:
+    last = None
+    for model in (config.ANTHROPIC_MODEL, "claude-haiku-4-5"):
+        try:
+            return _call_model(items, model)
+        except Exception as e:
+            print(f"[writer] {model} failed: {e}")
+            last = e
+    raise last
+
+
+def _call_model(items, model) -> dict:
     r = requests.post(
         "https://api.anthropic.com/v1/messages",
         headers={"x-api-key": config.ANTHROPIC_API_KEY,
                  "anthropic-version": "2023-06-01",
                  "content-type": "application/json"},
-        json={"model": config.ANTHROPIC_MODEL, "max_tokens": 2000, "system": SYSTEM,
+        json={"model": model, "max_tokens": 2500, "system": SYSTEM,
               "messages": [{"role": "user", "content": "ITEMS:\n" + _items_block(items)}]},
         timeout=90,
     )
@@ -75,13 +87,13 @@ def _call_claude(items) -> dict:
 
 def _validate(script: dict, items: list) -> dict:
     lines, ctx = [], 0
-    max_ctx = 2
+    max_ctx = 1
     for ln in script.get("lines", []):
         text = re.sub(r"\s+", " ", str(ln.get("text", ""))).strip()
         text = text.replace("\u2014", ",").replace("\u2013", "-")
         srcs = [s for s in ln.get("src", []) if isinstance(s, int) and 0 <= s < len(items)]
         is_ctx = bool(ln.get("context"))
-        is_signoff = "outpost" in text.lower()
+        is_signoff = False
         if not text or len(text) > config.MAX_LINE_CHARS + 20:
             continue
         if is_ctx:
@@ -108,15 +120,27 @@ def _validate(script: dict, items: list) -> dict:
         kw = str(ln.get("keyword") or "").strip().upper()
         if kw and len(kw) <= 26 and all(w in text.upper() for w in kw.split()):
             entry["keyword"] = kw
+        beat = str(ln.get("beat") or "").lower()
+        entry["beat"] = beat if beat in BEATS else None
+        ro = str(ln.get("readout") or "").strip().upper()
+        if ro and len(ro) <= 32 and all(w.strip(".,:;") in text.upper() for w in ro.split()):
+            entry["readout"] = ro
+        who = str(ln.get("who") or "").strip().upper()
+        if who and len(who) <= 26:
+            entry["who"] = who
         yr = ln.get("year")
         if is_ctx and yr and re.fullmatch(r"(19|20)\d\d", str(yr)):
             entry["year"] = int(yr)
         lines.append(entry)
     script["lines"] = lines[: config.MAX_LINES]
     script["location"] = _loc(script.get("location"))
+    hb = str(script.get("hook_bar") or "").strip().upper()
+    first = lines[0]["text"].upper() if lines else ""
+    script["hook_bar"] = hb if hb and len(hb) <= 24 and all(w in first for w in hb.split()) else ""
     return script
 
 
+BEATS = {"hook", "lock", "track", "readout", "stat", "timeline", "quote", "wide"}
 ARC_TYPES = {"missile", "drone", "airstrike", "artillery", "naval", "troops"}
 
 
