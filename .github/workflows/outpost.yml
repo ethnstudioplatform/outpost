@@ -99,33 +99,3 @@ jobs:
           git add state/seen.json
           git diff --cached --quiet || (git commit -m "state: seen headlines" && git push)
 
-  # Human check. This job waits until you press Approve in GitHub (web or mobile app).
-  approve:
-    needs: render
-    if: needs.render.outputs.made == 'true'
-    runs-on: ubuntu-latest
-    environment: publish
-    defaults:
-      run:
-        working-directory: .
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: outpost-draft
-          path: draft
-
-      - name: Send approved file to phone
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: |
-          if [ -n "$TELEGRAM_BOT_TOKEN" ]; then
-            curl -s -F chat_id="$TELEGRAM_CHAT_ID" \
-              -F caption="APPROVED. Ready to post. Caption follows." \
-              -F video=@draft/outpost.mp4 \
-              "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendVideo" > /dev/null
-            curl -s --data-urlencode chat_id="$TELEGRAM_CHAT_ID" \
-              --data-urlencode text@draft/caption.txt \
-              "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" > /dev/null
-          fi
-          echo "Approved. Auto-upload to TikTok / Reels / Shorts is step 2."
