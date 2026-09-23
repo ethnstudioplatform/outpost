@@ -1,0 +1,6 @@
+[
+  {"title": "TEST SIGNAL ALPHA: placeholder headline used to check layout and timing", "url": "https://example.com/test-alpha", "domain": "example.com", "date": "20260923T120000Z", "country": "TEST", "source": "DEMO"},
+  {"title": "TEST SIGNAL BRAVO: second placeholder headline, not real news", "url": "https://example.com/test-bravo", "domain": "example.com", "date": "20260923T120500Z", "country": "TEST", "source": "DEMO"},
+  {"title": "TEST SIGNAL CHARLIE: third placeholder headline for ticker length", "url": "https://example.com/test-charlie", "domain": "example.com", "date": "20260923T121000Z", "country": "TEST", "source": "DEMO"},
+  {"title": "TEST SIGNAL DELTA: fourth placeholder headline for wrap testing on long lines of text", "url": "https://example.com/test-delta", "domain": "example.com", "date": "20260923T121500Z", "country": "TEST", "source": "DEMO"}
+]
