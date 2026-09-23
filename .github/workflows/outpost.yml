@@ -43,23 +43,29 @@ jobs:
       - name: Python packages
         run: pip install -r requirements.txt
 
-      - name: Cache font + voice
+      - name: Cache font, voice, map
         uses: actions/cache@v4
         with:
           path: |
             OUTPOST_UPLOAD/assets/fonts/VT323-Regular.ttf
             OUTPOST_UPLOAD/assets/voices
-          key: outpost-assets-v1
+            OUTPOST_UPLOAD/assets/land-110m.json
+          key: outpost-assets-v2-${{ vars.OUTPOST_VOICE || 'en_GB-cori-high' }}
 
-      - name: Fetch font + voice
+      - name: Fetch font, voice, map
+        env:
+          V: ${{ vars.OUTPOST_VOICE || 'en_GB-cori-high' }}
         run: |
           mkdir -p assets/fonts assets/voices
           [ -f assets/fonts/VT323-Regular.ttf ] || curl -fsSL -o assets/fonts/VT323-Regular.ttf \
             https://github.com/google/fonts/raw/main/ofl/vt323/VT323-Regular.ttf
-          V=en_GB-alan-medium
-          B=https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_GB/alan/medium
+          [ -f assets/land-110m.json ] || curl -fsSL -o assets/land-110m.json \
+            https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json
+          LANGR=${V%%-*}; REST=${V#*-}; Q=${REST##*-}; N=${REST%-*}; L=${LANGR%%_*}
+          B=https://huggingface.co/rhasspy/piper-voices/resolve/main/$L/$LANGR/$N/$Q
           [ -f assets/voices/$V.onnx ] || curl -fsSL -o assets/voices/$V.onnx $B/$V.onnx
           [ -f assets/voices/$V.onnx.json ] || curl -fsSL -o assets/voices/$V.onnx.json $B/$V.onnx.json
+          echo "OUTPOST_VOICE=$V" >> $GITHUB_ENV
 
       - name: Generate video
         id: run
