@@ -1,0 +1,78 @@
+{
+ "headline": "TEST TRANSMISSION",
+ "region": "TEST REGION",
+ "location": {
+  "name": "TEST CITY, UKRAINE",
+  "lat": 50.0,
+  "lon": 36.2
+ },
+ "lines": [
+  {
+   "text": "Test signal. This is a placeholder hook line for layout checks.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "keyword": "TEST SIGNAL"
+  },
+  {
+   "text": "Example outlet reports a second placeholder event at the test site.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "arc": {
+    "from": {
+     "name": "ORIGIN TEST, RUSSIA",
+     "lat": 51.5,
+     "lon": 39.0
+    },
+    "to": {
+     "name": "TEST CITY, UKRAINE",
+     "lat": 50.0,
+     "lon": 36.2
+    },
+    "type": "missile"
+   },
+   "keyword": "SECOND PLACEHOLDER"
+  },
+  {
+   "text": "A test source lists 1,200 placeholder units in this demo data.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "stat": {
+    "value": "1,200",
+    "label": "TEST UNITS"
+   }
+  },
+  {
+   "text": "Background line: this demo conflict timeline starts in a sample year.",
+   "src": [],
+   "context": true,
+   "year": 2022
+  },
+  {
+   "text": "A second test report places another event further south.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "loc": {
+    "name": "TEST SITE 2, TURKEY",
+    "lat": 39.0,
+    "lon": 35.0
+   }
+  },
+  {
+   "text": "Outpost will keep monitoring.",
+   "src": [],
+   "context": false
+  }
+ ],
+ "caption": "Test transmission with placeholder data.",
+ "hashtags": [
+  "test"
+ ]
+}
