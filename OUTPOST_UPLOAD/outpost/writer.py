@@ -32,6 +32,7 @@ Between 4 and 7 lines. First line is the hook. Last line is a sign-off like "Out
 
 def _items_block(items):
     return "\n".join(f"[{i}] ({it['domain']}, {it['date']}) {it['title']}"
+                     + (f" | {it['summary']}" if it.get("summary") else "")
                      for i, it in enumerate(items))
 
 
