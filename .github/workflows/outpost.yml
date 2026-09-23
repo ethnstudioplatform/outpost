@@ -49,18 +49,18 @@ jobs:
           path: |
             OUTPOST_UPLOAD/assets/fonts/VT323-Regular.ttf
             OUTPOST_UPLOAD/assets/voices
-            OUTPOST_UPLOAD/assets/land-110m.json
-          key: outpost-assets-v2-${{ vars.OUTPOST_VOICE || 'en_GB-cori-high' }}
+            OUTPOST_UPLOAD/assets/countries-110m.json
+          key: outpost-assets-v3-${{ vars.OUTPOST_VOICE || 'en_GB-southern_english_female-low' }}
 
       - name: Fetch font, voice, map
         env:
-          V: ${{ vars.OUTPOST_VOICE || 'en_GB-cori-high' }}
+          V: ${{ vars.OUTPOST_VOICE || 'en_GB-southern_english_female-low' }}
         run: |
           mkdir -p assets/fonts assets/voices
           [ -f assets/fonts/VT323-Regular.ttf ] || curl -fsSL -o assets/fonts/VT323-Regular.ttf \
             https://github.com/google/fonts/raw/main/ofl/vt323/VT323-Regular.ttf
-          [ -f assets/land-110m.json ] || curl -fsSL -o assets/land-110m.json \
-            https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json
+          [ -f assets/countries-110m.json ] || curl -fsSL -o assets/countries-110m.json \
+            https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json
           LANGR=${V%%-*}; REST=${V#*-}; Q=${REST##*-}; N=${REST%-*}; L=${LANGR%%_*}
           B=https://huggingface.co/rhasspy/piper-voices/resolve/main/$L/$LANGR/$N/$Q
           [ -f assets/voices/$V.onnx ] || curl -fsSL -o assets/voices/$V.onnx $B/$V.onnx
@@ -98,4 +98,3 @@ jobs:
           git config user.email "outpost-bot@users.noreply.github.com"
           git add state/seen.json
           git diff --cached --quiet || (git commit -m "state: seen headlines" && git push)
-
