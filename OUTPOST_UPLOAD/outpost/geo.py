@@ -1,50 +1,74 @@
-"""World land outlines for the map panel. Reads Natural Earth 110m (world-atlas topojson)."""
+"""Country outlines for the map (Natural Earth 110m via world-atlas topojson)."""
 import json
+import re
 
 from . import config
 
-_polys = None
+_countries = None
+
+ALIASES = {
+    "UNITED STATES": "UNITED STATES OF AMERICA", "USA": "UNITED STATES OF AMERICA", "US": "UNITED STATES OF AMERICA",
+    "UK": "UNITED KINGDOM", "BRITAIN": "UNITED KINGDOM",
+    "DR CONGO": "DEM. REP. CONGO", "DRC": "DEM. REP. CONGO", "DEMOCRATIC REPUBLIC OF THE CONGO": "DEM. REP. CONGO",
+    "SOUTH SUDAN": "S. SUDAN", "GAZA": "PALESTINE", "WEST BANK": "PALESTINE", "GAZA STRIP": "PALESTINE",
+    "CENTRAL AFRICAN REPUBLIC": "CENTRAL AFRICAN REP.", "BOSNIA": "BOSNIA AND HERZ.",
+    "NORTH KOREA": "NORTH KOREA", "SOUTH KOREA": "SOUTH KOREA", "MYANMAR": "MYANMAR", "BURMA": "MYANMAR",
+}
 
 
-def land():
-    """List of polygons, each a list of (lon, lat). Empty list if the data file is missing."""
-    global _polys
-    if _polys is not None:
-        return _polys
-    path = config.ROOT / "assets" / "land-110m.json"
+def countries():
+    """List of (NAME_UPPER, [polygon rings as (lon, lat) lists]). Empty if data missing."""
+    global _countries
+    if _countries is not None:
+        return _countries
+    path = config.ROOT / "assets" / "countries-110m.json"
     try:
         topo = json.loads(path.read_text())
     except Exception:
-        _polys = []
-        return _polys
-    sx, sy = topo["transform"]["scale"]
-    tx, ty = topo["transform"]["translate"]
+        _countries = []
+        return _countries
+    tr = topo.get("transform")
     arcs = []
     for a in topo["arcs"]:
-        x = y = 0
-        pts = []
-        for dx, dy in a:
-            x += dx
-            y += dy
-            pts.append((x * sx + tx, y * sy + ty))
+        pts, x, y = [], 0, 0
+        for p in a:
+            if tr:
+                x += p[0]; y += p[1]
+                pts.append((x * tr["scale"][0] + tr["translate"][0], y * tr["scale"][1] + tr["translate"][1]))
+            else:
+                pts.append((p[0], p[1]))
         arcs.append(pts)
 
-    def arc(i):
-        return arcs[i] if i >= 0 else arcs[~i][::-1]
-
     def ring(r):
-        pts = []
+        out = []
         for k, i in enumerate(r):
-            a = arc(i)
-            pts.extend(a if k == 0 else a[1:])
-        return pts
+            a = arcs[i] if i >= 0 else arcs[~i][::-1]
+            out.extend(a if k == 0 else a[1:])
+        return out
 
-    obj = topo["objects"]["land"]
-    geoms = obj["geometries"] if obj["type"] == "GeometryCollection" else [obj]
-    polys = []
-    for g in geoms:
-        parts = [g["arcs"]] if g["type"] == "Polygon" else g["arcs"]
-        for p in parts:
-            polys.append(ring(p[0]))
-    _polys = polys
-    return _polys
+    res = []
+    for g in topo["objects"]["countries"]["geometries"]:
+        name = str((g.get("properties") or {}).get("name", "")).upper()
+        if g.get("type") == "Polygon":
+            polys = [g["arcs"]]
+        elif g.get("type") == "MultiPolygon":
+            polys = g["arcs"]
+        else:
+            continue
+        rings = [ring(p[0]) for p in polys]
+        res.append((name, rings))
+    _countries = res
+    return _countries
+
+
+def match_country(place_name: str):
+    """'KHARKIV, UKRAINE' -> 'UKRAINE' if that country exists in the data."""
+    if not place_name:
+        return None
+    names = {n for n, _ in countries()}
+    parts = [p.strip() for p in re.split(r"[,/]", place_name.upper()) if p.strip()]
+    for cand in reversed(parts):
+        cand = ALIASES.get(cand, cand)
+        if cand in names:
+            return cand
+    return None
