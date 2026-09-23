@@ -25,8 +25,11 @@ def main():
 
     script = writer.write(items)
     if args.demo:
-        script["headline"] = "TEST TRANSMISSION"
-        script["region"] = "TEST"
+        demo = json.loads((config.ROOT / "fixtures" / "demo_script.json").read_text())
+        script.update({k: demo[k] for k in ("headline", "region", "location", "lines", "caption")})
+        used = sorted({s for ln in script["lines"] for s in ln["src"]})
+        script["sources"] = [{"n": i, "outlet": items[i]["domain"], "title": items[i]["title"],
+                              "url": items[i]["url"]} for i in used]
 
     stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%MZ")
     out = config.OUT_DIR / stamp
