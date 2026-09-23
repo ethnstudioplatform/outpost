@@ -44,9 +44,8 @@ def main():
 
     timeline, total = render.build_timeline(durs)
     audio = out / "audio.wav"
-    beeps = [0.15 + i * 0.38 for i in range(5)] + [st for st, _ in timeline]
     voice.build_track([(st, w) for (st, _), w in zip(timeline, wavs)] + [(total - 0.1, None)],
-                      audio, beeps)
+                      audio, [], render.sfx_events(script, timeline))
     for w in wavs:
         w.unlink()
 
