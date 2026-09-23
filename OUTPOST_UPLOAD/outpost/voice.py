@@ -12,7 +12,7 @@ from . import config
 SR = 44100
 # Field-radio chain tuned for a female command voice: slightly lower and slower,
 # warm low-mids, clear presence, tight compression, a touch of room. No tinny band-pass.
-RADIO_FX = ("asetrate=44100*0.96,aresample=44100,atempo=0.97,"
+RADIO_FX = ("asetrate=44100*0.97,aresample=44100,atempo=1.12,"
             "highpass=f=110,lowpass=f=7000,"
             "equalizer=f=220:t=q:w=1:g=3,equalizer=f=2800:t=q:w=1.4:g=2,"
             "equalizer=f=6000:t=q:w=1:g=-3,"
@@ -87,7 +87,7 @@ def engine_name() -> str:
     return "espeak-ng" if shutil.which("espeak-ng") else "test-tone"
 
 
-def build_track(segments: list[tuple[float, Path | None]], out: Path, beeps: list[float]):
+def build_track(segments: list[tuple[float, Path | None]], out: Path, beeps: list[float], sfx=()):
     """segments: (start_time, wav) placed on a timeline. Adds hum bed + line beeps."""
     import numpy as np
     total = max(s + (duration(p) if p else 0) for s, p in segments) + 0.1
@@ -107,6 +107,32 @@ def build_track(segments: list[tuple[float, Path | None]], out: Path, beeps: lis
         n = min(len(chirp), len(buf) - o)
         if n > 0:
             buf[o:o + n] += chirp[:n]
+    rng = np.random.default_rng(3)
+    for t0, kind in sfx:
+        o = int(t0 * SR)
+        if kind == "whoosh":      # filtered noise sweep on cuts
+            n = int(0.35 * SR)
+            k2 = np.arange(n) / n
+            s_ = rng.normal(0, 1, n) * np.sin(np.pi * k2) ** 2 * 0.10
+            s_ = np.convolve(s_, np.ones(12) / 12, mode="same")
+        elif kind == "boom":      # low impact thud
+            n = int(0.8 * SR)
+            k2 = np.arange(n) / SR
+            s_ = 0.45 * np.sin(2 * np.pi * (55 - 25 * k2) * k2) * np.exp(-k2 * 5)
+        elif kind == "lock":      # double lock-on beep
+            n = int(0.3 * SR)
+            k2 = np.arange(n) / SR
+            s_ = 0.10 * np.sin(2 * np.pi * 1760 * k2) * ((k2 < 0.08) | ((k2 > 0.15) & (k2 < 0.23)))
+        elif kind == "type":      # terminal typing ticks
+            n = int(0.6 * SR)
+            s_ = np.zeros(n)
+            for j in range(0, n - 400, int(0.045 * SR)):
+                s_[j:j + 300] += rng.normal(0, 0.08, 300) * np.exp(-np.arange(300) / 60)
+        else:
+            continue
+        m = min(len(s_), len(buf) - o)
+        if m > 0 and o >= 0:
+            buf[o:o + m] += s_[:m]
     dry = out.with_suffix(".dry.wav")
     with wave.open(str(dry), "wb") as wf:
         wf.setnchannels(1); wf.setsampwidth(2); wf.setframerate(SR)
