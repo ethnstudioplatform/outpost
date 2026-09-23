@@ -1,6 +1,7 @@
 """Green phosphor war-room renderer. PIL frames piped straight into ffmpeg."""
 import math
 import random
+import re
 import subprocess
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -9,6 +10,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 from . import config as C
+from . import geo
 
 W, H, FPS = C.W, C.H, C.FPS
 BOOT = 2.2
@@ -45,6 +47,10 @@ def wrap(text, f, width):
     return lines
 
 
+def ease(x):
+    return x * x * (3 - 2 * x)
+
+
 def mix(c, k):
     return tuple(int(v * k) for v in c)
 
@@ -74,8 +80,6 @@ def _static_bg():
     # corner ticks
     for (x, y) in [(40, 120), (W - 40, 120), (40, 1560), (W - 40, 1560)]:
         d.rectangle([x - 6, y - 6, x + 6, y + 6], fill=C.GREEN_MID)
-    d.text((70, 300), "SWEEP", font=font(30), fill=C.GREEN_DIM)
-    d.text((500, 300), "STATUS BOARD", font=font(30), fill=C.GREEN_DIM)
     return im
 
 
@@ -104,10 +108,12 @@ class Renderer:
         self.blips = [(r.uniform(0, 360), r.uniform(0.2, 0.95)) for _ in range(blips)]
         self.ticker = "   ///   ".join(t.upper() for t in script.get("ticker", [])) + "   ///   "
         self.lines = script["lines"]
+        self.land = geo.land()
+        self._plan_scenes()
         self.src_tags = []
         for ln in self.lines:
             if ln.get("context"):
-                self.src_tags.append("BACKGROUND CONTEXT")
+                self.src_tags.append("// BACKGROUND")
             elif ln["src"]:
                 outlets = []
                 for n in ln["src"]:
@@ -214,7 +220,8 @@ class Renderer:
                 ly = y + (len(rows) - 1) * 54
                 d.rectangle([lx, ly + 8, lx + 24, ly + 50], fill=C.GREEN)
             if tag:
-                d.text((100, y + len(rows) * 54 + 2), tag, font=fs, fill=C.GREEN_DIM if not active else C.GREEN_MID)
+                tcol = C.AMBER if tag.startswith("//") else C.GREEN_MID
+                d.text((100, y + len(rows) * 54 + 2), tag, font=fs, fill=tcol if active else mix(tcol, 0.55))
             y += hgt
 
     def ticker_bar(self, im, t):
@@ -265,6 +272,247 @@ class Renderer:
             d.text(((W - f.getlength(m)) / 2, y), shown, font=f, fill=col)
             y += sz + 26
 
+
+    # ================= scene system for the top panel =================
+    PX, PY, PW, PH = 42, 292, W - 84, 426
+
+    def _plan_scenes(self):
+        loc_main = self.s.get("location")
+        have_map = bool(self.land)
+        self.scenes = []
+        for ln in self.lines:
+            loc = ln.get("loc") or loc_main
+            if ln.get("stat"):
+                sc = ("stat", ln["stat"])
+            elif ln.get("context") and ln.get("year"):
+                sc = ("timeline", ln["year"])
+            elif loc and have_map:
+                sc = ("map", loc)
+            else:
+                sc = ("radar", None)
+            self.scenes.append(sc)
+        # when each map zoom starts: first of a run of lines sharing the same place
+        self.zoom_t0 = []
+        prev = None
+        for i, sc in enumerate(self.scenes):
+            key = (sc[0], sc[1]["name"]) if sc[0] == "map" else None
+            st = self.tl[i][0] if i < len(self.tl) else BOOT
+            if key and key == prev:
+                self.zoom_t0.append(self.zoom_t0[-1])
+            else:
+                self.zoom_t0.append(st)
+            prev = key
+
+    def _active(self, t):
+        idx = -1
+        for i, (st, _) in enumerate(self.tl):
+            if t >= st:
+                idx = i
+        return idx
+
+    def panel(self, im, d, t):
+        i = self._active(t)
+        if i < 0:
+            kind, data, t0 = ("map", self.s.get("location"), BOOT) if self.s.get("location") and self.land else ("radar", None, BOOT)
+        else:
+            kind, data = self.scenes[i]
+            t0 = self.zoom_t0[i] if kind == "map" else self.tl[i][0]
+        ctx = i >= 0 and self.lines[i].get("context")
+        if kind == "radar":
+            self.radar(d, t)
+            self.status(d, t)
+        else:
+            p = Image.new("RGB", (self.PW, self.PH), C.BG)
+            pd = ImageDraw.Draw(p)
+            if kind == "map":
+                self.scene_map(p, pd, t, t - t0, data)
+            elif kind == "stat":
+                src = self.src_tags[i].replace("SRC: ", "")
+                self.scene_stat(pd, t, t - t0, data, src)
+            elif kind == "timeline":
+                self.scene_timeline(pd, t, t - t0, data)
+            im.paste(p, (self.PX, self.PY))
+        # panel strip + tags
+        strip = (f"SIG {self.s.get('signal_count', 0)}  //  OUTLETS {self.s.get('outlet_count', 0)}"
+                 f"  //  CITED {len(self.s.get('sources', []))}")
+        d.text((60, self.PY + 6), strip, font=font(30), fill=C.GREEN_MID)
+        reg = self.s.get("region", "GLOBAL")[:20]
+        d.text((W - 60 - font(30).getlength(reg), self.PY + 6), reg, font=font(30), fill=C.GREEN_MID)
+        if ctx:
+            tag = " BACKGROUND BRIEF "
+            tw = font(34).getlength(tag)
+            x0 = W - 60 - tw
+            d.rectangle([x0, self.PY + 44, x0 + tw, self.PY + 84], fill=mix(C.AMBER, 0.85))
+            d.text((x0, self.PY + 46), tag, font=font(34), fill=C.BG)
+
+    # ---------- map ----------
+    def scene_map(self, p, pd, t, ts, loc):
+        PW, PH = self.PW, self.PH
+        lat0, lon0 = loc["lat"], loc["lon"]
+        aspect = PW / PH
+        # camera: world view -> regional view
+        k = ease(min(1.0, max(0.0, (ts - 0.2) / 1.8)))
+        world_h, zoom_h = 150.0, 22.0
+        span_h = world_h * (zoom_h / world_h) ** k       # exponential zoom feels natural
+        span_w = span_h * aspect
+        c_lat = 12 + (lat0 - 12) * k
+        c_lon = 10 + (lon0 - 10) * k
+        c_lon += math.sin(t * 0.35) * span_w * 0.01      # slow drift
+        x_min, y_max = c_lon - span_w / 2, c_lat + span_h / 2
+
+        def P(lon, lat):
+            return ((lon - x_min) / span_w * PW, (y_max - lat) / span_h * PH)
+
+        # graticule
+        step = 30 if span_h > 60 else (10 if span_h > 25 else 5)
+        g0 = math.floor((c_lon - span_w) / step) * step
+        for lon in range(int(g0), int(c_lon + span_w) + step, step):
+            x, _ = P(lon, 0)
+            pd.line([(x, 0), (x, PH)], fill=C.GREEN_FAINT)
+        for lat in range(-90, 91, step):
+            _, y = P(0, lat)
+            pd.line([(0, y), (PW, y)], fill=C.GREEN_FAINT)
+        # land
+        lw = 2 if span_h > 40 else 3
+        for poly in self.land:
+            xs = [q[0] for q in poly]
+            if max(xs) < x_min - 2 or min(xs) > x_min + span_w + 2:
+                continue
+            pts = [P(lon, lat) for lon, lat in poly]
+            if len(pts) > 2:
+                pd.polygon(pts, fill=mix(C.GREEN, 0.10), outline=C.GREEN_MID)
+                if lw > 2:
+                    pd.line(pts + [pts[0]], fill=C.GREEN_MID, width=lw)
+        # target
+        tx, ty = P(lon0, lat0)
+        lock = k > 0.95
+        for r_i in range(3):
+            ph = ((t * 0.9 + r_i / 3) % 1.0)
+            rr = 10 + ph * 90
+            col = mix(C.AMBER if lock else C.GREEN, (1 - ph) * 0.9)
+            pd.ellipse([tx - rr, ty - rr, tx + rr, ty + rr], outline=col, width=3)
+        pd.ellipse([tx - 8, ty - 8, tx + 8, ty + 8], fill=C.AMBER if lock else C.GREEN)
+        gap = 26
+        pd.line([(0, ty), (tx - gap, ty)], fill=C.GREEN_DIM, width=1)
+        pd.line([(tx + gap, ty), (PW, ty)], fill=C.GREEN_DIM, width=1)
+        pd.line([(tx, 0), (tx, ty - gap)], fill=C.GREEN_DIM, width=1)
+        pd.line([(tx, ty + gap), (tx, PH)], fill=C.GREEN_DIM, width=1)
+        b = 44 + (1 - k) * 60
+        for sx_, sy_ in [(-1, -1), (1, -1), (-1, 1), (1, 1)]:
+            cx, cy = tx + sx_ * b, ty + sy_ * b
+            pd.line([(cx, cy), (cx - sx_ * 18, cy)], fill=C.GREEN, width=3)
+            pd.line([(cx, cy), (cx, cy - sy_ * 18)], fill=C.GREEN, width=3)
+        # sweep bar
+        sxp = (t * 260) % (PW + 200) - 100
+        for j in range(24):
+            pd.line([(sxp - j * 3, 40), (sxp - j * 3, PH)], fill=mix(C.GREEN, 0.18 * (1 - j / 24)))
+        # readouts
+        name = f"TARGET // {loc['name']}"
+        coord = f"{abs(lat0):06.2f}{'N' if lat0 >= 0 else 'S'}  {abs(lon0):06.2f}{'E' if lon0 >= 0 else 'W'}"
+        kk = min(1.0, max(0.0, (ts - 1.0) / 0.8))
+        f1, f2 = font(44), font(34)
+        lx = min(max(tx + 70, 20), PW - f1.getlength(name) - 20)
+        ly = ty + 60 if ty < PH - 140 else ty - 130
+        shown = name[: int(len(name) * kk)]
+        if shown:
+            pd.rectangle([lx - 8, ly - 4, lx + f1.getlength(shown) + 8, ly + 46], fill=C.BG)
+            pd.text((lx, ly), shown, font=f1, fill=C.GREEN)
+            pd.text((lx, ly + 48), coord[: int(len(coord) * kk)], font=f2, fill=C.GREEN_MID)
+        pd.text((PW - 250, PH - 40), "APPROX. POSITION", font=font(28), fill=C.GREEN_DIM)
+        zoom_txt = f"ZOOM x{world_h / span_h:4.1f}"
+        pd.text((18, PH - 40), zoom_txt, font=font(28), fill=C.GREEN_DIM)
+        pd.rectangle([0, 0, PW - 1, PH - 1], outline=C.GREEN_DIM, width=2)
+
+    # ---------- stat ----------
+    def scene_stat(self, pd, t, ts, stat, src):
+        PW, PH = self.PW, self.PH
+        raw = stat["value"]
+        m = re.search(r"[\d,.]+", raw)
+        k = ease(min(1.0, ts / 1.4))
+        shown = raw
+        if m:
+            num_s = m.group(0).replace(",", "")
+            try:
+                target = float(num_s)
+                cur = target * k
+                if "." in num_s:
+                    body = f"{cur:,.1f}"
+                else:
+                    body = f"{int(round(cur)):,}" if "," in m.group(0) else str(int(round(cur)))
+                shown = raw[: m.start()] + body + raw[m.end():]
+            except ValueError:
+                pass
+        big = font(230)
+        wv = big.getlength(shown)
+        x = (PW - wv) / 2
+        pd.text((x, 40), shown, font=big, fill=C.GREEN)
+        lab = stat.get("label", "")
+        fl = font(56)
+        pd.text(((PW - fl.getlength(lab)) / 2, 270), lab, font=fl, fill=C.GREEN_MID)
+        if src:
+            s2 = f"SRC: {src}"
+            pd.text(((PW - font(32).getlength(s2)) / 2, 336), s2, font=font(32), fill=C.GREEN_DIM)
+        # bracket frame closing in
+        b = 30 + (1 - k) * 40
+        for (cx, cy, dx, dy) in [(b, b, 1, 1), (PW - b, b, -1, 1), (b, PH - b, 1, -1), (PW - b, PH - b, -1, -1)]:
+            pd.line([(cx, cy), (cx + dx * 50, cy)], fill=C.GREEN, width=4)
+            pd.line([(cx, cy), (cx, cy + dy * 50)], fill=C.GREEN, width=4)
+        # level bars
+        n = 24
+        for j in range(n):
+            h = 10 + 50 * abs(math.sin(t * 3 + j * 0.7)) * k
+            bx = 60 + j * ((PW - 120) / n)
+            pd.rectangle([bx, PH - 20 - h, bx + 18, PH - 20], fill=C.GREEN_DIM)
+        pd.rectangle([0, 0, PW - 1, PH - 1], outline=C.GREEN_DIM, width=2)
+
+    # ---------- timeline ----------
+    def scene_timeline(self, pd, t, ts, year):
+        PW, PH = self.PW, self.PH
+        now_y = self.start_dt.year + (self.start_dt.timetuple().tm_yday / 366)
+        k = ease(min(1.0, ts / 1.6))
+        x0, x1, y = 90, PW - 90, 250
+        pd.line([(x0, y), (x1, y)], fill=C.GREEN_DIM, width=4)
+        span = max(now_y - year, 0.5)
+        yrs = int(span) + 1
+        for j in range(yrs + 1):
+            yx = x0 + (x1 - x0) * min(1, j / span)
+            if yx <= x1:
+                pd.line([(yx, y - 14), (yx, y + 14)], fill=C.GREEN_MID, width=2)
+                if yrs <= 12 or j % 2 == 0:
+                    pd.text((yx - 30, y + 24), str(year + j), font=font(30), fill=C.GREEN_DIM)
+        px = x0 + (x1 - x0) * k
+        pd.line([(x0, y), (px, y)], fill=C.AMBER, width=8)
+        pd.ellipse([px - 12, y - 12, px + 12, y + 12], fill=C.AMBER)
+        pd.text((x0, 60), str(year), font=font(150), fill=C.GREEN)
+        pd.text((x0 + font(150).getlength(str(year)) + 24, 118), "START", font=font(48), fill=C.GREEN_MID)
+        dur = span * k
+        lab = f"{dur:.1f} YEARS" if dur < 10 else f"{int(dur)} YEARS"
+        f2 = font(64)
+        pd.text((x1 - f2.getlength(lab), 90), lab, font=f2, fill=C.AMBER)
+        pd.text((x1 - font(30).getlength("TO PRESENT"), 160), "TO PRESENT", font=font(30), fill=C.GREEN_MID)
+        pd.text((x0, PH - 60), "CONFLICT TIMELINE", font=font(34), fill=C.GREEN_DIM)
+        pd.rectangle([0, 0, PW - 1, PH - 1], outline=C.GREEN_DIM, width=2)
+
+    # ---------- transitions ----------
+    def glitch(self, arr, t):
+        hit = None
+        for st, _ in self.tl:
+            if 0 <= t - st < 0.22:
+                hit = t - st
+        if hit is None:
+            return arr
+        rng = np.random.default_rng(int(t * 1000))
+        strength = 1 - hit / 0.22
+        out = arr.copy()
+        for _ in range(int(10 * strength) + 3):
+            y0 = int(rng.integers(0, H - 40))
+            hgt = int(rng.integers(6, 60))
+            shift = int(rng.integers(-60, 60) * strength)
+            out[y0:y0 + hgt] = np.roll(out[y0:y0 + hgt], shift, axis=1)
+        noise = rng.random((H // 8, W // 8, 1)).repeat(8, 0).repeat(8, 1)
+        out = out * (1 + 0.25 * strength) + noise * 40 * strength * np.array([0.3, 1.0, 0.4])
+        return out
+
     def frame(self, t):
         im = self.bg.copy() if t >= BOOT else Image.new("RGB", (W, H), C.BG)
         d = ImageDraw.Draw(im)
@@ -272,8 +520,7 @@ class Renderer:
             self.boot(d, t)
         else:
             self.header(d, t)
-            self.radar(d, t)
-            self.status(d, t)
+            self.panel(im, d, t)
             top = self.headline(d)
             self.log(d, t, top)
             self.ticker_bar(im, t)
@@ -295,6 +542,7 @@ class Renderer:
         y0, y1 = max(0, band_y), min(H, band_y + 120)
         if y1 > y0:
             arr[y0:y1] *= 1.08
+        arr = self.glitch(arr, t)
         return np.clip(arr, 0, 255).astype(np.uint8)
 
 
