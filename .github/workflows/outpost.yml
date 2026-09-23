@@ -48,9 +48,10 @@ jobs:
         with:
           path: |
             OUTPOST_UPLOAD/assets/fonts/VT323-Regular.ttf
+            OUTPOST_UPLOAD/assets/fonts/Anton-Regular.ttf
             OUTPOST_UPLOAD/assets/voices
             OUTPOST_UPLOAD/assets/countries-110m.json
-          key: outpost-assets-v3-${{ vars.OUTPOST_VOICE || 'en_GB-southern_english_female-low' }}
+          key: outpost-assets-v4-${{ vars.OUTPOST_VOICE || 'en_GB-southern_english_female-low' }}
 
       - name: Fetch font, voice, map
         env:
@@ -59,6 +60,8 @@ jobs:
           mkdir -p assets/fonts assets/voices
           [ -f assets/fonts/VT323-Regular.ttf ] || curl -fsSL -o assets/fonts/VT323-Regular.ttf \
             https://github.com/google/fonts/raw/main/ofl/vt323/VT323-Regular.ttf
+          [ -f assets/fonts/Anton-Regular.ttf ] || curl -fsSL -o assets/fonts/Anton-Regular.ttf \
+            https://github.com/google/fonts/raw/main/ofl/anton/Anton-Regular.ttf
           [ -f assets/countries-110m.json ] || curl -fsSL -o assets/countries-110m.json \
             https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json
           LANGR=${V%%-*}; REST=${V#*-}; Q=${REST##*-}; N=${REST%-*}; L=${LANGR%%_*}
