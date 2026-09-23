@@ -50,7 +50,7 @@ MAX_LINES = 8          # narrated lines per video
 MAX_LINE_CHARS = 110   # keeps each line readable on screen
 
 # ---- voice ----
-PIPER_VOICE = os.getenv("OUTPOST_VOICE", "en_GB-cori-high")
+PIPER_VOICE = os.getenv("OUTPOST_VOICE", "en_GB-southern_english_female-low")
 
 # ---- telegram preview ----
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
