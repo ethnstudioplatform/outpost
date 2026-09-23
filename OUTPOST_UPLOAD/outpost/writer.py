@@ -35,12 +35,18 @@ VISUAL DATA (used for on-screen animation):
 - Per line optional "loc": {"name","lat","lon"} when that line is about a different named place.
 - Per line optional "stat": {"value": "the number exactly as written in the item", "label": "<=22 chars uppercase"}
   ONLY when that line quotes a number that appears in its source item.
+- Per line optional "arc": {"from": {"name","lat","lon"}, "to": {"name","lat","lon"},
+  "type": "missile" | "drone" | "airstrike" | "artillery" | "naval" | "troops"}
+  ONLY when the source item itself says something was launched, fired or moved FROM one named place TOWARD
+  another named place. Both place names must appear in that item. Otherwise null.
+- Per line "keyword": 1 to 3 words copied from that line's own text, uppercase, the most striking phrase
+  (e.g. "CEASEFIRE", "DRONE STRIKE", "EVACUATION ORDER"). Use on most lines.
 
 Return ONLY JSON:
 {"headline": "<=36 chars, uppercase, no punctuation except / and -",
  "region": "<=20 chars uppercase",
  "location": {...} or null,
- "lines": [{"text": "...", "src": [item numbers], "context": false, "year": null, "loc": null, "stat": null}],
+ "lines": [{"text": "...", "src": [item numbers], "context": false, "year": null, "loc": null, "stat": null, "arc": null, "keyword": "..."}],
  "caption": "1-2 sentence neutral social caption",
  "hashtags": ["up to 5, no # symbol"]}"""
 
@@ -93,6 +99,15 @@ def _validate(script: dict, items: list) -> dict:
             blob = " ".join(items[i]["title"] + " " + items[i].get("summary", "") for i in srcs)
             if val and re.search(r"\d", val) and val in blob:
                 entry["stat"] = {"value": val[:10], "label": str(stat.get("label", ""))[:22].upper()}
+        arc = ln.get("arc")
+        if isinstance(arc, dict) and srcs and str(arc.get("type", "")).lower() in ARC_TYPES:
+            a, b = _loc(arc.get("from")), _loc(arc.get("to"))
+            blob = " ".join(items[i]["title"] + " " + items[i].get("summary", "") for i in srcs).upper()
+            if a and b and _named(a["name"], blob) and _named(b["name"], blob):
+                entry["arc"] = {"from": a, "to": b, "type": str(arc["type"]).lower()}
+        kw = str(ln.get("keyword") or "").strip().upper()
+        if kw and len(kw) <= 26 and all(w in text.upper() for w in kw.split()):
+            entry["keyword"] = kw
         yr = ln.get("year")
         if is_ctx and yr and re.fullmatch(r"(19|20)\d\d", str(yr)):
             entry["year"] = int(yr)
@@ -100,6 +115,15 @@ def _validate(script: dict, items: list) -> dict:
     script["lines"] = lines[: config.MAX_LINES]
     script["location"] = _loc(script.get("location"))
     return script
+
+
+ARC_TYPES = {"missile", "drone", "airstrike", "artillery", "naval", "troops"}
+
+
+def _named(place, blob):
+    """First part of 'KHARKIV, UKRAINE' must be mentioned in the source text."""
+    head = place.split(",")[0].strip()
+    return len(head) >= 3 and head in blob
 
 
 def _loc(v):
