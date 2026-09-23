@@ -168,13 +168,15 @@ def collect(demo: bool = False) -> list[dict]:
     if demo:
         return json.loads((config.ROOT / "fixtures" / "demo_items.json").read_text())
     seen = load_seen()
-    items, urls, titles = [], set(), set()
+    items, reused, urls, titles = [], [], set(), set()
     for it in rss() + gdelt() + reliefweb():
         key = it["title"].lower()[:60]
-        if not it["title"] or it["url"] in seen or it["url"] in urls or key in titles:
+        if not it["title"] or it["url"] in urls or key in titles:
             continue
         urls.add(it["url"])
         titles.add(key)
-        items.append(it)
-    print(f"[collect] {len(items)} fresh items")
+        (reused if it["url"] in seen else items).append(it)
+    print(f"[collect] {len(items)} fresh items, {len(reused)} already used")
+    if len(items) < 6:  # quiet news cycle: top up with recent stories already covered
+        items += reused[: 12 - len(items)]
     return items[:40]
