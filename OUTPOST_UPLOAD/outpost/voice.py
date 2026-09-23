@@ -10,9 +10,14 @@ from pathlib import Path
 from . import config
 
 SR = 44100
-RADIO_FX = ("asetrate=44100*0.93,aresample=44100,highpass=f=240,lowpass=f=3700,"
-            "acrusher=bits=10:mix=0.2,aecho=0.8:0.5:22:0.22,"
-            "acompressor=threshold=0.1:ratio=4,volume=1.5")
+# Field-radio chain tuned for a female command voice: slightly lower and slower,
+# warm low-mids, clear presence, tight compression, a touch of room. No tinny band-pass.
+RADIO_FX = ("asetrate=44100*0.96,aresample=44100,atempo=0.97,"
+            "highpass=f=110,lowpass=f=7000,"
+            "equalizer=f=220:t=q:w=1:g=3,equalizer=f=2800:t=q:w=1.4:g=2,"
+            "equalizer=f=6000:t=q:w=1:g=-3,"
+            "acompressor=threshold=0.08:ratio=5:attack=5:release=90,"
+            "aecho=0.8:0.35:14:0.10,volume=1.4")
 
 _piper = None
 
@@ -70,7 +75,7 @@ def speak(text: str, out: Path) -> float:
     raw = out.with_suffix(".raw.wav")
     engine = _raw_tts(text, raw)
     fx = RADIO_FX if engine != "test-tone" else "anull"
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(raw), "-af", fx,
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(raw), "-af", ("aresample=44100," + fx) if fx != "anull" else fx,
                     "-ar", str(SR), "-ac", "1", "-sample_fmt", "s16", str(out)], check=True)
     raw.unlink(missing_ok=True)
     return duration(out)
