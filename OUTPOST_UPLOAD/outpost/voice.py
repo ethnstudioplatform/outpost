@@ -81,9 +81,41 @@ def _load_piper():
     return _piper
 
 
+_ORD = ["zeroth", "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth",
+        "tenth", "eleventh", "twelfth", "thirteenth", "fourteenth", "fifteenth", "sixteenth",
+        "seventeenth", "eighteenth", "nineteenth", "twentieth", "twenty-first", "twenty-second",
+        "twenty-third", "twenty-fourth", "twenty-fifth", "twenty-sixth", "twenty-seventh",
+        "twenty-eighth", "twenty-ninth", "thirtieth", "thirty-first"]
+_MONTHS = ("January|February|March|April|May|June|July|August|September|October|November|December|"
+           "Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec")
+_FULL = {m[:3].lower(): m for m in ["January", "February", "March", "April", "May", "June", "July",
+                                     "August", "September", "October", "November", "December"]}
+
+
+def _dates(t: str) -> str:
+    """'3 November' -> 'the third of November', 'November 3' -> 'November the third' (British read-out)."""
+    import re
+
+    def month(m):
+        return _FULL[m[:3].lower()]
+
+    def dm(mt):
+        d = int(mt.group(1))
+        return f"the {_ORD[d]} of {month(mt.group(2))}" if 1 <= d <= 31 else mt.group(0)
+
+    def md(mt):
+        d = int(mt.group(2))
+        return f"{month(mt.group(1))} the {_ORD[d]}" if 1 <= d <= 31 else mt.group(0)
+
+    t = re.sub(rf"\b(\d{{1,2}})(?:st|nd|rd|th)?\s+({_MONTHS})\b\.?", dm, t, flags=re.I)
+    t = re.sub(rf"\b({_MONTHS})\.?\s+(\d{{1,2}})(?:st|nd|rd|th)?\b(?!\d)", md, t, flags=re.I)
+    return t
+
+
 def _spoken(text: str) -> str:
-    """Small fixes so numbers and symbols read naturally."""
-    t = text.replace("%", " percent").replace("&", " and ")
+    """Small fixes so numbers, dates and symbols read naturally."""
+    t = _dates(text)
+    t = t.replace("%", " percent").replace("&", " and ")
     t = t.replace(" km", " kilometres").replace("km ", "kilometres ")
     return t
 
