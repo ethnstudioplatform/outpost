@@ -20,7 +20,7 @@ SR = 44100
 # Emma carries the warmth and clarity, Isabella adds a lower, steadier edge.
 VOICE_BLEND = [("bf_emma", 0.68), ("bf_isabella", 0.32)]
 VOICE_SPEED = float(os.getenv("OUTPOST_SPEED", "0.94"))
-MUSIC_LEVEL = 0.2   # music bed loudness relative to the voice (0.2 = 20%); 0 turns the music off  # a touch slower than default: measured, human
+MUSIC_LEVEL = 0.0   # built-in music bed off: Ethan adds a TikTok sound when he posts. Set 0.2 (20%) or use the script key "music_level" to turn it on  # a touch slower than default: measured, human
 
 # Light, natural chain. No radio effect: sounds like a person in a quiet room.
 VOICE_FX = ("highpass=f=65,"
