@@ -1,7 +1,7 @@
 """OUTPOST: one command, one finished video.
 
     python run.py            live data
-    python run.py --demo     placeholder data, for testing the look
+    python run.py --demo     fixed Yemen script, for testing the look
     python run.py --no-send  skip the Telegram preview
 """
 import argparse
@@ -18,34 +18,35 @@ def main():
     ap.add_argument("--no-send", action="store_true")
     args = ap.parse_args()
 
-    items = sources.collect(demo=args.demo)
-    if len(items) < 2:
-        print("[outpost] not enough fresh trusted items, no video this run")
-        return 0
-
-    script = writer.write(items)
     if args.demo:
-        demo = json.loads((config.ROOT / "fixtures" / "demo_script.json").read_text())
-        script.update({k: demo[k] for k in ("headline", "region", "location", "lines", "caption")})
-        used = sorted({s for ln in script["lines"] for s in ln["src"]})
-        script["sources"] = [{"n": i, "outlet": items[i]["domain"], "title": items[i]["title"],
-                              "url": items[i]["url"]} for i in used]
+        script = json.loads((config.ROOT / "fixtures" / "demo_script_v5.json").read_text())
+        now = datetime.now(timezone.utc)
+        script.update({"stamp": now.strftime("%d%b%y %H%MZ").upper(), "date": now.strftime("%-d %b %Y").upper(),
+                       "headline": " ".join(script["cover"]), "sources": []})
+        items = []
+    else:
+        items = sources.collect()
+        if len(items) < 2:
+            print("[outpost] not enough fresh trusted items, no video this run")
+            return 0
+        script = writer.write(items)
 
     stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%MZ")
     out = config.OUT_DIR / stamp
     out.mkdir(parents=True, exist_ok=True)
 
-    print(f"[voice] engine: {voice.engine_name()}")
+    engine = voice.engine_name()
+    print(f"[voice] engine: {engine}")
     durs, wavs = [], []
     for i, ln in enumerate(script["lines"]):
         wav = out / f"line{i:02d}.wav"
         durs.append(voice.speak(ln["text"], wav))
         wavs.append(wav)
 
-    timeline, total = render.build_timeline(durs)
+    timeline, total = render.build_timeline(durs, [l["scene"] for l in script["lines"]])
     audio = out / "audio.wav"
-    voice.build_track([(st, w) for (st, _), w in zip(timeline, wavs)] + [(total - 0.1, None)],
-                      audio, [], render.sfx_events(script, timeline))
+    voice.build_track([(st, w) for (st, _), w in zip(timeline, wavs)] + [(total - 0.2, None)],
+                      audio, render.sfx_events(script, timeline))
     for w in wavs:
         w.unlink()
 
@@ -56,20 +57,19 @@ def main():
     cap = writer.caption_text(script)
     (out / "caption.txt").write_text(cap)
     (out / "script.json").write_text(json.dumps(script, indent=2))
-    print(f"[outpost] done: {video} ({total:.1f}s)")
+    print(f"[outpost] done: {video} ({total:.1f}s), terrain={script.get('_terrain')}")
 
     if not args.demo:
-        seen = sources.load_seen() | {it["url"] for it in items}
+        seen = sources.load_seen() | set(script.get("source_urls", []))
         sources.save_seen(seen)
     if not args.no_send:
-        review = "\n".join(f"{i+1}. {l['text']}" + ("  [CONTEXT, CHECK]" if l.get("context") else "")
+        review = "\n".join(f"{i + 1}. {l['text']}" + ("  [CONTEXT, CHECK]" if l.get("context") else "")
                            for i, l in enumerate(script["lines"]))
-        telegram.send_video(video, f"OUTPOST DRAFT {script['stamp']}\n{script['headline']}")
+        telegram.send_video(video, f"OUTPOST {script['stamp']}\n{script['headline']}")
+        desk = f"voice {engine} / terrain {script.get('_terrain')} / {total:.0f}s"
         telegram.send_text("SCRIPT\n" + review + "\n\nCAPTION\n" + cap +
-                           "\n\nPost it if you like it. Caption above, ready to paste.")
-    # expose paths to GitHub Actions
-    gh = config.ROOT / "out" / "latest.txt"
-    gh.write_text(str(out))
+                           "\n\nPost it if you like it. Caption above, ready to paste.\n\n[desk: " + desk + "]")
+    (config.ROOT / "out" / "latest.txt").write_text(str(out))
     return 0
 
 
