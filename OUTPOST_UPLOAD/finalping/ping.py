@@ -32,12 +32,16 @@ THEME = "night"
 
 
 def pitch_colour(m):
+    if THEME == "spooky":     # violet through magenta to pumpkin orange
+        return hue(0.72 + ((m * 5) % 12) / 12 * 0.36, s=0.72)
     if THEME == "autumn":     # ember red through amber to gold
         return hue(0.005 + ((m * 5) % 12) / 12 * 0.125, s=0.78)
     return hue(((m - 60) % 12) / 12 * 0.85 + 0.02)
 
 
 def spark_colour(q):
+    if THEME == "spooky":
+        return hue([0.07, 0.75, 0.82, 0.05][q % 4], s=0.8)
     return hue(0.01 + (q % 7) / 7 * 0.12, s=0.8) if THEME == "autumn" else hue(q)
 
 
@@ -113,7 +117,7 @@ def build(spec):
             merged.append(p)
     final = {"x": pts[-1][0], "y": pts[-1][1], "t": times[-1], "m": notes[-1][0]}
     end = times[-1] + spec.get("outro", 2.6)
-    return {"times": times, "pts": pts, "vel": vel, "pads": merged, "final": final, "start": start,
+    return {"spec": spec, "times": times, "pts": pts, "vel": vel, "pads": merged, "final": final, "start": start,
             "t0": t0, "end": end, "notes": notes, "beat": beat}
 
 
@@ -181,6 +185,7 @@ def render(spec, out):
     global THEME
     THEME = spec.get("theme", "night")
     autumn = THEME == "autumn"
+    spooky = THEME == "spooky"
     c = build(spec)
     n = int(c["end"] * FPS)
     ts = np.arange(n) / FPS
@@ -191,7 +196,8 @@ def render(spec, out):
     ys = [p[1] for p in c["pts"]] + [c["start"][1]]
     top, bot = min(ys) - 260, max(ys) + 260
     fit = min(1.0, (H * 0.86) / (bot - top))
-    bg_top, bg_bot = (np.array([30, 14, 8], np.float32), np.array([9, 5, 4], np.float32)) if autumn else (BG_TOP, BG_BOT)
+    bg_top, bg_bot = (np.array([30, 14, 8], np.float32), np.array([9, 5, 4], np.float32)) if autumn else \
+        ((np.array([20, 8, 30], np.float32), np.array([5, 2, 9], np.float32)) if spooky else (BG_TOP, BG_BOT))
     grad = (bg_top[None, :] * (1 - np.linspace(0, 1, H)[:, None]) + bg_bot[None, :] * np.linspace(0, 1, H)[:, None])
     base = np.repeat(grad[:, None, :], W, axis=1).astype(np.float32)
     rng = np.random.default_rng(3)
@@ -215,7 +221,16 @@ def render(spec, out):
         def S(x, y):
             return (W / 2 + (x - W / 2) * s, H * 0.42 + (y - cy) * s)
         buf = base.copy()
-        if autumn:                      # falling leaves, drifting and turning, with parallax
+        if spooky:                      # embers drifting upward, flickering
+            for lx0, ly0, lr, ph, spd, hq, dep in leaves:
+                ly = (ly0 - spd * t + 600) % span_y - 600
+                X = lx0 + 30 * math.sin(t * 1.7 + ph)
+                Y = H * 0.42 + (ly - cy * dep) * s
+                if -30 < Y < H + 30:
+                    fl = 0.5 + 0.5 * math.sin(t * 7 + ph * 3)
+                    capsule(buf, X, Y, X, Y, lr * 0.45 * s, hue(0.06, s=0.85) * (0.6 + 0.4 * fl),
+                            glow=0.12 * fl, glow_r=18 * s, alpha=0.2 + 0.35 * dep)
+        elif autumn:                    # falling leaves, drifting and turning, with parallax
             for lx0, ly0, lr, ph, spd, hq, dep in leaves:
                 ly = (ly0 + spd * t + 600) % span_y - 600
                 X = lx0 + 46 * math.sin(t * 1.1 + ph)
@@ -279,7 +294,7 @@ def render(spec, out):
                 sx, sy = fx + math.cos(ang) * v * e, fy + math.sin(ang) * v * e + 0.5 * G * 0.4 * e * e
                 if e < 1.3:
                     X, Y = S(sx, sy)
-                    capsule(buf, X, Y, X, Y, 5 * s, spark_colour(q) if autumn else hue(q / 26), glow=0.4, glow_r=30 * s, alpha=max(0, 1 - e / 1.3))
+                    capsule(buf, X, Y, X, Y, 5 * s, spark_colour(q) if (autumn or spooky) else hue(q / 26), glow=0.4, glow_r=30 * s, alpha=max(0, 1 - e / 1.3))
         # trail + ball
         trail.append((bx, byy))
         trail = trail[-14:]
@@ -295,6 +310,9 @@ def render(spec, out):
             a = 1.0
         capsule(buf, X, Y, X, Y, R * s, np.array([255, 244, 226] if autumn else [255, 255, 255], np.float32), glow=0.5 * a, glow_r=80 * s, alpha=a)
         # grade + grain + loop fade
+        if spooky and ft <= t < ft + 0.35:   # lightning flash on the final chord
+            fl = (1 - (t - ft) / 0.35) ** 2 * (0.55 if int((t - ft) * 30) % 3 else 0.3)
+            buf += (np.array([235, 225, 255], np.float32) - buf) * fl
         f = 1.0
         if t > c["end"] - 0.45:
             f = max(0.0, (c["end"] - t) / 0.45)
@@ -317,6 +335,15 @@ def mallet(freq, dur, vel=1.0, bright=1.0):
     return (x * env + click) * vel
 
 
+def organ(freq, dur, vel=1.0):
+    """Pipe-organ-ish tone: stacked harmonics, soft attack, gentle tremulant."""
+    t = np.arange(int(dur * SR)) / SR
+    env = np.minimum(1, t / 0.012) * np.exp(-t * 1.6)
+    x = sum(a * np.sin(2 * np.pi * freq * k * t) for k, a in ((0.5, 0.35), (1, 1.0), (2, 0.55), (3, 0.3), (4, 0.22), (6, 0.1), (8, 0.07)))
+    x *= 1 + 0.06 * np.sin(2 * np.pi * 5.5 * t)
+    return x * env * vel * 0.32
+
+
 def midi(m):
     return 440 * 2 ** ((m - 69) / 12)
 
@@ -326,13 +353,25 @@ def audio(c, path):
     mix = np.zeros(n, np.float32)
     for nb, t in zip(c["notes"][:-1], c["times"][:-1]):
         m = nb[0]
-        s = mallet(midi(m), 2.2, 0.55)
+        spec = c.get("spec", {})
+        if spec.get("voice") == "organ":
+            s = organ(midi(m), 1.8, 0.55)
+            k_ = mallet(midi(m), 0.4, 0.18, 0.6); s[:len(k_)] += k_
+        else:
+            s = mallet(midi(m), 2.2, 0.55)
         o = int(t * SR); mix[o:o + len(s)] += s[:n - o]
     # the final ping: tonic chord, a low root and a bell on top
     ft = c["final"]["t"]; fm = c["final"]["m"]
-    for mm, v, br in ((fm, 0.55, 1), (fm + 4, 0.35, 1), (fm + 7, 0.35, 1), (fm + 12, 0.4, 1.4), (fm - 12, 0.5, 0.4)):
-        s = mallet(midi(mm), 3.5, v, br)
-        o = int(ft * SR); mix[o:o + len(s)] += s[:n - o]
+    spec = c.get("spec", {})
+    chord = spec.get("final_chord")
+    if chord:                # e.g. a rolled organ chord: [[interval, delay_s], ...]
+        for iv, dl in chord:
+            s = organ(midi(fm + iv), 4.0, 0.5) if spec.get("voice") == "organ" else mallet(midi(fm + iv), 3.5, 0.4)
+            o = int((ft + dl) * SR); mix[o:o + len(s)] += s[:max(0, n - o)]
+    else:
+        for mm, v, br in ((fm, 0.55, 1), (fm + 4, 0.35, 1), (fm + 7, 0.35, 1), (fm + 12, 0.4, 1.4), (fm - 12, 0.5, 0.4)):
+            s = mallet(midi(mm), 3.5, v, br)
+            o = int(ft * SR); mix[o:o + len(s)] += s[:n - o]
     tb = np.arange(int(3.5 * SR)) / SR
     bell = 0.22 * np.sin(2 * np.pi * midi(fm + 24) * tb) * np.exp(-tb * 1.2)
     o = int(ft * SR); mix[o:o + len(bell)] += bell[:n - o]
