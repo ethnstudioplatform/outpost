@@ -20,6 +20,7 @@ INK = (218, 255, 228)
 G = (96, 236, 146)
 GM = (74, 166, 110)
 GD = (26, 66, 42)
+RED = (255, 74, 62)     # waypoints only
 
 LEAD = 0.45        # voice starts under the cover
 GAP = 0.34         # breath between lines
@@ -135,6 +136,7 @@ class Renderer:
         self._build_rays()
         self._build_cams()
         self._build_post()
+        self._build_flags()
 
     # ---- map texture ----
     def _build_texture(self):
@@ -376,7 +378,7 @@ class Renderer:
                 ids += sc["to"] if isinstance(sc["to"], list) else [sc["to"]]
         return list(dict.fromkeys(i for i in ids if i in self.places))
 
-    def marker(self, d, p, cam, a, name=True, big=False):
+    def marker(self, d, p, cam, a, name=True, big=False, red=False):
         pr = self.project(p["lon"], p["lat"], cam)
         if not pr:
             return None
@@ -384,16 +386,30 @@ class Renderer:
         if not (-100 < x < W + 100 and -100 < y < H + 100):
             return (x, y)
         r = 9 if big else 6
-        d.rectangle([x - r, y - r, x + r, y + r], fill=rgba(INK, a))
+        if red:
+            r = 13
+            d.polygon([(x, y - r), (x + r, y), (x, y + r), (x - r, y)], fill=rgba(RED, a))
+            for sx in (-1, 1):
+                d.line([(x + sx * (r + 6), y), (x + sx * (r + 18), y)], fill=rgba(RED, a * 0.8), width=3)
+        else:
+            d.rectangle([x - r, y - r, x + r, y + r], fill=rgba(INK, a))
         if name:
             d.text((x + 16, y + 10), p["name"].upper(), font=font("mono", 26), fill=rgba(INK if big else GM, a * 0.95))
         return (x, y)
 
-    def rings(self, d, x, y, t, a):
+    def rings(self, d, x, y, t, a, col=RED):
         for k in range(2):
             ph = (t * 0.45 + k * 0.5) % 1
             r = 22 + ph * 70
-            d.ellipse([x - r, y - r * 0.62, x + r, y + r * 0.62], outline=rgba(G, a * (1 - ph)), width=3)
+            d.ellipse([x - r, y - r * 0.62, x + r, y + r * 0.62], outline=rgba(col, a * (1 - ph)), width=3)
+
+    def waypoints(self, d, pts, a, n=3):
+        """Small red waypoint ticks along a projected path."""
+        if len(pts) < 4:
+            return
+        for j in range(1, n + 1):
+            q = pts[int(j / (n + 1) * (len(pts) - 1))]
+            d.rectangle([q[0] - 6, q[1] - 6, q[0] + 6, q[1] + 6], outline=rgba(RED, a), width=3)
 
     def label_block(self, d, ax, ay, head, notes, src, a, slide):
         fh, fn = font("sans", 64), font("mono", 29)
@@ -461,6 +477,63 @@ class Renderer:
         d.text((78, y), text, font=f, fill=rgba(INK, a))
         return size
 
+
+    # ---- flag view (detail scenes) ----
+    def _build_flags(self):
+        """Load each needed flag as a small luminance grid for the green halftone flag."""
+        self.flags = {}
+        codes = {str(self.s.get("country") or "").upper()}
+        codes |= {str(l["scene"].get("flag") or "").upper() for l in self.lines}
+        for code in codes:
+            if not re.fullmatch(r"[A-Z]{2}", code):
+                continue
+            img = None
+            local = C.ROOT / "assets" / "flags" / f"{code.lower()}.png"
+            try:
+                if local.exists():
+                    img = Image.open(local)
+                else:
+                    import io
+                    import requests
+                    r = requests.get(f"https://flagcdn.com/w320/{code.lower()}.png", timeout=15)
+                    r.raise_for_status()
+                    img = Image.open(io.BytesIO(r.content))
+            except Exception as e:
+                print(f"[render] flag {code} unavailable: {e}")
+                continue
+            img = img.convert("RGB")
+            cols = 46
+            rows = max(18, min(34, int(round(cols * img.height / img.width))))
+            g = np.asarray(img.resize((cols, rows), Image.BOX), np.float32) / 255
+            # luminance with a push so red/green/blue fields stay distinct from each other
+            lum = 0.42 * g[..., 0] + 0.45 * g[..., 1] + 0.13 * g[..., 2]
+            lo, hi = float(lum.min()), float(lum.max())
+            lum = (lum - lo) / (hi - lo) if hi - lo > 0.05 else lum * 0 + 0.6
+            self.flags[code] = lum
+        print(f"[render] flags: {sorted(self.flags)}")
+
+    def flag_for(self, sc):
+        c = str(sc.get("flag") or self.s.get("country") or "").upper()
+        return c if c in self.flags else None
+
+    def draw_flag(self, d, code, t, a):
+        lum = self.flags[code]
+        rows, cols = lum.shape
+        pitch = 24
+        fw, fh = cols * pitch, rows * pitch
+        x0, y0 = (W - fw) / 2 + 6, 990 - fh / 2
+        for r in range(rows):
+            for c in range(cols):
+                ph = c * 0.32 - t * 2.4 + r * 0.05
+                wave = math.sin(ph)
+                shade = 0.72 + 0.28 * math.cos(ph)          # light rolling across the folds
+                v = lum[r, c]
+                rad = (2.2 + v * 8.6) * (0.9 + 0.1 * shade)
+                x = x0 + c * pitch + wave * 3
+                y = y0 + r * pitch + wave * 13 + (c / cols) * 18
+                col = tuple(int(GD[i] + (G[i] - GD[i]) * (0.25 + 0.75 * v) * shade) for i in range(3))
+                d.ellipse([x - rad, y - rad, x + rad, y + rad], fill=rgba(col, a * (0.2 + 0.32 * v)))
+
     # ---- one frame ----
     def frame(self, t, fi):
         i = self._line_at(t)
@@ -470,12 +543,16 @@ class Renderer:
         loc = t - st
         cam = self.camera(t)
         # map dim: panels push the map back
-        def dim_of(k):
-            return {"number": 0.5, "compare": 0.42, "quote": 0.36, "statement": 0.62}.get(k, 1.0)
-        dim = dim_of(sc["type"])
+        def dim_of(scn):
+            k_ = scn["type"]
+            if k_ in PANEL_SCENES and self.flag_for(scn):
+                return 0.16
+            return {"number": 0.5, "compare": 0.42, "quote": 0.36, "statement": 0.62}.get(k_, 1.0)
+        dim = dim_of(sc)
+        swap = ease((loc + 0.25) / 0.8)
         if i > 0:
-            pd = dim_of(self.lines[i - 1]["scene"]["type"])
-            dim = pd + (dim - pd) * ease((loc + 0.25) / 0.8)
+            pd = dim_of(self.lines[i - 1]["scene"])
+            dim = pd + (dim - pd) * swap
         if t < COVER_T and self.s.get("cover"):
             dim *= 0.8
         im = self.map_layer(cam, dim).convert("RGBA")
@@ -490,6 +567,17 @@ class Renderer:
             a_in *= gate
         slide = ease((loc - 0.1) / 0.5)
         map_a = 1.0 if sc["type"] in MAP_SCENES else 0.45
+
+        # detail scenes: cut from the map to a waving green flag of the country
+        fc = self.flag_for(sc) if sc["type"] in PANEL_SCENES else None
+        prev_sc = self.lines[i - 1]["scene"] if i > 0 else None
+        pfc = self.flag_for(prev_sc) if prev_sc and prev_sc["type"] in PANEL_SCENES else None
+        if fc and not (t < COVER_T + 0.3 and self.s.get("cover")):
+            fa = swap if pfc != fc else 1.0
+            self.draw_flag(d, fc, t, fa)
+            map_a = 0.0
+        if pfc and pfc != fc and swap < 1:
+            self.draw_flag(d, pfc, t, 1 - swap)
 
         # context markers for places already mentioned
         active = set()
@@ -506,7 +594,7 @@ class Renderer:
         k = sc["type"]
         if k == "pin":
             p = self.places[sc["place"]]
-            pos = self.marker(d, p, cam, max(a_in, 0.3), name=False, big=True)
+            pos = self.marker(d, p, cam, max(a_in, 0.3), name=False, big=True, red=True)
             if pos:
                 self.rings(d, pos[0], pos[1], t, a_in)
                 self.label_block(d, pos[0], pos[1], sc.get("head") or p["name"], sc.get("notes", []),
@@ -522,14 +610,15 @@ class Renderer:
                     pts.append(pr[:2])
             for j in range(0, len(pts) - 1, 2):
                 d.line([pts[j], pts[j + 1]], fill=rgba(INK, a_in), width=6)
-            pa = self.marker(d, A, cam, a_in, big=True)
-            pb = self.marker(d, B, cam, a_in if prog > 0.95 else 0, big=True)
+            self.waypoints(d, pts, a_in, 3)
+            pa = self.marker(d, A, cam, a_in, big=True, red=True)
+            pb = self.marker(d, B, cam, a_in if prog > 0.95 else 0, big=True, red=True)
             if pa and pb:
                 mx, my = (pa[0] + pb[0]) / 2, (pa[1] + pb[1]) / 2
                 if sc.get("style") == "cut" and loc > 1.1:
                     e = ease((loc - 1.1) / 0.3) * 24
-                    d.line([(mx - e, my - e), (mx + e, my + e)], fill=rgba(G, a), width=7)
-                    d.line([(mx - e, my + e), (mx + e, my - e)], fill=rgba(G, a), width=7)
+                    d.line([(mx - e, my - e), (mx + e, my + e)], fill=rgba(RED, a), width=7)
+                    d.line([(mx - e, my + e), (mx + e, my - e)], fill=rgba(RED, a), width=7)
                 if sc.get("style") == "attack" and pts:
                     ph = (t * 0.6) % 1
                     q = pts[min(len(pts) - 1, int(ph * (len(pts) - 1)))]
@@ -537,7 +626,7 @@ class Renderer:
                 self.label_block(d, mx, my, sc.get("label"), [sc.get("note")], ln.get("note"), a, slide)
         elif k == "flow":
             A = self.places[sc["from"]]
-            pa = self.marker(d, A, cam, a_in, big=True)
+            pa = self.marker(d, A, cam, a_in, big=True, red=True)
             if pa:
                 self.rings(d, pa[0], pa[1], t, a_in * 0.8)
             for j, dest in enumerate(sc["to"]):
@@ -553,12 +642,13 @@ class Renderer:
                 pts = [p[:2] for p in pts if p]
                 if len(pts) > 1:
                     d.line(pts, fill=rgba(GM, a_in * 0.8), width=3)
+                    self.waypoints(d, pts, a_in * grow, 2)
                 for m in range(7):
                     u = ((t * 0.28 + m / 7 + j * 0.13) % 1) * grow
                     pr = self.project(*bez(u), cam)
                     if pr:
                         d.ellipse([pr[0] - 7, pr[1] - 7, pr[0] + 7, pr[1] + 7], fill=rgba(INK, a_in * 0.9))
-                self.marker(d, B, cam, a_in * grow, big=True)
+                self.marker(d, B, cam, a_in * grow, big=True, red=True)
             if pa:
                 self.label_block(d, pa[0], pa[1], sc.get("label"), [], ln.get("note"), a, slide)
         elif k == "number":
@@ -618,7 +708,7 @@ class Renderer:
                 d.text((78, 330 + j * 122 + (1 - aj) * 18), r, font=f, fill=rgba(INK, aj))
         else:  # wide: every place in the story
             for pid in self.places:
-                self.marker(d, self.places[pid], cam, a_in, big=True)
+                self.marker(d, self.places[pid], cam, a_in, big=True, red=True)
 
         # chrome
         d.text((60, 104), C.BRAND, font=font("sans", 34), fill=rgba(G, 1))
