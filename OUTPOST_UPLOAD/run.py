@@ -43,6 +43,8 @@ def main():
         voice.VOICE_SPEED = float(script["voice_speed"])
     if script.get("gap") is not None:
         render.GAP = float(script["gap"])
+    if script.get("hook"):
+        render.LEAD = 0.05  # v6: voice starts on the first frame
     engine = voice.engine_name()
     print(f"[voice] engine: {engine}")
     durs, wavs = [], []
