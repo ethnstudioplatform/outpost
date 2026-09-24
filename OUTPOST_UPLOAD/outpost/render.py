@@ -115,7 +115,7 @@ def sfx_events(script, timeline):
         k = ln["scene"]["type"]
         if k in ("pin", "route", "flow", "tankers"):
             ev.append((st + 0.3, "tick"))
-        if k in ("number", "compare", "barrel", "chart", "pulse"):
+        if k in ("number", "compare", "barrel", "chart", "pulse", "breach"):
             ev.append((st + 0.15, "pulse"))
         if prev and prev != k:
             ev.append((max(0, st - 0.4), "swell"))
@@ -881,6 +881,94 @@ class Renderer:
             d.rectangle([x1 - f.getlength(tag) - 26, yc - 300, x1, yc - 256], outline=rgba(RED, a * blink), width=3)
             d.text((x1 - f.getlength(tag) - 13, yc - 296), tag, font=f, fill=rgba(RED, a * blink))
 
+    def padlock(self, d, x, y, a, open_=0.0, col=INK):
+        """Padlock centred at (x, y). open_ 0..1 lifts and swings the shackle."""
+        bw, bh = 92, 74
+        lift = 26 * open_
+        sx = x + 22 * open_
+        d.arc([sx - 30, y - bh / 2 - 48 - lift, sx + 30, y - bh / 2 + 12 - lift], 180, 360, fill=rgba(col, a), width=9)
+        d.line([(sx - 30 + 4, y - bh / 2 - 18 - lift), (sx - 30 + 4, y - bh / 2 + 6 - lift * (1 - open_))], fill=rgba(col, a), width=9)
+        d.line([(sx + 30 - 4, y - bh / 2 - 18 - lift), (sx + 30 - 4, y - bh / 2 + 6 - lift)], fill=rgba(col, a), width=9)
+        d.rectangle([x - bw / 2, y - bh / 2, x + bw / 2, y + bh / 2], fill=rgba(col, a))
+        d.ellipse([x - 8, y - 12, x + 8, y + 4], fill=rgba(BG, a))
+        d.rectangle([x - 3, y, x + 3, y + 18], fill=rgba(BG, a))
+
+    def breach(self, d, sc, ln, loc, dur, t, a):
+        """An agent node tries a wall of blocks, is refused, then routes around it to the lock."""
+        if sc.get("head"):
+            self.big_value(d, sc["head"], 300, a, size=120)
+        d.text((84, 460), sc.get("label", ""), font=font("mono", 32), fill=rgba(INK, a * 0.9))
+        if sc.get("detail"):
+            d.text((84, 504), sc["detail"], font=font("mono", 27), fill=rgba(GM, a))
+        d.text((84, 546), ln.get("note", ""), font=font("mono", 25), fill=rgba(GM, a * 0.85))
+        ax, ay = 170, 1030
+        lx, ly = 905, 1030
+        wx, wtop, wbot = 560, 790, 1290
+        fm = font("mono", 24)
+        d.text((W - 80 - fm.getlength("ILLUSTRATION"), 640), "ILLUSTRATION", font=fm, fill=rgba(GM, a * 0.7))
+        # time budget: 3 refused tries, then the way around
+        T = max(3.0, dur)
+        tries = [(0.25 + k * 0.5, 0.25 + k * 0.5 + 0.42) for k in range(3)]
+        route_t0, route_t1 = 1.85, min(T - 0.4, 3.3)
+        hit_flash = 0.0
+        agent = (ax, ay)
+        for (t0, t1) in tries:
+            if t0 <= loc < t1:
+                q = (loc - t0) / (t1 - t0)
+                reach = 1 - abs(1 - 2 * q)          # out and back
+                agent = (ax + (wx - 34 - ax) * ease(reach), ay)
+                if 0.4 < q < 0.75:
+                    hit_flash = 1 - abs(q - 0.55) / 0.2
+        # wall of blocks
+        for by in range(wtop, wbot, 50):
+            hot = hit_flash > 0 and abs(by + 20 - ay) < 90
+            col = RED if hot else GM
+            fa = a * (0.55 + 0.45 * (hit_flash if hot else 0))
+            d.rectangle([wx - 20, by, wx + 20, by + 40], outline=rgba(col, fa), width=4)
+            if hot:
+                d.rectangle([wx - 14, by + 6, wx + 14, by + 34], fill=rgba(RED, fa * 0.5))
+        # refusals
+        n_no = sum(1 for t0, _ in tries if loc > t0 + 0.2)
+        fno = font("sans", 44)
+        for k in range(n_no):
+            d.text((wx - 150 - k * 6, 1110 + k * 56), "NO", font=fno, fill=rgba(RED, a * (0.45 + 0.55 * (k == n_no - 1))))
+        # the way around
+        path = [(ax, ay), (330, ay), (440, 700), (700, 700), (810, ly), (lx - 70, ly)]
+        prog = ease((loc - route_t0) / max(0.6, route_t1 - route_t0))
+        if loc >= route_t0:
+            seg = [math.hypot(path[i + 1][0] - path[i][0], path[i + 1][1] - path[i][1]) for i in range(len(path) - 1)]
+            L = sum(seg); s_ = L * prog; drawn = [path[0]]
+            for i, l in enumerate(seg):
+                if s_ >= l:
+                    drawn.append(path[i + 1]); s_ -= l
+                else:
+                    f = s_ / l
+                    drawn.append((path[i][0] + (path[i + 1][0] - path[i][0]) * f, path[i][1] + (path[i + 1][1] - path[i][1]) * f))
+                    break
+            for (x1, y1), (x2, y2) in zip(drawn, drawn[1:]):
+                n = max(1, int(math.hypot(x2 - x1, y2 - y1) / 22))
+                for j in range(0, n, 2):
+                    u0, u1 = j / n, min(1, (j + 1) / n)
+                    d.line([(x1 + (x2 - x1) * u0, y1 + (y2 - y1) * u0), (x1 + (x2 - x1) * u1, y1 + (y2 - y1) * u1)], fill=rgba(INK, a), width=6)
+            for q in path[2:4]:
+                if (q[0] <= drawn[-1][0] and q[1] <= drawn[-1][1] + 400):
+                    d.rectangle([q[0] - 7, q[1] - 7, q[0] + 7, q[1] + 7], outline=rgba(RED, a), width=3)
+            agent = drawn[-1]
+        # agent node
+        x, y = agent
+        for g_ in (3, 2, 1):
+            d.ellipse([x - 16 * g_, y - 16 * g_, x + 16 * g_, y + 16 * g_], fill=rgba(G, a * 0.06))
+        d.ellipse([x - 18, y - 18, x + 18, y + 18], fill=rgba(INK, a))
+        d.text((ax - fm.getlength(sc.get("agent", "AI AGENT")) / 2, ay + 44), sc.get("agent", "AI AGENT"), font=fm, fill=rgba(INK, a))
+        # the lock
+        opened = ease((loc - route_t1 + 0.05) / 0.35)
+        lcol = RED if opened > 0.5 else INK
+        self.padlock(d, lx, ly, a, opened, lcol)
+        if opened > 0.5:
+            self.rings(d, lx, ly, t, a)
+        tgt = sc.get("target", "PORTAL")
+        d.text((lx - fm.getlength(tgt) / 2 - 40, ly + 70), tgt, font=fm, fill=rgba(lcol, a))
+
     # ---- one frame ----
     def frame(self, t, fi):
         i = self._line_at(t)
@@ -894,7 +982,7 @@ class Renderer:
             k_ = scn["type"]
             if k_ in PANEL_SCENES and self.flag_for(scn):
                 return 0.16
-            if k_ in ("walkout", "barrel", "chart", "pulse"):
+            if k_ in ("walkout", "barrel", "chart", "pulse", "breach"):
                 return 0.14
             return {"number": 0.5, "compare": 0.42, "quote": 0.36, "statement": 0.62}.get(k_, 1.0)
         dim = dim_of(sc)
@@ -915,7 +1003,7 @@ class Renderer:
             a *= gate
             a_in *= gate
         slide = ease((loc - 0.1) / 0.5)
-        map_a = 1.0 if sc["type"] in MAP_SCENES else (0.0 if sc["type"] in ("barrel", "chart", "walkout", "pulse") else 0.45)
+        map_a = 1.0 if sc["type"] in MAP_SCENES else (0.0 if sc["type"] in ("barrel", "chart", "walkout", "pulse", "breach") else 0.45)
 
         # detail scenes: cut from the map to a waving green flag of the country
         fc = self.flag_for(sc) if sc["type"] in PANEL_SCENES else None
@@ -1039,6 +1127,8 @@ class Renderer:
             self.chart(d, sc, ln, loc, en - st, t, a)
         elif k == "pulse":
             self.pulse(d, sc, ln, loc, t, a)
+        elif k == "breach":
+            self.breach(d, sc, ln, loc, en - st, t, a)
         elif k == "walkout":
             self.hall(d, sc, loc, en - st, t, a)
             if ln.get("note"):
