@@ -115,7 +115,7 @@ def sfx_events(script, timeline):
         k = ln["scene"]["type"]
         if k in ("pin", "route", "flow", "tankers"):
             ev.append((st + 0.3, "tick"))
-        if k in ("number", "compare", "barrel", "chart"):
+        if k in ("number", "compare", "barrel", "chart", "pulse"):
             ev.append((st + 0.15, "pulse"))
         if prev and prev != k:
             ev.append((max(0, st - 0.4), "swell"))
@@ -831,6 +831,56 @@ class Renderer:
             lx = min(x1 + 40 - fl.getlength(lab), max(50, px - fl.getlength(lab) / 2))
             d.text((lx, y0 + 16 + (i % 2) * 30), lab, font=fl, fill=rgba(GM, a))
 
+    @staticmethod
+    def _ecg(ph):
+        """One heartbeat, ph in [0,1): P wave, QRS spike, T wave. Returns -1..1 (up is positive)."""
+        g = lambda c, w, h: h * math.exp(-((ph - c) / w) ** 2)
+        return (g(0.18, 0.035, 0.12) - g(0.36, 0.012, 0.18) + g(0.40, 0.014, 1.0)
+                - g(0.44, 0.013, 0.32) + g(0.66, 0.06, 0.26))
+
+    def pulse(self, d, sc, ln, loc, t, a):
+        """Heart-monitor trace sweeping across, with the scene's headline above it."""
+        if sc.get("head"):
+            self.big_value(d, sc["head"], 300, a, size=130)
+        d.text((84, 470), sc.get("label", ""), font=font("mono", 32), fill=rgba(INK, a * 0.9))
+        if sc.get("detail"):
+            d.text((84, 514), sc["detail"], font=font("mono", 27), fill=rgba(GM, a))
+        d.text((84, 556), ln.get("note", ""), font=font("mono", 25), fill=rgba(GM, a * 0.85))
+        x0, x1, yc, amp = 70, 1010, 1010, 190
+        # monitor grid
+        for gx in range(x0, x1 + 1, 47):
+            d.line([(gx, yc - 240), (gx, yc + 150)], fill=rgba(GD, a * 0.5), width=1)
+        for gy in range(int(yc - 235), int(yc + 150), 47):
+            d.line([(x0, gy), (x1, gy)], fill=rgba(GD, a * 0.5), width=1)
+        bpm = float(sc.get("bpm", 72))
+        span = x1 - x0
+        sweep = 2.6                               # seconds for the beam to cross the screen
+        head = ((t / sweep) % 1) * span
+        pts = []
+        for xi in range(0, int(span), 3):
+            age = (head - xi) % span              # pixels since the beam passed this x
+            if age > span * 0.86:
+                continue                          # erased gap just ahead of the beam
+            tp = t - age / span * sweep           # the moment the beam drew this x
+            ph = (tp * bpm / 60.0) % 1
+            pts.append((x0 + xi, yc - self._ecg(ph) * amp, 1 - age / (span * 0.86)))
+        for (xa, ya, fa), (xb, yb, fb) in zip(pts, pts[1:]):
+            if xb - xa > 4:
+                continue
+            d.line([(xa, ya), (xb, yb)], fill=rgba(G, a * (0.15 + 0.85 * fa)), width=5)
+        if pts:
+            hx = x0 + head
+            near = min(pts, key=lambda p: abs(p[0] - hx))
+            for g_ in (3, 2, 1):
+                d.ellipse([near[0] - 12 * g_, near[1] - 12 * g_, near[0] + 12 * g_, near[1] + 12 * g_], fill=rgba(G, a * 0.06))
+            d.ellipse([near[0] - 9, near[1] - 9, near[0] + 9, near[1] + 9], fill=rgba(RED if sc.get("alert") else INK, a))
+        tag = sc.get("tag")
+        if tag:
+            blink = 0.55 + 0.45 * math.sin(t * 6)
+            f = font("mono", 30)
+            d.rectangle([x1 - f.getlength(tag) - 26, yc - 300, x1, yc - 256], outline=rgba(RED, a * blink), width=3)
+            d.text((x1 - f.getlength(tag) - 13, yc - 296), tag, font=f, fill=rgba(RED, a * blink))
+
     # ---- one frame ----
     def frame(self, t, fi):
         i = self._line_at(t)
@@ -844,7 +894,7 @@ class Renderer:
             k_ = scn["type"]
             if k_ in PANEL_SCENES and self.flag_for(scn):
                 return 0.16
-            if k_ in ("walkout", "barrel", "chart"):
+            if k_ in ("walkout", "barrel", "chart", "pulse"):
                 return 0.14
             return {"number": 0.5, "compare": 0.42, "quote": 0.36, "statement": 0.62}.get(k_, 1.0)
         dim = dim_of(sc)
@@ -865,7 +915,7 @@ class Renderer:
             a *= gate
             a_in *= gate
         slide = ease((loc - 0.1) / 0.5)
-        map_a = 1.0 if sc["type"] in MAP_SCENES else (0.0 if sc["type"] in ("barrel", "chart", "walkout") else 0.45)
+        map_a = 1.0 if sc["type"] in MAP_SCENES else (0.0 if sc["type"] in ("barrel", "chart", "walkout", "pulse") else 0.45)
 
         # detail scenes: cut from the map to a waving green flag of the country
         fc = self.flag_for(sc) if sc["type"] in PANEL_SCENES else None
@@ -987,6 +1037,8 @@ class Renderer:
             self.barrel(d, sc, loc, t, a)
         elif k == "chart":
             self.chart(d, sc, ln, loc, en - st, t, a)
+        elif k == "pulse":
+            self.pulse(d, sc, ln, loc, t, a)
         elif k == "walkout":
             self.hall(d, sc, loc, en - st, t, a)
             if ln.get("note"):
