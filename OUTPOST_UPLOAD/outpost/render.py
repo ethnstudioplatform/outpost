@@ -278,6 +278,9 @@ class Renderer:
         if t == "flow":
             cx, cy, ext = center([pl[sc["from"]]] + [pl[x] for x in sc["to"]])
             return cx, cy, max(ext * 1.6, self._deg(2.2))
+        if t == "flight" and self._long_flight(sc):
+            bx, by = self.T(pl[sc["to"]]["lon"], pl[sc["to"]]["lat"])
+            return bx, by, self._deg(16)
         if t == "flight":
             _, _, ext = center([sc["from"], pl[sc["to"]]])
             ax, ay = self.T(sc["from"]["lon"], sc["from"]["lat"])
@@ -287,6 +290,18 @@ class Renderer:
         if t == "wide":
             return cx, cy, max(ext * 1.45, self._deg(2.8))
         return cx, cy + ext * 0.2, max(ext * 1.8, self._deg(3.6))   # panels: pulled back, map as backdrop
+
+    def _long_flight(self, sc):
+        A, B = sc["from"], self.places[sc["to"]]
+        return max(abs(A["lon"] - B["lon"]) * math.cos(math.radians((A["lat"] + B["lat"]) / 2)),
+                   abs(A["lat"] - B["lat"])) > 25
+
+    def _flight_bez(self, sc, u):
+        A, B = sc["from"], self.places[sc["to"]]
+        mlon = (A["lon"] + B["lon"]) / 2 - (B["lat"] - A["lat"]) * 0.25
+        mlat = (A["lat"] + B["lat"]) / 2 + (B["lon"] - A["lon"]) * 0.25
+        return ((1 - u) ** 2 * A["lon"] + 2 * (1 - u) * u * mlon + u * u * B["lon"],
+                (1 - u) ** 2 * A["lat"] + 2 * (1 - u) * u * mlat + u * u * B["lat"])
 
     def _build_cams(self):
         yaws = [-7, 5, -3, 7, -5, 3, -8, 6]
@@ -320,6 +335,15 @@ class Renderer:
         span = math.exp(math.log(prev[2]) + (math.log(cur[2]) - math.log(prev[2])) * e)
         yaw = prev[3] + (cur[3] - prev[3]) * e
         loc = max(0.0, t - st)
+        sc = self.lines[i]["scene"] if self.lines else {}
+        if sc.get("type") == "flight" and self._long_flight(sc):
+            # long-haul: the camera rides with the aircraft, pulling out mid-flight
+            en = self.tl[i][1]
+            prog = ease((loc + 0.2) / max(1.6, (en - st) * 0.8))
+            fx, fy = self.T(*self._flight_bez(sc, prog))
+            A, B = sc["from"], self.places[sc["to"]]
+            ext = max(abs(A["lon"] - B["lon"]) * math.cos(math.radians((A["lat"] + B["lat"]) / 2)), abs(A["lat"] - B["lat"]))
+            return fx, fy, self._deg(16 + ext * 0.3 * math.sin(math.pi * prog)), math.radians(1.6 * math.sin(t * 0.21))
         span *= 1 - 0.014 * min(loc, 8)
         yaw += 1.6 * math.sin(t * 0.21)
         return cx, cy, span, math.radians(yaw)
