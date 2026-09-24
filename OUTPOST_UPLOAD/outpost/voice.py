@@ -1,6 +1,11 @@
-"""Robotic narration. Piper (free, offline neural TTS) -> radio filter.
-Falls back to espeak-ng, then to a test tone so the pipeline never hard-fails."""
+"""OUTPOST narration.
+
+Primary engine: Kokoro (open-source, Apache 2.0) via kokoro-onnx, with a custom
+blend of British female voices: the "OUTPOST" voice. Calm, close, documentary.
+Fallbacks: Piper, then espeak-ng, then a test tone, so a run never hard-fails.
+"""
 import math
+import os
 import shutil
 import struct
 import subprocess
@@ -10,16 +15,53 @@ from pathlib import Path
 from . import config
 
 SR = 44100
-# Field-radio chain tuned for a female command voice: slightly lower and slower,
-# warm low-mids, clear presence, tight compression, a touch of room. No tinny band-pass.
-RADIO_FX = ("asetrate=44100*0.97,aresample=44100,atempo=1.12,"
-            "highpass=f=110,lowpass=f=7000,"
-            "equalizer=f=220:t=q:w=1:g=3,equalizer=f=2800:t=q:w=1.4:g=2,"
-            "equalizer=f=6000:t=q:w=1:g=-3,"
-            "acompressor=threshold=0.08:ratio=5:attack=5:release=90,"
-            "aecho=0.8:0.35:14:0.10,volume=1.4")
 
+# ---- the OUTPOST voice: a blend of Kokoro's British female voices ----
+# Emma carries the warmth and clarity, Isabella adds a lower, steadier edge.
+VOICE_BLEND = [("bf_emma", 0.68), ("bf_isabella", 0.32)]
+VOICE_SPEED = float(os.getenv("OUTPOST_SPEED", "0.94"))  # a touch slower than default: measured, human
+
+# Light, natural chain. No radio effect: sounds like a person in a quiet room.
+VOICE_FX = ("highpass=f=65,"
+            "equalizer=f=180:t=q:w=1.1:g=2.2,"      # warmth
+            "equalizer=f=3200:t=q:w=1.6:g=1.2,"     # presence
+            "equalizer=f=7400:t=q:w=2:g=-3,"        # soften sibilance
+            "acompressor=threshold=0.12:ratio=2.6:attack=12:release=160:makeup=1.3,"
+            "aecho=0.85:0.22:23|37:0.07|0.045")     # small room, barely there
+
+_kokoro = None
+_style = None
 _piper = None
+ENGINE = None
+
+
+def _load_kokoro():
+    global _kokoro, _style
+    if _kokoro is not None:
+        return _kokoro
+    model = config.ROOT / "assets" / "kokoro" / "kokoro-v1.0.onnx"
+    voices = config.ROOT / "assets" / "kokoro" / "voices-v1.0.bin"
+    if not (model.exists() and voices.exists()):
+        print("[voice] kokoro model files missing")
+        _kokoro = False
+        return _kokoro
+    try:
+        import numpy as np
+        from kokoro_onnx import Kokoro
+        k = Kokoro(str(model), str(voices))
+        parts = []
+        for name, w in VOICE_BLEND:
+            try:
+                st = k.get_voice_style(name)
+            except Exception:
+                st = k.voices[name]
+            parts.append(np.asarray(st, dtype=np.float32) * w)
+        _style = sum(parts)
+        _kokoro = k
+    except Exception as e:
+        print(f"[voice] kokoro unavailable: {e}")
+        _kokoro = False
+    return _kokoro
 
 
 def _load_piper():
@@ -39,7 +81,26 @@ def _load_piper():
     return _piper
 
 
+def _spoken(text: str) -> str:
+    """Small fixes so numbers and symbols read naturally."""
+    t = text.replace("%", " percent").replace("&", " and ")
+    t = t.replace(" km", " kilometres").replace("km ", "kilometres ")
+    return t
+
+
 def _raw_tts(text: str, path: Path) -> str:
+    k = _load_kokoro()
+    if k:
+        import numpy as np
+        try:
+            samples, sr = k.create(_spoken(text), voice=_style, speed=VOICE_SPEED, lang="en-gb")
+        except TypeError:
+            samples, sr = k.create(_spoken(text), _style, VOICE_SPEED, "en-gb")
+        samples = np.asarray(samples, dtype=np.float32)
+        with wave.open(str(path), "wb") as wf:
+            wf.setnchannels(1); wf.setsampwidth(2); wf.setframerate(int(sr))
+            wf.writeframes((np.clip(samples, -1, 1) * 32767).astype("<i2").tobytes())
+        return "kokoro"
     v = _load_piper()
     if v:
         with wave.open(str(path), "wb") as wf:
@@ -49,18 +110,15 @@ def _raw_tts(text: str, path: Path) -> str:
                 v.synthesize(text, wf)
         return "piper"
     if shutil.which("espeak-ng"):
-        subprocess.run(["espeak-ng", "-v", "en-gb", "-s", "150", "-p", "30",
-                        "-w", str(path), text], check=True)
+        subprocess.run(["espeak-ng", "-v", "en-gb", "-s", "150", "-p", "30", "-w", str(path), text], check=True)
         return "espeak-ng"
-    # last resort: a data-burst tone the length of the sentence (layout tests only)
-    dur = max(1.2, len(text) * 0.06)
+    dur = max(1.2, len(text) * 0.065)
     with wave.open(str(path), "wb") as wf:
         wf.setnchannels(1); wf.setsampwidth(2); wf.setframerate(SR)
         frames = bytearray()
         for i in range(int(dur * SR)):
             t = i / SR
-            env = 0.5 + 0.5 * math.sin(2 * math.pi * 7 * t)
-            s = 0.18 * env * math.sin(2 * math.pi * (180 + 40 * math.sin(2 * math.pi * 3 * t)) * t)
+            s = 0.12 * (0.5 + 0.5 * math.sin(2 * math.pi * 5 * t)) * math.sin(2 * math.pi * 190 * t)
             frames += struct.pack("<h", int(s * 32767))
         wf.writeframes(bytes(frames))
     return "test-tone"
@@ -72,80 +130,83 @@ def duration(path: Path) -> float:
 
 
 def speak(text: str, out: Path) -> float:
+    global ENGINE
     raw = out.with_suffix(".raw.wav")
-    engine = _raw_tts(text, raw)
-    fx = RADIO_FX if engine != "test-tone" else "anull"
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(raw), "-af", ("aresample=44100," + fx) if fx != "anull" else fx,
+    ENGINE = _raw_tts(text, raw)
+    fx = "aresample=44100," + (VOICE_FX if ENGINE in ("kokoro", "piper") else "anull")
+    # trim leading/trailing silence so our own pauses control the rhythm
+    fx = "silenceremove=start_periods=1:start_threshold=-50dB," + fx + \
+         ",areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse"
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(raw), "-af", fx,
                     "-ar", str(SR), "-ac", "1", "-sample_fmt", "s16", str(out)], check=True)
     raw.unlink(missing_ok=True)
     return duration(out)
 
 
 def engine_name() -> str:
+    if _load_kokoro():
+        return "kokoro:" + "+".join(f"{n}{int(w * 100)}" for n, w in VOICE_BLEND)
     if _load_piper():
         return "piper"
     return "espeak-ng" if shutil.which("espeak-ng") else "test-tone"
 
 
-def build_track(segments: list[tuple[float, Path | None]], out: Path, beeps: list[float], sfx=()):
-    """segments: (start_time, wav) placed on a timeline. Adds hum bed + line beeps."""
+def build_track(segments, out: Path, sfx=()):
+    """segments: [(start_s, wav)], sfx: [(t, kind)] with kind in tick|pulse|swell.
+    Voice on top of a quiet ambient pad. Loudness normalised for phones."""
     import numpy as np
-    total = max(s + (duration(p) if p else 0) for s, p in segments) + 0.1
-    buf = np.zeros(int(total * SR), dtype=np.float32)
+    total = max(s + (duration(p) if p else 0) for s, p in segments) + 0.2
+    n_all = int(total * SR)
+    voice = np.zeros(n_all, np.float32)
     for start, p in segments:
         if not p:
             continue
         with wave.open(str(p)) as wf:
             v = np.frombuffer(wf.readframes(wf.getnframes()), dtype="<i2").astype(np.float32) / 32768
         o = int(start * SR)
-        n = min(len(v), len(buf) - o)
-        buf[o:o + n] += v[:n]
-    k = np.arange(int(0.07 * SR))
-    chirp = 0.12 * (1 - k / len(k)) * np.sin(2 * np.pi * 1320 * k / SR)
-    for b in beeps:  # short terminal chirp at each new line
-        o = int(b * SR)
-        n = min(len(chirp), len(buf) - o)
+        n = min(len(v), n_all - o)
         if n > 0:
-            buf[o:o + n] += chirp[:n]
-    rng = np.random.default_rng(3)
+            voice[o:o + n] += v[:n]
+
+    t = np.arange(n_all) / SR
+    rng = np.random.default_rng(7)
+    # ambient pad: low A and E, slowly breathing, plus a soft air layer
+    pad = (0.05 * np.sin(2 * np.pi * 55 * t) + 0.035 * np.sin(2 * np.pi * 82.41 * t + 1.3)
+           + 0.018 * np.sin(2 * np.pi * 110.3 * t + 0.4) + 0.010 * np.sin(2 * np.pi * 164.8 * t + 2.1))
+    pad *= 0.65 + 0.35 * np.sin(2 * np.pi * t / 9.0)
+    air = rng.normal(0, 1, n_all).astype(np.float32)
+    k = 200
+    air = np.convolve(air, np.ones(k) / k, mode="same") * 0.12
+    bed = (pad + air) * np.clip(t / 2.0, 0, 1) * np.clip((total - t) / 1.5, 0, 1)
+
+    fx = np.zeros(n_all, np.float32)
     for t0, kind in sfx:
         o = int(t0 * SR)
-        if kind == "whoosh":      # filtered noise sweep on cuts
-            n = int(0.35 * SR)
-            k2 = np.arange(n) / n
-            s_ = rng.normal(0, 1, n) * np.sin(np.pi * k2) ** 2 * 0.10
-            s_ = np.convolve(s_, np.ones(12) / 12, mode="same")
-        elif kind == "boom":      # low impact thud
-            n = int(0.8 * SR)
-            k2 = np.arange(n) / SR
-            s_ = 0.45 * np.sin(2 * np.pi * (55 - 25 * k2) * k2) * np.exp(-k2 * 5)
-        elif kind == "lock":      # double lock-on beep
-            n = int(0.3 * SR)
-            k2 = np.arange(n) / SR
-            s_ = 0.10 * np.sin(2 * np.pi * 1760 * k2) * ((k2 < 0.08) | ((k2 > 0.15) & (k2 < 0.23)))
-        elif kind == "type":      # terminal typing ticks
-            n = int(0.6 * SR)
-            s_ = np.zeros(n)
-            for j in range(0, n - 400, int(0.045 * SR)):
-                s_[j:j + 300] += rng.normal(0, 0.08, 300) * np.exp(-np.arange(300) / 60)
+        if kind == "tick":        # soft UI tick when a label lands
+            m = int(0.05 * SR); kk = np.arange(m) / SR
+            s_ = 0.05 * np.sin(2 * np.pi * 2400 * kk) * np.exp(-kk * 90)
+        elif kind == "pulse":     # low, round pulse for a key number
+            m = int(0.9 * SR); kk = np.arange(m) / SR
+            s_ = 0.22 * np.sin(2 * np.pi * (62 - 12 * kk) * kk) * np.exp(-kk * 4.5)
+        elif kind == "swell":     # air swell on big camera moves
+            m = int(1.2 * SR); kk = np.arange(m) / m
+            s_ = rng.normal(0, 1, m) * np.sin(np.pi * kk) ** 2 * 0.03
+            s_ = np.convolve(s_, np.ones(60) / 60, mode="same")
         else:
             continue
-        m = min(len(s_), len(buf) - o)
+        m = min(len(s_), n_all - o)
         if m > 0 and o >= 0:
-            buf[o:o + m] += s_[:m]
+            fx[o:o + m] += s_[:m]
+
+    # duck the bed under the voice
+    env = np.convolve(np.abs(voice), np.ones(4410) / 4410, mode="same")
+    duck = 1 - np.clip(env * 6, 0, 0.55)
+    mix = voice + bed * duck + fx
     dry = out.with_suffix(".dry.wav")
     with wave.open(str(dry), "wb") as wf:
         wf.setnchannels(1); wf.setsampwidth(2); wf.setframerate(SR)
-        wf.writeframes((np.clip(buf, -1, 1) * 32767).astype("<i2").tobytes())
-
-    # low war-room hum + static bed under the voice
-    subprocess.run([
-        "ffmpeg", "-y", "-loglevel", "error", "-i", str(dry),
-        "-f", "lavfi", "-i", f"sine=f=55:d={total:.2f}:sample_rate={SR}",
-        "-f", "lavfi", "-i", f"anoisesrc=d={total:.2f}:c=brown:a=0.5:r={SR}",
-        "-filter_complex",
-        "[1]volume=0.05[h];[2]lowpass=f=900,volume=0.05[n];"
-        "[0][h][n]amix=inputs=3:normalize=0,alimiter=limit=0.95[a]",
-        "-map", "[a]", "-ar", str(SR), "-ac", "2", str(out)], check=True)
+        wf.writeframes((np.clip(mix, -1, 1) * 32767).astype("<i2").tobytes())
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(dry),
+                    "-af", "loudnorm=I=-15:TP=-1.5:LRA=9", "-ar", str(SR), "-ac", "2", str(out)], check=True)
     dry.unlink(missing_ok=True)
     return total
