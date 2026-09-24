@@ -31,7 +31,7 @@ def _tile(z, x, y):
 
 def heightmap(lon0, lat0, lon1, lat1, w, h):
     """Elevation (m) sampled on a regular lon/lat grid of w x h (row 0 = lat1, north)."""
-    for z in range(9, 3, -1):
+    for z in range(9, 0, -1):
         x0, y0 = _merc(lon0, lat1, z)
         x1, y1 = _merc(lon1, lat0, z)
         tx0, ty0, tx1, ty1 = int(x0 // 256), int(y0 // 256), int(x1 // 256), int(y1 // 256)
