@@ -50,6 +50,8 @@ SCENES: every line gets a "scene" that the screen shows while it is spoken. Type
  {"type":"quote","quote":"exact words copied from a source, max 16 words","who":"name, role (max 34 chars)"}
  {"type":"statement","lines":["2 to 3 very short lines", "words from the spoken line"]}
  {"type":"wide"}  (pull back over every place, good for the last line)
+Detail scenes (number, compare, quote, statement) show a flag instead of the map: add "flag": "XX"
+(ISO 3166-1 alpha-2 code) for the country that detail is about, e.g. "flag": "YE".
 Use a mix. Never the same type three lines in a row. Use "compare" only when both numbers are in the sources.
 
 PLACES: list every place used by a scene: {"id":"MOKHA","name":"Mokha","lat":13.32,"lon":43.25}. Only places
@@ -59,7 +61,7 @@ COVER: 3 short lines (max 22 chars each) that pose the video's question as a rid
 e.g. ["15,786 in 8 months.", "46,000 in a week.", "What changed?"].
 
 Return ONLY JSON:
-{"question": "...", "cover": ["","",""], "region": "COUNTRY / AREA, max 30 chars, uppercase",
+{"question": "...", "country": "ISO alpha-2 code of the main country, e.g. YE", "cover": ["","",""], "region": "COUNTRY / AREA, max 30 chars, uppercase",
  "places": [...], "lines": [{"text": "...", "src": [source numbers], "context": false, "scene": {...}}],
  "caption": "1 to 2 neutral sentences", "hashtags": ["up to 5, no #"]}"""
 
@@ -165,6 +167,9 @@ def _validate(script, srcs):
             print(f"[writer] dropped, number not in sources: {text}")
             continue
         sc = _scene(ln.get("scene") or {}, places, bl, bnums)
+        fl = str((ln.get("scene") or {}).get("flag") or "").upper()
+        if re.fullmatch(r"[A-Z]{2}", fl) and sc["type"] in ("number", "compare", "quote", "statement"):
+            sc["flag"] = fl
         note = ""
         if src:
             s0 = srcs[src[0]]
@@ -175,7 +180,9 @@ def _validate(script, srcs):
     cover = [_clip(c, 24) for c in (script.get("cover") or [])][:3]
     if len(cover) != 3 or not all(_nums_ok(c, bnums) for c in cover):
         cover = []
+    cc = str(script.get("country") or "").upper()
     return {"question": _clip(script.get("question"), 120), "cover": cover,
+            "country": cc if re.fullmatch(r"[A-Z]{2}", cc) else "",
             "region": _clip(script.get("region"), 32).upper(), "places": places, "lines": lines,
             "caption": _clip(script.get("caption"), 400), "hashtags": script.get("hashtags", [])[:5]}
 
