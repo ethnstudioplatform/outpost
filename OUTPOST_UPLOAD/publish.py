@@ -64,7 +64,7 @@ def post(video_url, text, mode):
       }
     }"""
     inp = {"text": text, "channelId": tiktok_channel(), "schedulingType": "automatic", "mode": mode,
-           "assets": [{"video": {"url": video_url, "metadata": {"thumbnailOffset": 600}}}]}
+           "assets": [{"video": {"url": video_url, "metadata": {"thumbnailOffset": 0}}}]}
     d = gql(q, {"input": inp})
     res = d.get("createPost") or {}
     if res.get("post"):

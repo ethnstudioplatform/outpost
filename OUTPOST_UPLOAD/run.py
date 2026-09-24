@@ -41,6 +41,7 @@ def main():
 
     if script.get("voice_speed"):
         voice.VOICE_SPEED = float(script["voice_speed"])
+    voice.MUSIC_LEVEL = float(script.get("music_level", voice.MUSIC_LEVEL))
     if script.get("gap") is not None:
         render.GAP = float(script["gap"])
     if script.get("hook"):
