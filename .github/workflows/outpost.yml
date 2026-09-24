@@ -41,29 +41,35 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y ffmpeg espeak-ng
 
       - name: Python packages
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
+          pip install "kokoro-onnx>=0.4.9" || echo "kokoro-onnx install failed, Piper fallback will be used"
 
       - name: Cache font, voice, map
         uses: actions/cache@v4
         with:
           path: |
-            OUTPOST_UPLOAD/assets/fonts/VT323-Regular.ttf
-            OUTPOST_UPLOAD/assets/fonts/Anton-Regular.ttf
+            OUTPOST_UPLOAD/assets/fonts
             OUTPOST_UPLOAD/assets/voices
-            OUTPOST_UPLOAD/assets/countries-110m.json
-          key: outpost-assets-v4-${{ vars.OUTPOST_VOICE || 'en_GB-southern_english_female-low' }}
+            OUTPOST_UPLOAD/assets/kokoro
+            OUTPOST_UPLOAD/assets/countries-50m.json
+          key: outpost-assets-v5-${{ vars.OUTPOST_VOICE || 'en_GB-southern_english_female-low' }}
 
-      - name: Fetch font, voice, map
+      - name: Fetch fonts, voices, map
         env:
           V: ${{ vars.OUTPOST_VOICE || 'en_GB-southern_english_female-low' }}
         run: |
-          mkdir -p assets/fonts assets/voices
-          [ -f assets/fonts/VT323-Regular.ttf ] || curl -fsSL -o assets/fonts/VT323-Regular.ttf \
-            https://github.com/google/fonts/raw/main/ofl/vt323/VT323-Regular.ttf
-          [ -f assets/fonts/Anton-Regular.ttf ] || curl -fsSL -o assets/fonts/Anton-Regular.ttf \
-            https://github.com/google/fonts/raw/main/ofl/anton/Anton-Regular.ttf
-          [ -f assets/countries-110m.json ] || curl -fsSL -o assets/countries-110m.json \
-            https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json
+          mkdir -p assets/fonts assets/voices assets/kokoro
+          [ -f assets/fonts/Inter-Var.ttf ] || curl -fsSL -o assets/fonts/Inter-Var.ttf \
+            "https://github.com/google/fonts/raw/main/ofl/inter/Inter%5Bopsz,wght%5D.ttf" || rm -f assets/fonts/Inter-Var.ttf
+          [ -f assets/fonts/IBMPlexMono-Regular.ttf ] || curl -fsSL -o assets/fonts/IBMPlexMono-Regular.ttf \
+            https://github.com/google/fonts/raw/main/ofl/ibmplexmono/IBMPlexMono-Regular.ttf || rm -f assets/fonts/IBMPlexMono-Regular.ttf
+          [ -f assets/countries-50m.json ] || curl -fsSL -o assets/countries-50m.json \
+            https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json
+          K=https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0
+          [ -f assets/kokoro/kokoro-v1.0.onnx ] || curl -fsSL -o assets/kokoro/kokoro-v1.0.onnx $K/kokoro-v1.0.onnx || rm -f assets/kokoro/kokoro-v1.0.onnx
+          [ -f assets/kokoro/voices-v1.0.bin ] || curl -fsSL -o assets/kokoro/voices-v1.0.bin $K/voices-v1.0.bin || rm -f assets/kokoro/voices-v1.0.bin
+          ls -la assets/fonts assets/kokoro
           LANGR=${V%%-*}; REST=${V#*-}; Q=${REST##*-}; N=${REST%-*}; L=${LANGR%%_*}
           B=https://huggingface.co/rhasspy/piper-voices/resolve/main/$L/$LANGR/$N/$Q
           [ -f assets/voices/$V.onnx ] || curl -fsSL -o assets/voices/$V.onnx $B/$V.onnx
