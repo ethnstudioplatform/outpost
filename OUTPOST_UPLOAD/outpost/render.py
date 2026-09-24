@@ -475,13 +475,24 @@ class Renderer:
             size -= 8
             f = font("sans", size)
         d.text((78, y), text, font=f, fill=rgba(INK, a))
+        self.accent_bar(d, 84, y + size * 1.12, a)
         return size
+
+    def accent_bar(self, d, x, y, a, w=210):
+        """Thin tricolour rule in the story's accent colours (e.g. US red/white/blue)."""
+        if not self.accents:
+            return
+        seg = w / len(self.accents)
+        for j, c in enumerate(self.accents):
+            d.rectangle([x + j * seg, y, x + (j + 1) * seg - 6, y + 7], fill=rgba(c, a))
 
 
     # ---- flag view (detail scenes) ----
     def _build_flags(self):
         """Load each needed flag as a small luminance grid for the green halftone flag."""
         self.flags = {}
+        self.flag_rgb = {}
+        self.accents = [tuple(int(v) for v in c) for c in (self.s.get("accents") or [])][:3]
         codes = {str(self.s.get("country") or "").upper()}
         codes |= {str(l["scene"].get("flag") or "").upper() for l in self.lines}
         for code in codes:
@@ -510,6 +521,7 @@ class Renderer:
             lo, hi = float(lum.min()), float(lum.max())
             lum = (lum - lo) / (hi - lo) if hi - lo > 0.05 else lum * 0 + 0.6
             self.flags[code] = lum
+            self.flag_rgb[code] = g
         print(f"[render] flags: {sorted(self.flags)}")
 
     def flag_for(self, sc):
@@ -531,6 +543,12 @@ class Renderer:
                 rad = (2.2 + v * 8.6) * (0.9 + 0.1 * shade)
                 x = x0 + c * pitch + wave * 3
                 y = y0 + r * pitch + wave * 13 + (c / cols) * 18
+                if self.accents and code in self.flag_rgb:
+                    rgb = self.flag_rgb[code][r, c]
+                    col = tuple(int(min(255, rgb[i] * 255 * shade * 0.9 + 18)) for i in range(3))
+                    rad = 7.5 * (0.9 + 0.1 * shade)
+                    d.ellipse([x - rad, y - rad, x + rad, y + rad], fill=rgba(col, a * 0.34))
+                    continue
                 col = tuple(int(GD[i] + (G[i] - GD[i]) * (0.25 + 0.75 * v) * shade) for i in range(3))
                 d.ellipse([x - rad, y - rad, x + rad, y + rad], fill=rgba(col, a * (0.2 + 0.32 * v)))
 
@@ -660,7 +678,7 @@ class Renderer:
             d.text((84, 566), ln.get("note", ""), font=font("mono", 25), fill=rgba(GM, a * 0.85))
             nums = re.findall(r"\d[\d,]*\.?\d*", sc["value"])
             n = float(nums[0].replace(",", "")) if nums else 0
-            if n >= 100 and "%" not in sc["value"]:
+            if n >= 100 and re.fullmatch(r"[\d,\.]+", sc["value"].strip()):
                 unit = self.unit_for(n)
                 self.dots(d, 84, 1200, n, 26, unit, INK, a, ease((loc - 0.3) / 1.4), size=18, gap=6)
                 d.text((84, 1232), f"1 square = {unit:,}", font=font("mono", 25), fill=rgba(GM, a))
@@ -702,10 +720,16 @@ class Renderer:
             d.text((84, y + 30), sc.get("who", ""), font=font("mono", 32), fill=rgba(G, a))
             d.text((84, y + 74), ln.get("note", ""), font=font("mono", 26), fill=rgba(GM, a))
         elif k == "statement":
-            f = font("sans", 100)
+            size = 100
+            while size > 56 and max(font("sans", size).getlength(r) for r in sc["lines"]) > 920:
+                size -= 6
+            f = font("sans", size)
             for j, r in enumerate(sc["lines"]):
                 aj = a_out * ease((loc - 0.1 - j * 0.45) / 0.35)
-                d.text((78, 330 + j * 122 + (1 - aj) * 18), r, font=f, fill=rgba(INK, aj))
+                if self.s.get("cover") and i == 0:
+                    aj *= ease((t - COVER_T) / 0.35)
+                col = self.accents[j % len(self.accents)] if self.accents else INK
+                d.text((78, 330 + j * int(size * 1.22) + (1 - aj) * 18), r, font=f, fill=rgba(col, aj))
         else:  # wide: every place in the story
             for pid in self.places:
                 self.marker(d, self.places[pid], cam, a_in, big=True, red=True)
@@ -747,8 +771,10 @@ class Renderer:
             while font("mono", size).getlength(ln) > 900 and size > 40:
                 size -= 4
             fz = font("mono", size)
-            d.rectangle([60, y - 6, 60 + fz.getlength(ln) + 26, y + 92], fill=rgba((126, 246, 166), a))
-            d.text((73, y + (70 - size) / 2), ln, font=fz, fill=rgba(BG, a))
+            box = self.accents[j % len(self.accents)] if self.accents else (126, 246, 166)
+            ink = BG if sum(box) > 500 else (255, 255, 255)
+            d.rectangle([60, y - 6, 60 + fz.getlength(ln) + 26, y + 92], fill=rgba(box, a))
+            d.text((73, y + (70 - size) / 2), ln, font=fz, fill=rgba(ink, a))
 
 
 def render(script, timeline, total, audio, out, thumb):
