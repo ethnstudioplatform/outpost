@@ -71,12 +71,10 @@ def main():
         seen = sources.load_seen() | set(script.get("source_urls", []))
         sources.save_seen(seen)
     if not args.no_send:
-        review = "\n".join(f"{i + 1}. {l['text']}" + ("  [CONTEXT, CHECK]" if l.get("context") else "")
-                           for i, l in enumerate(script["lines"]))
-        telegram.send_video(video, f"OUTPOST {script['stamp']}\n{script['headline']}")
-        desk = f"voice {engine} / terrain {script.get('_terrain')} / {total:.0f}s"
-        telegram.send_text("SCRIPT\n" + review + "\n\nCAPTION\n" + cap +
-                           "\n\nPost it if you like it. Caption above, ready to paste.\n\n[desk: " + desk + "]")
+        # Telegram gets the video only, captioned with the post title and hashtags, ready to paste.
+        tags = " ".join("#" + str(h).strip("#").replace(" ", "") for h in script.get("hashtags", []))
+        title = (script.get("caption") or script.get("headline", "")).strip().replace("\u2014", ",")
+        telegram.send_video(video, f"{title}\n\n{tags}".strip())
     (config.ROOT / "out" / "latest.txt").write_text(str(out))
     return 0
 
