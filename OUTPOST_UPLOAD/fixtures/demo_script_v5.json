@@ -1,0 +1,35 @@
+{
+ "question": "How did Yemen's displacement count nearly triple in a week?",
+ "cover": ["15,786 in 8 months.", "46,000 in a week.", "What changed?"],
+ "region": "YEMEN / TAIZ + WEST COAST",
+ "places": {
+  "MOKHA": {"id": "MOKHA", "name": "Mokha", "lat": 13.32, "lon": 43.25},
+  "TAIZ": {"id": "TAIZ", "name": "Taiz", "lat": 13.58, "lon": 44.02},
+  "AL MA'AFER": {"id": "AL MA'AFER", "name": "Al Ma'afer", "lat": 13.38, "lon": 43.84},
+  "LAHJ": {"id": "LAHJ", "name": "Lahj", "lat": 13.06, "lon": 44.88},
+  "ADEN": {"id": "ADEN", "name": "Aden", "lat": 12.80, "lon": 45.03},
+  "IBB": {"id": "IBB", "name": "Ibb", "lat": 13.97, "lon": 44.18}
+ },
+ "lines": [
+  {"text": "By the end of August, the UN had counted 15,786 people displaced in Yemen this year.", "src": [0], "context": false, "note": "IOM via Anadolu, 2 Sep 2026",
+   "scene": {"type": "number", "value": "15,786", "label": "people displaced in Yemen", "detail": "1 Jan to 29 Aug 2026"}},
+  {"text": "Then Houthi fighters took the Red Sea port of Mokha, UN News reports.", "src": [1], "context": false, "note": "UN News, 11 Sep 2026",
+   "scene": {"type": "pin", "place": "MOKHA", "head": "Mokha", "notes": ["Red Sea port", "taken by Houthi fighters"]}},
+  {"text": "The road linking Mokha to Taiz, a vital supply route, was reportedly cut.", "src": [1], "context": false, "note": "UN News, 11 Sep 2026",
+   "scene": {"type": "route", "from": "MOKHA", "to": "TAIZ", "style": "cut", "label": "Road to Taiz", "note": "reportedly cut"}},
+  {"text": "In three districts of Taiz, whole villages emptied.", "src": [1], "context": false, "note": "UN News, 11 Sep 2026",
+   "scene": {"type": "pin", "place": "AL MA'AFER", "head": "Villages emptied", "notes": ["Maqbanah, Jabal Habashi,", "Al Ma'afer"]}},
+  {"text": "People fled south to Lahj and Aden, and north toward Ibb.", "src": [1], "context": false, "note": "UN News, 11 Sep 2026",
+   "scene": {"type": "flow", "from": "AL MA'AFER", "to": ["LAHJ", "ADEN", "IBB"], "label": "Fleeing"}},
+  {"text": "Within a week, the UN migration agency counted at least 46,000 displaced.", "src": [1], "context": false, "note": "IOM via UN News, 11 Sep 2026",
+   "scene": {"type": "compare", "a": {"value": "15,786", "label": "Jan to Aug", "n": 15786}, "b": {"value": "46,000", "label": "one week", "n": 46000}}},
+  {"text": "Its chief says families are being forced to flee for the second or third time.", "src": [1], "context": false, "note": "UN News, 11 Sep 2026",
+   "scene": {"type": "quote", "quote": "Families are being forced to flee for the second or third time", "who": "Amy Pope, IOM Director General"}},
+  {"text": "Only 60 percent of Yemen's health facilities are fully working, the UN says.", "src": [1], "context": false, "note": "UN News, 11 Sep 2026",
+   "scene": {"type": "number", "value": "60%", "label": "of health facilities working", "detail": "fully operational, Yemen"}},
+  {"text": "So what changed? A port, a road, and one week.", "src": [1], "context": false, "note": "UN News, 11 Sep 2026",
+   "scene": {"type": "statement", "lines": ["A port.", "A road.", "One week."]}}
+ ],
+ "caption": "Fighting in southwest Yemen displaced at least 46,000 people in a week, the UN says.",
+ "hashtags": ["yemen", "news", "explained", "worldnews", "outpost"]
+}
