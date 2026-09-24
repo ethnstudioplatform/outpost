@@ -1,7 +1,7 @@
 """OUTPOST: send a finished video to TikTok through Buffer (Buffer is a TikTok-approved posting app).
 
     python publish.py --probe                 list the Buffer channels this API key can see
-    python publish.py --video-url URL --caption-file caption.txt [--mode addToQueue]
+    python publish.py --video-url URL --caption-file tiktok.txt [--mode shareNow|shareNext|addToQueue]
 
 Needs the BUFFER_API_KEY secret. The TikTok channel is found automatically (or set BUFFER_CHANNEL_ID).
 Buffer fetches the video from a public URL, so the workflow uploads the MP4 to a GitHub release first.
@@ -79,7 +79,7 @@ def main():
     ap.add_argument("--probe", action="store_true")
     ap.add_argument("--video-url", default="")
     ap.add_argument("--caption-file", default="")
-    ap.add_argument("--mode", default=os.environ.get("BUFFER_MODE", "addToQueue"))
+    ap.add_argument("--mode", default=os.environ.get("BUFFER_MODE", "shareNow"))
     a = ap.parse_args()
     if a.probe:
         for c in channels():
@@ -87,7 +87,12 @@ def main():
                   f"queue_paused={c.get('isQueuePaused')} org={c.get('org')}")
         return 0
     text = open(a.caption_file, encoding="utf-8").read().strip() if a.caption_file else ""
-    return 0 if post(a.video_url, text, a.mode) else 1
+    if post(a.video_url, text, a.mode):
+        return 0
+    # news is time-sensitive: if Buffer refuses an instant post, put it at the front of the queue instead
+    if a.mode == "shareNow" and post(a.video_url, text, "shareNext"):
+        return 0
+    return 1
 
 
 if __name__ == "__main__":
