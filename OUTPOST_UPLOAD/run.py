@@ -39,6 +39,10 @@ def main():
     out = config.OUT_DIR / stamp
     out.mkdir(parents=True, exist_ok=True)
 
+    if script.get("voice_speed"):
+        voice.VOICE_SPEED = float(script["voice_speed"])
+    if script.get("gap") is not None:
+        render.GAP = float(script["gap"])
     engine = voice.engine_name()
     print(f"[voice] engine: {engine}")
     durs, wavs = [], []
