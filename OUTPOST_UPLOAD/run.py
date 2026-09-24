@@ -16,13 +16,17 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--demo", action="store_true")
     ap.add_argument("--no-send", action="store_true")
+    ap.add_argument("--script", default="", help="render a hand-written script from fixtures/")
     args = ap.parse_args()
 
-    if args.demo:
-        script = json.loads((config.ROOT / "fixtures" / "demo_script_v5.json").read_text())
+    if args.demo or args.script:
+        path = config.ROOT / "fixtures" / (args.script or "demo_script_v5.json")
+        script = json.loads(path.read_text())
         now = datetime.now(timezone.utc)
         script.update({"stamp": now.strftime("%d%b%y %H%MZ").upper(), "date": now.strftime("%-d %b %Y").upper(),
-                       "headline": " ".join(script["cover"]), "sources": []})
+                       "headline": " ".join(script["cover"])})
+        script.setdefault("sources", [])
+        args.demo = True
         items = []
     else:
         items = sources.collect()
