@@ -32,7 +32,7 @@ FOC = 1.6
 HORIZ = 0.44
 MAPSCALE = 2       # map layer rendered at 1/2 res then upscaled (soft, fast)
 
-MAP_SCENES = {"pin", "route", "flow", "wide", "flight"}
+MAP_SCENES = {"pin", "route", "flow", "wide", "flight", "tankers"}
 PANEL_SCENES = {"number", "compare", "quote", "statement"}
 
 # ---------------- fonts ----------------
@@ -113,9 +113,9 @@ def sfx_events(script, timeline):
     prev = None
     for ln, (st, _) in zip(script["lines"], timeline):
         k = ln["scene"]["type"]
-        if k in ("pin", "route", "flow"):
+        if k in ("pin", "route", "flow", "tankers"):
             ev.append((st + 0.3, "tick"))
-        if k in ("number", "compare"):
+        if k in ("number", "compare", "barrel", "chart"):
             ev.append((st + 0.15, "pulse"))
         if prev and prev != k:
             ev.append((max(0, st - 0.4), "swell"))
@@ -268,6 +268,10 @@ class Renderer:
             p = pl[sc["place"]]
             x, y = self.T(p["lon"], p["lat"])
             return x, y, self._deg(2.1)
+        if t == "tankers":
+            p = pl[sc["place"]]
+            x, y = self.T(p["lon"], p["lat"])
+            return x, y + self._deg(0.25), self._deg(3.6)
         if t == "route":
             cx, cy, ext = center([pl[sc["from"]], pl[sc["to"]]])
             return cx, cy - ext * 0.1, max(ext * 1.7, self._deg(1.8))
@@ -632,6 +636,201 @@ class Renderer:
             d.text((70, 300), head, font=f, fill=rgba(INK, a))
             self.accent_bar(d, 76, 300 + size * 1.15, a)
 
+    # ---- oil animations ----
+    @staticmethod
+    def _along(pts, u):
+        """Point and heading at fraction u of a polyline's length."""
+        seg = [math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1]) for i in range(len(pts) - 1)]
+        L = sum(seg) or 1
+        s_ = max(0.0, min(1.0, u)) * L
+        for i, l in enumerate(seg):
+            if s_ <= l or i == len(seg) - 1:
+                f = s_ / l if l else 0
+                (x1, y1), (x2, y2) = pts[i], pts[i + 1]
+                return x1 + (x2 - x1) * f, y1 + (y2 - y1) * f, math.atan2(y2 - y1, x2 - x1)
+            s_ -= l
+        return pts[-1][0], pts[-1][1], 0.0
+
+    def ship(self, d, x, y, ang, a, col=INK, size=30, outline=False):
+        """Top-down tanker hull: blunt stern, pointed bow along `ang`."""
+        pts = [(1.0, 0), (0.7, 0.3), (-1.0, 0.3), (-1.0, -0.3), (0.7, -0.3)]
+        c, s_ = math.cos(ang), math.sin(ang)
+        poly = [(x + (px * c - py * s_) * size, y + (px * s_ + py * c) * size) for px, py in pts]
+        if outline:
+            d.polygon(poly, outline=rgba(col, a), width=3)
+        else:
+            d.polygon(poly, fill=rgba(col, a))
+
+    def tankers(self, d, sc, ln, cam, loc, t, a, a_in, slide):
+        """Shipping lane through a strait. 'before': busy two-way traffic. 'after': a trickle, and a queue."""
+        lane = [self.project(lo, la, cam) for lo, la in sc["lane"]]
+        lane = [p[:2] for p in lane if p]
+        if len(lane) < 2:
+            return
+        # smooth the lane a little (Chaikin) so ships glide
+        for _ in range(3):
+            nl = [lane[0]]
+            for (x1, y1), (x2, y2) in zip(lane, lane[1:]):
+                nl += [(0.75 * x1 + 0.25 * x2, 0.75 * y1 + 0.25 * y2), (0.25 * x1 + 0.75 * x2, 0.25 * y1 + 0.75 * y2)]
+            lane = nl + [lane[-1]]
+        def offset(pts, o):
+            out = []
+            for i, (x, y) in enumerate(pts):
+                x2, y2 = pts[min(i + 1, len(pts) - 1)]
+                x1, y1 = pts[max(i - 1, 0)]
+                ang = math.atan2(y2 - y1, x2 - x1)
+                out.append((x - math.sin(ang) * o, y + math.cos(ang) * o))
+            return out
+        out_l, in_l = offset(lane, 16), offset(lane, -16)[::-1]
+        mode = sc.get("mode", "before")
+        grow = ease((loc - 0.1) / 0.8)
+        for L in (out_l, in_l):
+            n = int(len(L) * grow)
+            for j in range(0, max(0, n - 1), 2):
+                d.line([L[j], L[j + 1]], fill=rgba(GM if mode == "before" else GD, a_in * 0.9), width=3)
+        if mode == "before":
+            self.waypoints(d, lane, a_in, 3)
+            for L, speed in ((out_l, 0.07), (in_l, 0.065)):
+                for m in range(9):
+                    u = (t * speed + m / 9) % 1
+                    x, y, ang = self._along(L, u)
+                    edge = min(1, u / 0.06, (1 - u) / 0.06)
+                    self.ship(d, x, y, ang, a_in * grow * edge, INK, size=26)
+        else:
+            # the queue: ships waiting at both mouths
+            for L, base in ((out_l, 0.02), (in_l, 0.02)):
+                for m in range(6):
+                    x, y, ang = self._along(L, base + m * 0.028)
+                    ox, oy = -math.sin(ang) * (22 if m % 2 else -22), math.cos(ang) * (22 if m % 2 else -22)
+                    blink = 0.65 + 0.35 * math.sin(t * 3 + m)
+                    self.ship(d, x + ox, y + oy, ang, a_in * blink, RED, size=22, outline=True)
+            for j, (L, u0) in enumerate(((out_l, 0.35), (in_l, 0.55))):
+                u = u0 + 0.06 * loc
+                x, y, ang = self._along(L, u)
+                self.ship(d, x, y, ang, a_in, INK, size=26)
+        p = self.places[sc["place"]]
+        pos = self.marker(d, p, cam, max(a_in, 0.3), name=False, big=True, red=True)
+        if pos:
+            self.rings(d, pos[0], pos[1], t, a_in)
+            n0, n1 = float(sc.get("n_from", 0)), float(sc.get("n", 0))
+            cur = n0 + (n1 - n0) * ease((loc - 0.2) / 1.2)
+            head = sc.get("head", "").replace("{n}", f"{cur:.0f}")
+            self.label_block(d, pos[0], pos[1], head, sc.get("notes", []), ln.get("note"), a, slide)
+
+    def barrel(self, d, sc, loc, t, a):
+        """An oil barrel filling from a pipe; a red line marks the pre-war level."""
+        cx, top, bot, hw, ry = W / 2, 760, 1330, 230, 38
+        mx = float(sc.get("max", 120))
+        def half(y):
+            return hw + 16 * math.sin(math.pi * (y - top) / (bot - top))
+        lvl_n = float(sc.get("n", 0)) * ease((loc - 0.05) / 1.6)
+        ly = bot - (bot - top) * min(1.0, lvl_n / mx)
+        # liquid body
+        if lvl_n > 0:
+            left, right = [], []
+            for yy in np.linspace(ly, bot, 24):
+                hwy = half(yy) - 5
+                left.append((cx - hwy, yy)); right.append((cx + hwy, yy))
+            hb = half(bot) - 5
+            base = [(cx + hb * math.cos(th), bot + (ry - 4) * math.sin(th)) for th in np.linspace(0, math.pi, 18)]
+            surf = [(cx - (half(ly) - 5) + (2 * (half(ly) - 5)) * q,
+                     ly + 7 * math.sin(q * 9 + t * 5) * min(1, loc)) for q in np.linspace(0, 1, 30)]
+            d.polygon(surf + right + base + left[::-1], fill=rgba((16, 44, 28), a))
+            # glossy sheen down the left side
+            d.line([(cx - half(ly) * 0.62, ly + 30), (cx - half(bot) * 0.62, bot - 20)], fill=rgba(GM, a * 0.35), width=14)
+            d.line(surf, fill=rgba(G, a), width=4)
+            # bubbles
+            for m in range(8):
+                ph = (t * 0.5 + m / 8) % 1
+                by_ = bot - 10 - (bot - ly - 20) * ph
+                bx_ = cx - hw * 0.7 + (m * 97 % 360) * hw * 1.4 / 360
+                if by_ > ly + 12:
+                    r_ = 4 + (m % 3) * 2
+                    d.ellipse([bx_ - r_, by_ - r_, bx_ + r_, by_ + r_], outline=rgba(GM, a * 0.7), width=2)
+        # barrel outline, hoops, rim
+        sides = [(cx - half(y), y) for y in np.linspace(top, bot, 30)]
+        d.line(sides, fill=rgba(INK, a), width=5)
+        d.line([(2 * cx - x, y) for x, y in sides], fill=rgba(INK, a), width=5)
+        d.arc([cx - half(bot), bot - ry, cx + half(bot), bot + ry], 0, 180, fill=rgba(INK, a), width=5)
+        d.ellipse([cx - hw, top - ry, cx + hw, top + ry], outline=rgba(INK, a), width=5)
+        for q in (0.3, 0.7):
+            y = top + (bot - top) * q
+            d.arc([cx - half(y), y - ry, cx + half(y), y + ry], 0, 180, fill=rgba(GM, a), width=4)
+        # pipe and drips
+        d.rectangle([cx - 14, top - 170, cx + 14, top - 110], outline=rgba(GM, a), width=4)
+        d.rectangle([cx - 14, top - 186, W + 20, top - 158], outline=rgba(GM, a), width=4)
+        for m in range(3):
+            ph = (t * 1.6 + m / 3) % 1
+            y = top - 104 + (ly - top + 104) * ph * ph
+            if y < ly - 6:
+                d.ellipse([cx - 8, y - 12, cx + 8, y + 8], fill=rgba(G, a * 0.9))
+            else:   # splash ring on the surface
+                rr = 18 + 60 * (ph - 0.8) / 0.2 if ph > 0.8 else 18
+                d.ellipse([cx - rr, ly - rr * 0.28, cx + rr, ly + rr * 0.28], outline=rgba(G, a * 0.6), width=2)
+        # reference line (pre-war level)
+        ref = sc.get("ref")
+        if ref:
+            ry_ = bot - (bot - top) * float(ref["n"]) / mx
+            ra = a * ease((loc - 0.5) / 0.4)
+            for x in range(int(cx - hw - 60), int(cx + hw + 60), 26):
+                d.line([(x, ry_), (x + 14, ry_)], fill=rgba(RED, ra), width=4)
+            d.text((cx + hw + 40 - font("mono", 26).getlength(ref["label"]), ry_ + 10), ref["label"],
+                   font=font("mono", 26), fill=rgba(RED, ra))
+        # now level tag
+        if lvl_n > 0:
+            tag = sc.get("value", "")
+            d.line([(cx + half(ly) + 8, ly), (cx + hw + 60, ly)], fill=rgba(G, a), width=3)
+            d.text((cx + hw + 70, ly - 18), self.count(tag, lvl_n / max(1e-6, float(sc["n"]))), font=font("mono", 30), fill=rgba(G, a))
+
+    def chart(self, d, sc, ln, loc, dur, t, a):
+        """Price line that pours in like oil: the area under the line fills as it draws."""
+        pts_in = sc["points"]
+        lo, hi = float(sc.get("min", 50)), float(sc.get("max", 130))
+        x0, x1, y0, y1 = 150, 960, 1230, 720
+        n = len(pts_in)
+        P = [(x0 + (x1 - x0) * i / (n - 1), y0 - (y0 - y1) * (float(v) - lo) / (hi - lo)) for i, (_, v) in enumerate(pts_in)]
+        if sc.get("head"):
+            self.big_value(d, sc["head"], 300, a, size=130)
+        d.text((84, 470), sc.get("label", ""), font=font("mono", 32), fill=rgba(INK, a * 0.9))
+        d.text((84, 514), ln.get("note", ""), font=font("mono", 25), fill=rgba(GM, a * 0.85))
+        # grid
+        for gv in sc.get("grid", [70, 100]):
+            gy = y0 - (y0 - y1) * (gv - lo) / (hi - lo)
+            for x in range(x0, x1, 22):
+                d.line([(x, gy), (x + 10, gy)], fill=rgba(GD, a), width=2)
+            d.text((x0 - 8 - font("mono", 24).getlength(f"${gv}"), gy - 14), f"${gv}", font=font("mono", 24), fill=rgba(GM, a))
+        d.line([(x0, y0), (x1, y0)], fill=rgba(GM, a), width=2)
+        prog = ease((loc - 0.15) / max(1.4, dur * 0.7))
+        xe = x0 + (x1 - x0) * prog
+        # sample the polyline up to xe
+        line = []
+        for i in range(n - 1):
+            (ax, ay), (bx, by) = P[i], P[i + 1]
+            for q in np.linspace(0, 1, 16):
+                x = ax + (bx - ax) * q
+                if x <= xe:
+                    line.append((x, ay + (by - ay) * q))
+        if len(line) >= 2:
+            d.polygon(line + [(line[-1][0], y0), (line[0][0], y0)], fill=rgba((16, 44, 28), a * 0.9))
+            d.line(line, fill=rgba(G, a), width=6)
+            hx, hy = line[-1]
+            d.ellipse([hx - 9, hy - 9, hx + 9, hy + 9], fill=rgba(INK, a))
+        for i, ((lab, v), (px, py)) in enumerate(zip(pts_in, P)):
+            if px > xe + 1:
+                continue
+            last = i == n - 1
+            col = RED if last else INK
+            d.ellipse([px - 10, py - 10, px + 10, py + 10], fill=rgba(col, a))
+            if last:
+                self.rings(d, px, py, t, a)
+            f = font("sans", 40 if last else 34)
+            txt = f"${float(v):.0f}"
+            tx = min(x1 + 30 - f.getlength(txt), max(60, px - f.getlength(txt) / 2))
+            d.text((tx, py - 62), txt, font=f, fill=rgba(col, a))
+            fl = font("mono", 22)
+            lx = min(x1 + 40 - fl.getlength(lab), max(50, px - fl.getlength(lab) / 2))
+            d.text((lx, y0 + 16 + (i % 2) * 30), lab, font=fl, fill=rgba(GM, a))
+
     # ---- one frame ----
     def frame(self, t, fi):
         i = self._line_at(t)
@@ -645,7 +844,7 @@ class Renderer:
             k_ = scn["type"]
             if k_ in PANEL_SCENES and self.flag_for(scn):
                 return 0.16
-            if k_ == "walkout":
+            if k_ in ("walkout", "barrel", "chart"):
                 return 0.14
             return {"number": 0.5, "compare": 0.42, "quote": 0.36, "statement": 0.62}.get(k_, 1.0)
         dim = dim_of(sc)
@@ -666,7 +865,7 @@ class Renderer:
             a *= gate
             a_in *= gate
         slide = ease((loc - 0.1) / 0.5)
-        map_a = 1.0 if sc["type"] in MAP_SCENES else 0.45
+        map_a = 1.0 if sc["type"] in MAP_SCENES else (0.0 if sc["type"] in ("barrel", "chart", "walkout") else 0.45)
 
         # detail scenes: cut from the map to a waving green flag of the country
         fc = self.flag_for(sc) if sc["type"] in PANEL_SCENES else None
@@ -681,7 +880,7 @@ class Renderer:
 
         # context markers for places already mentioned
         active = set()
-        if sc["type"] == "pin":
+        if sc["type"] in ("pin", "tankers"):
             active = {sc["place"]}
         elif sc["type"] == "route":
             active = {sc["from"], sc["to"]}
@@ -776,6 +975,18 @@ class Renderer:
             if pb and prog > 0.9:
                 la = ease((prog - 0.9) / 0.1) * a_out
                 self.label_block(d, pb[0], pb[1], sc.get("label") or B["name"], [sc.get("sub", "")], ln.get("note"), la, la)
+        elif k == "tankers":
+            self.tankers(d, sc, ln, cam, loc, t, a, a_in, slide)
+        elif k == "barrel":
+            prog = (loc - 0.1) / 1.3
+            self.big_value(d, self.count(sc["value"], prog), 300, a)
+            d.text((84, 480), sc.get("label", ""), font=font("mono", 34), fill=rgba(INK, a * 0.9))
+            if sc.get("detail"):
+                d.text((84, 526), sc["detail"], font=font("mono", 28), fill=rgba(GM, a))
+            d.text((84, 566), ln.get("note", ""), font=font("mono", 25), fill=rgba(GM, a * 0.85))
+            self.barrel(d, sc, loc, t, a)
+        elif k == "chart":
+            self.chart(d, sc, ln, loc, en - st, t, a)
         elif k == "walkout":
             self.hall(d, sc, loc, en - st, t, a)
             if ln.get("note"):
