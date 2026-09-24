@@ -66,6 +66,10 @@ def main():
 
     cap = writer.caption_text(script)
     (out / "caption.txt").write_text(cap)
+    tags = " ".join("#" + str(h).strip("#").replace(" ", "") for h in script.get("hashtags", []))
+    title = (script.get("caption") or script.get("headline", "")).strip().replace("\u2014", ",")
+    # the TikTok post text (used by Telegram and by the Buffer publish step)
+    (out / "tiktok.txt").write_text(f"{title}\n\nNarrated by an AI voice. Sources in the comments.\n\n{tags}".strip())
     (out / "script.json").write_text(json.dumps(script, indent=2))
     print(f"[outpost] done: {video} ({total:.1f}s), terrain={script.get('_terrain')}")
 
@@ -74,9 +78,7 @@ def main():
         sources.save_seen(seen)
     if not args.no_send:
         # Telegram gets the video only, captioned with the post title and hashtags, ready to paste.
-        tags = " ".join("#" + str(h).strip("#").replace(" ", "") for h in script.get("hashtags", []))
-        title = (script.get("caption") or script.get("headline", "")).strip().replace("\u2014", ",")
-        telegram.send_video(video, f"{title}\n\n{tags}".strip())
+        telegram.send_video(video, (out / "tiktok.txt").read_text())
     (config.ROOT / "out" / "latest.txt").write_text(str(out))
     return 0
 
