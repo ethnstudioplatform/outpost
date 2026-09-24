@@ -1267,7 +1267,7 @@ class Renderer:
             while font("sans", size).getlength(ln) > 940 and size > 44:
                 size -= 4
             fz = font("sans", size)
-            aj = a * ease((t + 0.25 - j * 0.35) / 0.2)
+            aj = a  # all hook lines on screen from frame 0, so the first frame (the TikTok cover) is the hook
             box = RED if j == 0 else (126, 246, 166)
             ink = (255, 255, 255) if j == 0 else BG
             d.rectangle([56, y - 8, 56 + fz.getlength(ln) + 32, y + size + 14], fill=rgba(box, aj))
@@ -1294,11 +1294,12 @@ class Renderer:
 def render(script, timeline, total, audio, out, thumb):
     r = Renderer(script, timeline, total)
     script["_terrain"] = r.terrain_src
-    Image.fromarray(r.frame(0.6 if script.get("hook") else (0.7 if script.get("cover") else LEAD + 1.0), 0)).save(thumb)
+    Image.fromarray(r.frame(0.0 if script.get("hook") else (0.7 if script.get("cover") else LEAD + 1.0), 0)).save(thumb)
     n = int(math.ceil(total * FPS))
     cmd = ["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
            "-r", str(FPS), "-i", "-", "-i", str(audio), "-map", "0:v", "-map", "1:a",
-           "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-pix_fmt", "yuv420p", "-aspect", "9:16",
+           "-c:v", "libx264", "-preset", "slow", "-crf", "16", "-profile:v", "high", "-level", "4.2",
+           "-maxrate", "18M", "-bufsize", "36M", "-g", "60", "-pix_fmt", "yuv420p", "-aspect", "9:16",
            "-c:a", "aac", "-b:a", "192k", "-t", f"{total:.2f}", "-movflags", "+faststart", str(out)]
     p = subprocess.Popen(cmd, stdin=subprocess.PIPE)
     for fi in range(n):

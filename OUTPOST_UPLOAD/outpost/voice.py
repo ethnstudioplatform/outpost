@@ -19,7 +19,8 @@ SR = 44100
 # ---- the OUTPOST voice: a blend of Kokoro's British female voices ----
 # Emma carries the warmth and clarity, Isabella adds a lower, steadier edge.
 VOICE_BLEND = [("bf_emma", 0.68), ("bf_isabella", 0.32)]
-VOICE_SPEED = float(os.getenv("OUTPOST_SPEED", "0.94"))  # a touch slower than default: measured, human
+VOICE_SPEED = float(os.getenv("OUTPOST_SPEED", "0.94"))
+MUSIC_LEVEL = 0.2   # music bed loudness relative to the voice (0.2 = 20%); 0 turns the music off  # a touch slower than default: measured, human
 
 # Light, natural chain. No radio effect: sounds like a person in a quiet room.
 VOICE_FX = ("highpass=f=65,"
@@ -183,6 +184,52 @@ def engine_name() -> str:
     return "espeak-ng" if shutil.which("espeak-ng") else "test-tone"
 
 
+def music_bed(n_all, total, bpm=92):
+    """A tense, understated news-desk loop in A minor (Am, F, C, G): kick, bass, plucked arpeggio,
+    soft pad and hats. Generated from scratch every render, so it is fully original."""
+    import numpy as np
+    t = np.arange(n_all) / SR
+    beat = 60.0 / bpm
+    out = np.zeros(n_all, np.float32)
+    hz = lambda m: 440.0 * 2 ** ((m - 69) / 12)
+    chords = [(57, 60, 64), (53, 57, 60), (48, 52, 55), (55, 59, 62)]   # Am F C G
+    bar = 4 * beat
+
+    def note(start, dur, freq, amp, decay, harm=(1.0,)):
+        o = int(start * SR); m = int(dur * SR)
+        if o >= n_all or m <= 0:
+            return
+        m = min(m, n_all - o)
+        k = np.arange(m) / SR
+        w = sum(a * np.sin(2 * np.pi * freq * (i + 1) * k) for i, a in enumerate(harm))
+        env = np.exp(-k * decay) * np.clip(k / 0.004, 0, 1)
+        out[o:o + m] += (amp * w * env).astype(np.float32)
+
+    n_beats = int(total / beat) + 2
+    rng = np.random.default_rng(11)
+    for b in range(n_beats):
+        st = b * beat
+        ch = chords[(b // 8) % 4]                      # 2 bars per chord
+        if b % 2 == 0:                                 # kick on 1 and 3
+            o = int(st * SR); m = min(int(0.35 * SR), n_all - o)
+            if m > 0:
+                k = np.arange(m) / SR
+                out[o:o + m] += (0.9 * np.sin(2 * np.pi * (48 + 70 * np.exp(-k * 30)) * k) * np.exp(-k * 9)).astype(np.float32)
+        for half in (0, 0.5):                          # driving eighth-note bass
+            note(st + half * beat, 0.9 * beat / 2, hz(ch[0] - 24), 0.30, 7, (1.0, 0.35, 0.15))
+        for q in range(4):                             # plucked sixteenth arpeggio
+            tone = ch[(b * 4 + q) % 3] + 12
+            note(st + q * beat / 4, beat / 2, hz(tone), 0.07, 11, (1.0, 0.25))
+        o = int((st + beat / 2) * SR); m = min(int(0.05 * SR), n_all - o)
+        if m > 0:                                      # soft off-beat hat
+            out[o:o + m] += (rng.normal(0, 1, m) * 0.05 * np.exp(-np.arange(m) / SR * 80)).astype(np.float32)
+    for c in range(int(total / (2 * bar)) + 2):          # sustained pad under each chord
+        ch = chords[c % 4]
+        for mnote in ch:
+            note(c * 2 * bar, 2 * bar, hz(mnote), 0.035, 0.4, (1.0, 0.2))
+    return out
+
+
 def build_track(segments, out: Path, sfx=()):
     """segments: [(start_s, wav)], sfx: [(t, kind)] with kind in tick|pulse|swell.
     Voice on top of a quiet ambient pad. Loudness normalised for phones."""
@@ -210,6 +257,13 @@ def build_track(segments, out: Path, sfx=()):
     k = 200
     air = np.convolve(air, np.ones(k) / k, mode="same") * 0.12
     bed = (pad + air) * np.clip(t / 2.0, 0, 1) * np.clip((total - t) / 1.5, 0, 1)
+    if MUSIC_LEVEL > 0:
+        # original music bed (generated here, so no copyright issues) sitting at MUSIC_LEVEL of the voice
+        mus = music_bed(n_all, total)
+        vo = voice[np.abs(voice) > 0.01]
+        v_rms = float(np.sqrt(np.mean(vo ** 2))) if len(vo) else 0.1
+        m_rms = float(np.sqrt(np.mean(mus ** 2))) or 1.0
+        bed = mus * (MUSIC_LEVEL * v_rms / m_rms) * np.clip(t / 0.3, 0, 1) * np.clip((total - t) / 1.5, 0, 1)
 
     fx = np.zeros(n_all, np.float32)
     for t0, kind in sfx:
@@ -232,7 +286,7 @@ def build_track(segments, out: Path, sfx=()):
 
     # duck the bed under the voice
     env = np.convolve(np.abs(voice), np.ones(4410) / 4410, mode="same")
-    duck = 1 - np.clip(env * 6, 0, 0.55)
+    duck = 1 - np.clip(env * 6, 0, 0.25 if MUSIC_LEVEL > 0 else 0.55)
     mix = voice + bed * duck + fx
     dry = out.with_suffix(".dry.wav")
     with wave.open(str(dry), "wb") as wf:
