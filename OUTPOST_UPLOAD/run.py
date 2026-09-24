@@ -44,6 +44,8 @@ def main():
     voice.MUSIC_LEVEL = float(script.get("music_level", voice.MUSIC_LEVEL))
     if script.get("gap") is not None:
         render.GAP = float(script["gap"])
+    if script.get("scene_gap") is not None:
+        render.SCENE_GAP = float(script["scene_gap"])  # extra pause on a scene change (fast videos use ~0.05)
     if script.get("hook"):
         render.LEAD = 0.05  # v6: voice starts on the first frame
     engine = voice.engine_name()
