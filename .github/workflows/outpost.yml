@@ -110,7 +110,7 @@ jobs:
         env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
           BUFFER_CHANNEL_ID: ${{ vars.BUFFER_CHANNEL_ID }}
-          BUFFER_MODE: ${{ vars.BUFFER_MODE || 'addToQueue' }}
+          BUFFER_MODE: ${{ vars.BUFFER_MODE || 'shareNow' }}  # post as soon as the video is ready
           GH_TOKEN: ${{ github.token }}
         run: |
           TAG="v$(date -u +%Y%m%d-%H%M%S)"
