@@ -32,7 +32,7 @@ FOC = 1.6
 HORIZ = 0.44
 MAPSCALE = 2       # map layer rendered at 1/2 res then upscaled (soft, fast)
 
-MAP_SCENES = {"pin", "route", "flow", "wide"}
+MAP_SCENES = {"pin", "route", "flow", "wide", "flight"}
 PANEL_SCENES = {"number", "compare", "quote", "statement"}
 
 # ---------------- fonts ----------------
@@ -141,6 +141,8 @@ class Renderer:
     # ---- map texture ----
     def _build_texture(self):
         pl = list(self.places.values())
+        pl += [ln["scene"]["from"] for ln in self.lines
+               if ln["scene"].get("type") == "flight" and isinstance(ln["scene"].get("from"), dict)]
         if pl:
             lons = [p["lon"] for p in pl]; lats = [p["lat"] for p in pl]
         else:
@@ -272,6 +274,11 @@ class Renderer:
         if t == "flow":
             cx, cy, ext = center([pl[sc["from"]]] + [pl[x] for x in sc["to"]])
             return cx, cy, max(ext * 1.6, self._deg(2.2))
+        if t == "flight":
+            _, _, ext = center([sc["from"], pl[sc["to"]]])
+            ax, ay = self.T(sc["from"]["lon"], sc["from"]["lat"])
+            bx, by = self.T(pl[sc["to"]]["lon"], pl[sc["to"]]["lat"])
+            return ax + (bx - ax) * 0.58, ay + (by - ay) * 0.5, max(ext * 1.35, self._deg(1.8))
         cx, cy, ext = center(allp)
         if t == "wide":
             return cx, cy, max(ext * 1.45, self._deg(2.8))
@@ -282,7 +289,8 @@ class Renderer:
         self.cams = []
         for i, ln in enumerate(self.lines):
             cx, cy, span = self._target(ln["scene"])
-            self.cams.append((cx, cy, span, yaws[i % len(yaws)]))
+            yaw = 0 if ln["scene"]["type"] == "flight" else yaws[i % len(yaws)]
+            self.cams.append((cx, cy, span, yaw))
         if not self.cams:
             self.cams = [(self.TW / 2, self.TH / 2, self.TW * 0.4, 0)]
 
@@ -376,7 +384,7 @@ class Renderer:
                     ids.append(sc[k])
             if sc.get("to"):
                 ids += sc["to"] if isinstance(sc["to"], list) else [sc["to"]]
-        return list(dict.fromkeys(i for i in ids if i in self.places))
+        return list(dict.fromkeys(i for i in ids if isinstance(i, str) and i in self.places))
 
     def marker(self, d, p, cam, a, name=True, big=False, red=False):
         pr = self.project(p["lon"], p["lat"], cam)
@@ -552,6 +560,78 @@ class Renderer:
                 col = tuple(int(GD[i] + (G[i] - GD[i]) * (0.25 + 0.75 * v) * shade) for i in range(3))
                 d.ellipse([x - rad, y - rad, x + rad, y + rad], fill=rgba(col, a * (0.2 + 0.32 * v)))
 
+
+    # ---- special animations ----
+    def plane(self, d, x, y, ang, a, size=34):
+        """Top-down aircraft silhouette, nose along angle `ang` (radians)."""
+        pts = [(1.0, 0), (0.55, 0.08), (0.1, 0.1), (-0.15, 0.62), (-0.32, 0.62), (-0.2, 0.1), (-0.72, 0.08),
+               (-0.9, 0.3), (-1.0, 0.3), (-0.92, 0), (-1.0, -0.3), (-0.9, -0.3), (-0.72, -0.08), (-0.2, -0.1),
+               (-0.32, -0.62), (-0.15, -0.62), (0.1, -0.1), (0.55, -0.08)]
+        c, s_ = math.cos(ang), math.sin(ang)
+        poly = [(x + (px * c - py * s_) * size, y + (px * s_ + py * c) * size) for px, py in pts]
+        d.polygon(poly, fill=rgba(INK, a))
+        d.ellipse([x + c * size * 0.8 - 4, y + s_ * size * 0.8 - 4, x + c * size * 0.8 + 4, y + s_ * size * 0.8 + 4],
+                  fill=rgba(RED, a))
+
+    def person(self, d, x, y, h, phase, col, a, walking=True):
+        """Pictogram figure standing at (x, y=feet). Legs and arms swing while walking."""
+        head = h * 0.13
+        d.ellipse([x - head, y - h, x + head, y - h + head * 2], fill=rgba(col, a))
+        neck, hip = y - h + head * 2.2, y - h * 0.45
+        w = max(3, int(h * 0.07))
+        d.line([(x, neck), (x, hip)], fill=rgba(col, a), width=w)
+        sw = math.sin(phase) * (0.35 if walking else 0)
+        for sgn in (1, -1):
+            d.line([(x, hip), (x + sgn * sw * h * 0.5, y)], fill=rgba(col, a), width=w)
+            d.line([(x, neck + h * 0.05), (x - sgn * sw * h * 0.35, hip + h * 0.05)], fill=rgba(col, a), width=w)
+
+    def hall(self, d, sc, loc, dur, t, a):
+        """Schematic assembly hall: podium, curved rows of seats, an exit, and delegates walking out."""
+        cx, top = W / 2, 520
+        d.rectangle([cx - 120, top, cx + 120, top + 46], outline=rgba(GM, a), width=3)
+        d.text((cx - font("mono", 24).getlength("PODIUM") / 2, top + 10), "PODIUM", font=font("mono", 24), fill=rgba(GM, a))
+        seats = []
+        for r in range(5):
+            rad = 230 + r * 78
+            n = 9 + r * 3
+            for k in range(n):
+                ang = math.radians(200 + (140 * k / (n - 1)))
+                seats.append((cx + math.cos(ang) * rad * 1.05, top + 40 - math.sin(ang) * rad * 0.9))
+        walkers = max(1, min(4, int(sc.get("count", 1))))
+        chosen = [len(seats) - 6 - j * 2 for j in range(walkers)]
+        door = (W - 120, 1210)
+        d.rectangle([door[0] - 40, door[1] - 150, door[0] + 40, door[1]], outline=rgba(RED, a), width=4)
+        d.text((door[0] - 30, door[1] + 10), "EXIT", font=font("mono", 26), fill=rgba(RED, a))
+        for i_, (sx, sy) in enumerate(seats):
+            if i_ in chosen:
+                d.rectangle([sx - 9, sy - 9, sx + 9, sy + 9], outline=rgba(RED, a * 0.8), width=2)
+            else:
+                d.rectangle([sx - 8, sy - 8, sx + 8, sy + 8], fill=rgba(GM, a * 0.7))
+        for j, idx in enumerate(chosen):
+            sx, sy = seats[idx]
+            p = ease((loc - 0.3 - j * 0.35) / max(1.2, dur * 0.8))
+            if p <= 0:
+                self.person(d, sx, sy + 6, 70, 0, RED, a, walking=False)
+                continue
+            # path: seat -> aisle below the rows -> door
+            ay = 1210
+            if p < 0.35:
+                q = p / 0.35
+                x, y = sx, sy + 6 + (ay - sy - 6) * q
+            else:
+                q = (p - 0.35) / 0.65
+                x, y = sx + (door[0] - sx) * q, ay
+            fade = 1 - ease((p - 0.9) / 0.1)
+            self.person(d, x, y, 96, t * 11 + j, RED, a * fade)
+        head = sc.get("label", "")
+        if head:
+            f = font("sans", 64)
+            size = 64
+            while f.getlength(head) > 940 and size > 40:
+                size -= 4; f = font("sans", size)
+            d.text((70, 300), head, font=f, fill=rgba(INK, a))
+            self.accent_bar(d, 76, 300 + size * 1.15, a)
+
     # ---- one frame ----
     def frame(self, t, fi):
         i = self._line_at(t)
@@ -565,6 +645,8 @@ class Renderer:
             k_ = scn["type"]
             if k_ in PANEL_SCENES and self.flag_for(scn):
                 return 0.16
+            if k_ == "walkout":
+                return 0.14
             return {"number": 0.5, "compare": 0.42, "quote": 0.36, "statement": 0.62}.get(k_, 1.0)
         dim = dim_of(sc)
         swap = ease((loc + 0.25) / 0.8)
@@ -669,6 +751,35 @@ class Renderer:
                 self.marker(d, B, cam, a_in * grow, big=True, red=True)
             if pa:
                 self.label_block(d, pa[0], pa[1], sc.get("label"), [], ln.get("note"), a, slide)
+        elif k == "flight":
+            B = self.places[sc["to"]]
+            A = sc["from"]
+            prog = ease((loc + 0.2) / max(1.6, (en - st) * 0.8))
+            mlon = (A["lon"] + B["lon"]) / 2 - (B["lat"] - A["lat"]) * 0.25
+            mlat = (A["lat"] + B["lat"]) / 2 + (B["lon"] - A["lon"]) * 0.25
+            def bez(u):
+                return ((1 - u) ** 2 * A["lon"] + 2 * (1 - u) * u * mlon + u * u * B["lon"],
+                        (1 - u) ** 2 * A["lat"] + 2 * (1 - u) * u * mlat + u * u * B["lat"])
+            pts = [self.project(*bez(u / 60 * prog), cam) for u in range(61)]
+            pts = [p[:2] for p in pts if p]
+            for j in range(0, len(pts) - 1, 2):
+                d.line([pts[j], pts[j + 1]], fill=rgba(INK, 0.75), width=6)
+            pb = self.marker(d, B, cam, 1.0 if prog > 0.97 else 0.5, name=False, big=True, red=True)
+            if pb:
+                self.rings(d, pb[0], pb[1], t, 1.0)
+            if len(pts) >= 2:
+                (x1, y1), (x2, y2) = pts[-2], pts[-1]
+                ang = math.atan2(y2 - y1, x2 - x1)
+                for g in (3, 2, 1):   # soft glow under the aircraft
+                    d.ellipse([x2 - 26 * g, y2 - 26 * g, x2 + 26 * g, y2 + 26 * g], fill=rgba(G, 0.05))
+                self.plane(d, x2, y2, ang, 1.0, size=54)
+            if pb and prog > 0.9:
+                la = ease((prog - 0.9) / 0.1) * a_out
+                self.label_block(d, pb[0], pb[1], sc.get("label") or B["name"], [sc.get("sub", "")], ln.get("note"), la, la)
+        elif k == "walkout":
+            self.hall(d, sc, loc, en - st, t, a)
+            if ln.get("note"):
+                d.text((76, 400), ln["note"], font=font("mono", 26), fill=rgba(GM, a))
         elif k == "number":
             prog = (loc - 0.1) / 0.9
             self.big_value(d, self.count(sc["value"], prog), 300, a)
