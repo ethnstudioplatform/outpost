@@ -69,7 +69,7 @@ def main():
     tags = " ".join("#" + str(h).strip("#").replace(" ", "") for h in script.get("hashtags", []))
     title = (script.get("caption") or script.get("headline", "")).strip().replace("\u2014", ",")
     # the TikTok post text (used by Telegram and by the Buffer publish step)
-    (out / "tiktok.txt").write_text(f"{title}\n\nNarrated by an AI voice. Sources in the comments.\n\n{tags}".strip())
+    (out / "tiktok.txt").write_text(f"{title}\n\nSources in the comments.\n\n{tags}".strip())
     (out / "script.json").write_text(json.dumps(script, indent=2))
     print(f"[outpost] done: {video} ({total:.1f}s), terrain={script.get('_terrain')}")
 
