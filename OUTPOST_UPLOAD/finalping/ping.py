@@ -28,8 +28,17 @@ def hue(h, s=0.55, v=1.0):
     return np.array([(v, t, p), (q, v, p), (p, v, t), (p, q, v), (t, p, v), (v, p, q)][i % 6], np.float32) * 255
 
 
+THEME = "night"
+
+
 def pitch_colour(m):
+    if THEME == "autumn":     # ember red through amber to gold
+        return hue(0.005 + ((m * 5) % 12) / 12 * 0.125, s=0.78)
     return hue(((m - 60) % 12) / 12 * 0.85 + 0.02)
+
+
+def spark_colour(q):
+    return hue(0.01 + (q % 7) / 7 * 0.12, s=0.8) if THEME == "autumn" else hue(q)
 
 
 # ------------------------------------------------------------------ course
@@ -169,6 +178,9 @@ def ring(buf, cx, cy, rad, width, col, a):
 
 # ------------------------------------------------------------------ frames
 def render(spec, out):
+    global THEME
+    THEME = spec.get("theme", "night")
+    autumn = THEME == "autumn"
     c = build(spec)
     n = int(c["end"] * FPS)
     ts = np.arange(n) / FPS
@@ -179,10 +191,14 @@ def render(spec, out):
     ys = [p[1] for p in c["pts"]] + [c["start"][1]]
     top, bot = min(ys) - 260, max(ys) + 260
     fit = min(1.0, (H * 0.86) / (bot - top))
-    grad = (BG_TOP[None, :] * (1 - np.linspace(0, 1, H)[:, None]) + BG_BOT[None, :] * np.linspace(0, 1, H)[:, None])
+    bg_top, bg_bot = (np.array([30, 14, 8], np.float32), np.array([9, 5, 4], np.float32)) if autumn else (BG_TOP, BG_BOT)
+    grad = (bg_top[None, :] * (1 - np.linspace(0, 1, H)[:, None]) + bg_bot[None, :] * np.linspace(0, 1, H)[:, None])
     base = np.repeat(grad[:, None, :], W, axis=1).astype(np.float32)
     rng = np.random.default_rng(3)
     stars = [(rng.uniform(0, W), rng.uniform(-400, bot + 1600), rng.uniform(1, 2.4)) for _ in range(140)]
+    leaves = [(rng.uniform(0, W), rng.uniform(-600, bot + 1600), rng.uniform(3.5, 5.5), rng.uniform(0, 6.3),
+               rng.uniform(40, 110), rng.integers(0, 7), rng.uniform(0.35, 0.8)) for _ in range(34)]
+    span_y = bot + 2200
     grain = [rng.normal(0, 2.2, (H, W, 1)).astype(np.float32) for _ in range(4)]
     ft = c["final"]["t"]
 
@@ -199,10 +215,21 @@ def render(spec, out):
         def S(x, y):
             return (W / 2 + (x - W / 2) * s, H * 0.42 + (y - cy) * s)
         buf = base.copy()
-        for sx, sy, sr in stars:        # faint parallax dust
-            X, Y = sx, H * 0.42 + (sy - cy * 0.35) * s
-            if -5 < Y < H + 5:
-                capsule(buf, X, Y, X, Y, sr * s, np.array([70, 80, 110], np.float32), alpha=0.5)
+        if autumn:                      # falling leaves, drifting and turning, with parallax
+            for lx0, ly0, lr, ph, spd, hq, dep in leaves:
+                ly = (ly0 + spd * t + 600) % span_y - 600
+                X = lx0 + 46 * math.sin(t * 1.1 + ph)
+                Y = H * 0.42 + (ly - cy * dep) * s
+                if -30 < Y < H + 30:
+                    ang = ph + t * (1.2 + 0.4 * math.sin(ph))
+                    L = lr * 1.4 * s
+                    capsule(buf, X - math.cos(ang) * L, Y - math.sin(ang) * L * 0.6, X + math.cos(ang) * L,
+                            Y + math.sin(ang) * L * 0.6, lr * 0.75 * s, spark_colour(hq) * 0.7, alpha=0.22 + 0.3 * dep)
+        else:
+            for sx, sy, sr in stars:    # faint parallax dust
+                X, Y = sx, H * 0.42 + (sy - cy * 0.35) * s
+                if -5 < Y < H + 5:
+                    capsule(buf, X, Y, X, Y, sr * s, np.array([70, 80, 110], np.float32), alpha=0.5)
         bx, byy = ball_at(c, t)
         # pads
         for p in c["pads"]:
@@ -252,20 +279,21 @@ def render(spec, out):
                 sx, sy = fx + math.cos(ang) * v * e, fy + math.sin(ang) * v * e + 0.5 * G * 0.4 * e * e
                 if e < 1.3:
                     X, Y = S(sx, sy)
-                    capsule(buf, X, Y, X, Y, 5 * s, hue(q / 26), glow=0.4, glow_r=30 * s, alpha=max(0, 1 - e / 1.3))
+                    capsule(buf, X, Y, X, Y, 5 * s, spark_colour(q) if autumn else hue(q / 26), glow=0.4, glow_r=30 * s, alpha=max(0, 1 - e / 1.3))
         # trail + ball
         trail.append((bx, byy))
         trail = trail[-14:]
         for j, (tx_, ty_) in enumerate(trail[:-1]):
             X, Y = S(tx_, ty_)
-            capsule(buf, X, Y, X, Y, R * s * (0.3 + 0.6 * j / len(trail)), np.array([200, 215, 255], np.float32),
+            capsule(buf, X, Y, X, Y, R * s * (0.3 + 0.6 * j / len(trail)),
+                    np.array([255, 196, 140] if autumn else [200, 215, 255], np.float32),
                     alpha=0.18 * j / len(trail))
         X, Y = S(bx, byy)
         if t < 0.35:          # the ball fades in at the top before it drops
             a = t / 0.35
         else:
             a = 1.0
-        capsule(buf, X, Y, X, Y, R * s, np.array([255, 255, 255], np.float32), glow=0.5 * a, glow_r=80 * s, alpha=a)
+        capsule(buf, X, Y, X, Y, R * s, np.array([255, 244, 226] if autumn else [255, 255, 255], np.float32), glow=0.5 * a, glow_r=80 * s, alpha=a)
         # grade + grain + loop fade
         f = 1.0
         if t > c["end"] - 0.45:
