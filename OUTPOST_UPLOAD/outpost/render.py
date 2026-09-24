@@ -144,7 +144,7 @@ class Renderer:
         else:
             lons, lats = [35.0], [32.0]
         ext = max(max(lons) - min(lons), max(lats) - min(lats), 1.5)
-        pad = max(6.5, ext * 2.0)
+        pad = max(6.5, min(ext * 2.0, 24))
         self.latc = (max(lats) + min(lats)) / 2
         self.cosc = math.cos(math.radians(self.latc))
         lon0, lon1 = min(lons) - pad / self.cosc, max(lons) + pad / self.cosc
