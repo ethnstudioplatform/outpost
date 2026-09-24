@@ -21,7 +21,9 @@ def countries():
     global _countries
     if _countries is not None:
         return _countries
-    path = config.ROOT / "assets" / "countries-110m.json"
+    path = config.ROOT / "assets" / "countries-50m.json"
+    if not path.exists():
+        path = config.ROOT / "assets" / "countries-110m.json"
     try:
         topo = json.loads(path.read_text())
     except Exception:
