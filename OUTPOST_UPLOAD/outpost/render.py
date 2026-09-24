@@ -1,618 +1,681 @@
-"""OUTPOST renderer v4: green war-room terminal, full-frame 1080x1920, built for fast scrolling.
+"""OUTPOST v5 renderer: quiet green, tilted relief map, pinned sourced labels, dot grids.
 
-Hook on frame one, a new visual beat every line, constant camera motion, word captions,
-glitch cuts. Beats: hook, lock, track, readout, stat, timeline, quote, wide."""
+The map is a real-terrain texture (AWS terrain tiles + Natural Earth coastlines) seen through a
+slowly moving, pitched camera. Everything else (pins, routes, numbers, subtitles) is drawn in
+screen space on top so text stays crisp.
+"""
 import math
-import random
 import re
 import subprocess
-from datetime import datetime
-from pathlib import Path
 
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 from . import config as C
-from . import geo
+from . import geo, terrain
 
 W, H, FPS = C.W, C.H, C.FPS
-LEAD = 0.15      # hook starts almost instantly
-GAP = 0.08
-OUTRO = 1.4
-CAM_T = 0.7
-BOOT = LEAD      # kept for run.py compatibility
+BG = (4, 10, 7)
+INK = (218, 255, 228)
+G = (96, 236, 146)
+GM = (74, 166, 110)
+GD = (26, 66, 42)
 
-BG = (3, 9, 5)
-G = (70, 255, 130)
-GM = (40, 170, 85)
-GD = (18, 70, 36)
-GF = (9, 30, 16)
-AMB = (255, 180, 40)
-REDDOT = (255, 70, 55)
+LEAD = 0.45        # voice starts under the cover
+GAP = 0.34         # breath between lines
+SCENE_GAP = 0.22   # extra breath when the picture changes kind
+OUTRO = 1.8
+COVER_T = 1.35
+PITCH = math.radians(40)
+FOC = 1.6
+HORIZ = 0.44
+MAPSCALE = 2       # map layer rendered at 1/2 res then upscaled (soft, fast)
 
-CAP_Y = 1190
-OUTLETS = {"apnews.com": "AP", "reuters.com": "REUTERS", "bbc.co.uk": "BBC", "bbc.com": "BBC",
-           "aljazeera.com": "AL JAZEERA", "theguardian.com": "THE GUARDIAN", "dw.com": "DW",
-           "france24.com": "FRANCE 24", "npr.org": "NPR", "news.sky.com": "SKY NEWS",
-           "news.un.org": "UN NEWS", "reliefweb.int": "RELIEFWEB", "cnn.com": "CNN",
-           "nytimes.com": "NYT", "kyivindependent.com": "KYIV INDEPENDENT", "timesofisrael.com": "TIMES OF ISRAEL"}
-_fonts = {}
-_VT = C.FONT_DIR / "VT323-Regular.ttf"
+MAP_SCENES = {"pin", "route", "flow", "wide"}
+PANEL_SCENES = {"number", "compare", "quote", "statement"}
 
-
-def font(size):
-    if size not in _fonts:
-        _fonts[size] = ImageFont.truetype(str(_VT), size) if _VT.exists() else \
-            ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf", int(size * 0.72))
-    return _fonts[size]
+# ---------------- fonts ----------------
+_fc = {}
 
 
-def wrap(text, f, width):
-    words, lines, cur = text.split(), [], ""
-    for w in words:
-        t = (cur + " " + w).strip()
-        if f.getlength(t) <= width:
-            cur = t
+def font(kind, size):
+    key = (kind, size)
+    if key in _fc:
+        return _fc[key]
+    fd = C.FONT_DIR
+    f = None
+    try:
+        if kind in ("sans", "sansr"):
+            f = ImageFont.truetype(str(fd / "Inter-Var.ttf"), size)
+            try:
+                vals = []
+                for ax in f.get_variation_axes():
+                    nm = ax.get("name", b"")
+                    nm = nm.decode() if isinstance(nm, bytes) else str(nm)
+                    if "eight" in nm:
+                        vals.append(700 if kind == "sans" else 420)
+                    elif "ptical" in nm:
+                        vals.append(max(ax["minimum"], min(ax["maximum"], 32)))
+                    else:
+                        vals.append(ax.get("default", ax["minimum"]))
+                f.set_variation_by_axes(vals)
+            except Exception:
+                pass
         else:
-            if cur:
-                lines.append(cur)
-            cur = w
-    if cur:
-        lines.append(cur)
-    return lines
-
-
-def mix(c, k):
-    return tuple(max(0, min(255, int(v * k))) for v in c)
+            f = ImageFont.truetype(str(fd / "IBMPlexMono-Regular.ttf"), size)
+    except Exception:
+        f = None
+    if f is None:
+        path = {"sans": "DejaVuSans-Bold.ttf", "sansr": "DejaVuSans.ttf", "mono": "DejaVuSansMono.ttf"}[kind]
+        f = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/" + path, size)
+    _fc[key] = f
+    return f
 
 
 def ease(x):
     x = max(0.0, min(1.0, x))
-    return 1 - (1 - x) ** 3
+    return x * x * (3 - 2 * x)
 
 
-def pop(ts, at, dur=0.25, amt=0.18):
-    """Scale overshoot when something slams in."""
-    u = (ts - at) / dur
-    if u < 0:
-        return 0.0
-    if u > 1:
-        return 1.0
-    return 1 + amt * math.sin(u * math.pi) if u > 0.35 else u / 0.35
+def rgba(c, a):
+    return (c[0], c[1], c[2], int(max(0, min(1, a)) * 255))
 
 
-def build_timeline(line_durs):
-    t = LEAD
-    tl = []
-    for d in line_durs:
-        tl.append((t, d))
-        t += d + GAP
-    return tl, t + OUTRO
+def wrap(text, f, width):
+    rows, cur = [], ""
+    for w in str(text).split():
+        if cur and f.getlength(cur + " " + w) > width:
+            rows.append(cur)
+            cur = w
+        else:
+            cur = (cur + " " + w).strip()
+    if cur:
+        rows.append(cur)
+    return rows
 
 
-def _beat(ln, i):
-    b = ln.get("beat")
-    if i == 0:
-        return "hook"
-    if b:
-        if b == "stat" and not ln.get("stat"):
-            b = None
-        elif b == "track" and not ln.get("arc"):
-            b = None
-        elif b == "timeline" and not ln.get("year"):
-            b = None
-        elif b == "readout" and not ln.get("readout"):
-            b = None
-    if b:
-        return b
-    if ln.get("arc"):
-        return "track"
-    if ln.get("stat"):
-        return "stat"
-    if ln.get("year"):
-        return "timeline"
-    if ln.get("loc"):
-        return "lock"
-    return "readout" if ln.get("readout") else "wide"
+# ---------------- timeline + sound cues ----------------
+def build_timeline(line_durs, scenes=None):
+    scenes = scenes or [{"type": "wide"}] * len(line_durs)
+    tl, t = [], LEAD
+    for i, d in enumerate(line_durs):
+        tl.append((t, t + d))
+        gap = GAP
+        if i + 1 < len(line_durs) and (scenes[i]["type"] in MAP_SCENES) != (scenes[i + 1]["type"] in MAP_SCENES):
+            gap += SCENE_GAP
+        t += d + gap
+    return tl, tl[-1][1] + OUTRO
 
 
 def sfx_events(script, timeline):
     ev = []
-    for i, ((st, du), ln) in enumerate(zip(timeline, script["lines"])):
-        b = _beat(ln, i)
-        if i > 0:
-            ev.append((st - 0.05, "whoosh"))
-        if b == "hook":
-            ev.append((st + 0.45, "boom"))
-        elif b == "lock":
-            ev.append((st + 0.55, "lock"))
-        elif b == "stat":
-            ev.append((st + 1.0, "boom"))
-        elif b == "track":
-            ev.append((st + 2.0, "boom"))
-        elif b in ("readout", "quote"):
-            ev.append((st + 0.1, "type"))
+    prev = None
+    for ln, (st, _) in zip(script["lines"], timeline):
+        k = ln["scene"]["type"]
+        if k in ("pin", "route", "flow"):
+            ev.append((st + 0.3, "tick"))
+        if k in ("number", "compare"):
+            ev.append((st + 0.15, "pulse"))
+        if prev and prev != k:
+            ev.append((max(0, st - 0.4), "swell"))
+        prev = k
     return ev
 
 
+# ---------------- renderer ----------------
 class Renderer:
     def __init__(self, script, timeline, total):
         self.s = script
         self.tl = timeline
         self.total = total
         self.lines = script["lines"]
-        self.start_dt = datetime.fromisoformat(script["generated_utc"])
-        self.countries = geo.countries()
-        self.beats = [_beat(ln, i) for i, ln in enumerate(self.lines)]
-        self.rng = random.Random(11)
-        # places in the story
-        self.places = []
-        for p in [script.get("location")] + [ln.get("loc") for ln in self.lines] + \
-                 [x for ln in self.lines if ln.get("arc") for x in (ln["arc"]["from"], ln["arc"]["to"])]:
-            if p and p["name"] not in [q["name"] for q in self.places]:
-                self.places.append(p)
-        self.main = script.get("location") or (self.places[0] if self.places else None)
-        self.hot = geo.match_country(self.main["name"]) if self.main else None
-        self._cams()
-        self._captions()
-        self.src_tags = []
-        for ln in self.lines:
-            if ln.get("context"):
-                self.src_tags.append("BACKGROUND")
-            elif ln.get("src"):
-                outs = []
-                for n in ln["src"]:
-                    for s in script.get("sources", []):
-                        if s["n"] == n and s["outlet"].upper() not in outs:
-                            nm = OUTLETS.get(s["outlet"], s["outlet"].split(".")[0].upper())
-                            if nm not in outs:
-                                outs.append(nm)
-                self.src_tags.append("SRC: " + " + ".join(outs[:2]))
-            else:
-                self.src_tags.append("")
-        # post effects
-        yy = (np.arange(H)[:, None] - H / 2) / (H / 2)
-        xx = (np.arange(W)[None, :] - W / 2) / (W / 2)
-        vig = np.clip(1 - 0.45 * (xx ** 2 * 0.8 + yy ** 2 * 0.5), 0.3, 1)
-        scan = np.where(np.arange(H)[:, None] % 4 < 2, 1.0, 0.72)
-        self.mask = (scan * vig)[..., None].astype(np.float32)
-        g = np.random.default_rng(5)
-        self.grain = [g.normal(1, 0.05, (H // 2, W // 2)).repeat(2, 0).repeat(2, 1)[..., None].astype(np.float32)
-                      for _ in range(4)]
+        self.places = script.get("places") or {}
+        self.notes = []
+        self._build_texture()
+        self._build_rays()
+        self._build_cams()
+        self._build_post()
 
-    # ---------- planning ----------
-    def _cams(self):
-        m = self.main
-        base = (m["lat"], m["lon"], 14.0) if m else (30.0, 30.0, 90.0)
+    # ---- map texture ----
+    def _build_texture(self):
+        pl = list(self.places.values())
+        if pl:
+            lons = [p["lon"] for p in pl]; lats = [p["lat"] for p in pl]
+        else:
+            lons, lats = [35.0], [32.0]
+        ext = max(max(lons) - min(lons), max(lats) - min(lats), 1.5)
+        pad = max(6.5, ext * 2.0)
+        self.latc = (max(lats) + min(lats)) / 2
+        self.cosc = math.cos(math.radians(self.latc))
+        lon0, lon1 = min(lons) - pad / self.cosc, max(lons) + pad / self.cosc
+        lat0, lat1 = max(-80, min(lats) - pad), min(80, max(lats) + pad)
+        self.bbox = (lon0, lat0, lon1, lat1)
+        k = 3400 / ((lon1 - lon0) * self.cosc)
+        TH = (lat1 - lat0) * k
+        if TH > 4200:
+            k *= 4200 / TH
+        self.k = k
+        TW, TH = int((lon1 - lon0) * self.cosc * k), int((lat1 - lat0) * k)
+        self.TW, self.TH = TW, TH
+
+        # land mask + outlines
+        mask = Image.new("L", (TW, TH), 0)
+        md = ImageDraw.Draw(mask)
+        lines_img = Image.new("L", (TW, TH), 0)
+        ld = ImageDraw.Draw(lines_img)
+        n_poly = 0
+        for _, rings in geo.countries():
+            for r in rings:
+                if not r:
+                    continue
+                xs = [p[0] for p in r]; ys = [p[1] for p in r]
+                if max(xs) < lon0 - 1 or min(xs) > lon1 + 1 or max(ys) < lat0 - 1 or min(ys) > lat1 + 1:
+                    continue
+                pts = [self.T(x, y) for x, y in r]
+                if len(pts) >= 3:
+                    md.polygon(pts, fill=255)
+                    ld.line(pts + [pts[0]], fill=255, width=3)
+                    n_poly += 1
+        land = np.asarray(mask, np.float32) / 255
+        print(f"[render] map {TW}x{TH}, {n_poly} coastline rings")
+
+        # elevation
+        hm = None
+        try:
+            hm = terrain.heightmap(lon0, lat0, lon1, lat1, TW // 2, TH // 2)
+        except Exception as e:
+            print(f"[render] terrain failed: {e}")
+        if hm is not None:
+            hm = np.asarray(Image.fromarray(hm).resize((TW, TH), Image.BICUBIC), np.float32)
+            self.terrain_src = "real"
+            if n_poly == 0:
+                land = (hm > 0).astype(np.float32)
+        else:
+            self.terrain_src = "synthetic"
+            hm = self._synthetic_height(mask) * 2500
+        hm = np.where(land > 0.5, np.maximum(hm, 0), 0)
+        m_per_px = 111320 / k
+        gy, gx = np.gradient(hm / m_per_px)
+        shade = np.clip(0.52 + (-gx * 0.62 - gy * 0.78) * 2.4, 0, 1)
+        en = np.clip(hm / max(600.0, float(np.percentile(hm[land > 0.5], 98)) if (land > 0.5).any() else 1), 0, 1)
+        tex = np.zeros((TH, TW, 3), np.float32)
+        for c in range(3):
+            tex[..., c] = BG[c] + land * (shade * (22, 64, 38)[c] + (5, 12, 8)[c] + en * (6, 16, 10)[c])
+        # faint graticule over the sea
+        gimg = Image.new("L", (TW, TH), 0)
+        gd = ImageDraw.Draw(gimg)
+        for lo in range(int(math.floor(lon0)), int(math.ceil(lon1)) + 1):
+            gd.line([self.T(lo, lat0), self.T(lo, lat1)], fill=255, width=2)
+        for la in range(int(math.floor(lat0)), int(math.ceil(lat1)) + 1):
+            gd.line([self.T(lon0, la), self.T(lon1, la)], fill=255, width=2)
+        grid = np.asarray(gimg, np.float32)[..., None] / 255 * (1 - land[..., None])
+        tex += grid * np.array([10, 26, 17], np.float32)
+        ol = np.asarray(lines_img.filter(ImageFilter.GaussianBlur(0.8)), np.float32)[..., None] / 255
+        tex = tex * (1 - ol * 0.8) + ol * 0.8 * np.array([70, 150, 100], np.float32)
+        self.tex = np.clip(tex, 0, 255).astype(np.uint8)
+
+    def _synthetic_height(self, mask):
+        rng = np.random.default_rng(5)
+        TW, TH = self.TW, self.TH
+        out = np.zeros((TH, TW), np.float32)
+        for o in range(6):
+            n = 4 * 2 ** o
+            g = rng.random((n + 1, n + 1)).astype(np.float32)
+            out += np.asarray(Image.fromarray((g * 255).astype(np.uint8)).resize((TW, TH), Image.BICUBIC), np.float32) / 255 / 1.9 ** o
+        out /= out.max()
+        ridge = 1 - np.abs(2 * out - 1)
+        inland = np.asarray(mask.filter(ImageFilter.GaussianBlur(120)), np.float32) / 255
+        return np.clip(inland - 0.45, 0, 1) * 1.8 * (0.2 + ridge ** 2)
+
+    def T(self, lon, lat):
+        lon0, lat0, lon1, lat1 = self.bbox
+        return ((lon - lon0) * self.cosc * self.k, (lat1 - lat) * self.k)
+
+    # ---- camera ----
+    def _build_rays(self):
+        w, h = W // MAPSCALE, H // MAPSCALE
+        ys, xs = np.mgrid[0:h, 0:w].astype(np.float32)
+        u = (xs * MAPSCALE - W / 2) / W
+        v = (ys * MAPSCALE - H * HORIZ) / W
+        den = FOC * math.cos(PITCH) - v * math.sin(PITCH)
+        self.valid = den > 0.06
+        den = np.where(self.valid, den, 1)
+        self.RX = (u * FOC / den).astype(np.float32)
+        self.RY = (v * FOC / den / math.cos(PITCH)).astype(np.float32)
+        fade = np.clip((ys * MAPSCALE - H * 0.02) / (H * 0.36), 0, 1)
+        self.fade = (fade * self.valid)[..., None].astype(np.float32)
+
+    def _deg(self, d):
+        return d * self.k
+
+    def _target(self, sc):
+        pl = self.places
+        allp = list(pl.values())
+        def center(ps):
+            xs = [self.T(p["lon"], p["lat"]) for p in ps]
+            cx = (min(x for x, _ in xs) + max(x for x, _ in xs)) / 2
+            cy = (min(y for _, y in xs) + max(y for _, y in xs)) / 2
+            ext = max(max(x for x, _ in xs) - min(x for x, _ in xs), max(y for _, y in xs) - min(y for _, y in xs))
+            return cx, cy, ext
+        if not allp:
+            return self.TW / 2, self.TH / 2, self.TW * 0.45
+        t = sc["type"]
+        if t == "pin":
+            p = pl[sc["place"]]
+            x, y = self.T(p["lon"], p["lat"])
+            return x, y, self._deg(2.1)
+        if t == "route":
+            cx, cy, ext = center([pl[sc["from"]], pl[sc["to"]]])
+            return cx, cy - ext * 0.1, max(ext * 1.7, self._deg(1.8))
+        if t == "flow":
+            cx, cy, ext = center([pl[sc["from"]]] + [pl[x] for x in sc["to"]])
+            return cx, cy, max(ext * 1.6, self._deg(2.2))
+        cx, cy, ext = center(allp)
+        if t == "wide":
+            return cx, cy, max(ext * 1.45, self._deg(2.8))
+        return cx, cy + ext * 0.2, max(ext * 1.8, self._deg(3.6))   # panels: pulled back, map as backdrop
+
+    def _build_cams(self):
+        yaws = [-7, 5, -3, 7, -5, 3, -8, 6]
         self.cams = []
-        cam = base
-        for ln, b in zip(self.lines, self.beats):
-            if b == "hook":
-                cam = base
-            elif b == "lock":
-                loc = ln.get("loc") or m
-                if loc:
-                    cam = (loc["lat"], loc["lon"], 5.5)
-            elif b == "track":
-                a, c = ln["arc"]["from"], ln["arc"]["to"]
-                cam = ((a["lat"] + c["lat"]) / 2, (a["lon"] + c["lon"]) / 2,
-                       max(abs(a["lat"] - c["lat"]) * 2.4, abs(a["lon"] - c["lon"]) * 1.4, 6.0))
-            elif b == "wide" and self.places:
-                lats = [p["lat"] for p in self.places]
-                lons = [p["lon"] for p in self.places]
-                cam = ((max(lats) + min(lats)) / 2, (max(lons) + min(lons)) / 2,
-                       max((max(lats) - min(lats)) * 2.2, (max(lons) - min(lons)) * 1.3, 8.0))
-            self.cams.append(cam)
+        for i, ln in enumerate(self.lines):
+            cx, cy, span = self._target(ln["scene"])
+            self.cams.append((cx, cy, span, yaws[i % len(yaws)]))
+        if not self.cams:
+            self.cams = [(self.TW / 2, self.TH / 2, self.TW * 0.4, 0)]
 
-    def _captions(self):
-        self.caps = []
-        for (st, du), ln in zip(self.tl, self.lines):
-            words = ln["text"].upper().split()
-            wts = [len(w) + 2 for w in words]
-            tot = sum(wts) or 1
-            t, timed = st, []
-            for w, wt in zip(words, wts):
-                d = du * wt / tot
-                timed.append((t, t + d, w))
-                t += d
-            chunks, cur, n = [], [], 0
-            for it in timed:
-                if cur and (len(cur) >= 3 or n + len(it[2]) > 16):
-                    chunks.append(cur)
-                    cur, n = [], 0
-                cur.append(it)
-                n += len(it[2]) + 1
-            if cur:
-                chunks.append(cur)
-            self.caps.append(chunks)
-
-    def _active(self, t):
-        idx = 0
-        for i, (st, _) in enumerate(self.tl):
-            if t >= st:
-                idx = i
-        return idx
+    def _line_at(self, t):
+        i = 0
+        for k, (st, _) in enumerate(self.tl):
+            if t >= st - 0.25:
+                i = k
+        return i
 
     def camera(self, t):
-        i = self._active(t)
-        prev = self.cams[i - 1] if i > 0 else (self.cams[0][0], self.cams[0][1], self.cams[0][2] * 1.6)
-        k = ease((t - self.tl[i][0]) / CAM_T) if self.tl else 1
-        c = self.cams[i]
-        lat = prev[0] + (c[0] - prev[0]) * k
-        lon = prev[1] + (c[1] - prev[1]) * k
-        span = prev[2] * (c[2] / prev[2]) ** k
-        span *= 1 - 0.035 * (t - self.tl[i][0])          # constant push-in
-        lon += 0.004 * span * math.sin(t * 0.7)           # drift
-        return (lat, lon, max(span, 2.5))
-
-    # ---------- map ----------
-    def proj(self, cam):
-        lat_c, lon_c, span_h = cam
-        cl = math.cos(math.radians(lat_c))
-        span_w = span_h * (W / H) / cl
-
-        def P(lon, lat):
-            return ((lon - lon_c) / span_w * W + W / 2, (lat_c - lat) / span_h * H + H / 2)
-        return P, lon_c - span_w / 2, span_w
-
-    def draw_map(self, cam, dim=1.0):
-        im = Image.new("RGB", (W, H), BG)
-        d = ImageDraw.Draw(im)
-        P, x0, span_w = self.proj(cam)
-        step = 10 if cam[2] > 25 else (2 if cam[2] < 8 else 5)
-        for lon in range(int(math.floor(x0 / step) * step), int(x0 + span_w) + step, step):
-            x, _ = P(lon, 0)
-            d.line([(x, 0), (x, H)], fill=GF)
-        for lat in range(-90, 91, step):
-            _, y = P(0, lat)
-            d.line([(0, y), (W, y)], fill=GF)
-        for name, rings in self.countries:
-            hot = name == self.hot
-            for r in rings:
-                xs = [q[0] for q in r]
-                if max(xs) < x0 - 2 or min(xs) > x0 + span_w + 2:
-                    continue
-                pts = [P(a, b) for a, b in r]
-                if len(pts) < 3:
-                    continue
-                d.polygon(pts, fill=mix(G, (0.15 if hot else 0.05) * dim))
-                d.line(pts + [pts[0]], fill=mix(G if hot else GM, dim), width=4 if hot else 2)
-        # every place in the story as a small dot
-        for p in self.places:
-            x, y = P(p["lon"], p["lat"])
-            d.ellipse([x - 7, y - 7, x + 7, y + 7], fill=mix(AMB, dim))
-        return im, d, P
-
-    # ---------- common overlays ----------
-    def hud(self, d, t):
-        d.text((60, 140), "OUTPOST", font=font(72), fill=G)
-        if int(t * 2) % 2 == 0:
-            d.ellipse([318, 162, 340, 184], fill=REDDOT)
-        d.text((352, 146), "LIVE", font=font(60), fill=REDDOT)
-        sub = f"{self.start_dt.strftime('%d %b %Y').upper()} // {self.s.get('region', '')[:18]}"
-        d.text((62, 212), sub, font=font(42), fill=GM)
-
-    def reticle(self, d, x, y, r, t, label=None, k=1.0):
-        for j in range(3):
-            ph = (t * 0.9 + j / 3) % 1
-            rr = 20 + ph * 170
-            d.ellipse([x - rr, y - rr, x + rr, y + rr], outline=mix(AMB, 1 - ph), width=4)
-        d.ellipse([x - 12, y - 12, x + 12, y + 12], fill=AMB)
-        for sx, sy in [(-1, -1), (1, -1), (-1, 1), (1, 1)]:
-            cx, cy = x + sx * r, y + sy * r
-            d.line([(cx, cy), (cx - sx * 42, cy)], fill=G, width=6)
-            d.line([(cx, cy), (cx, cy - sy * 42)], fill=G, width=6)
-        for a, b in [((0, y), (x - r - 24, y)), ((x + r + 24, y), (W, y)), ((x, 0), (x, y - r - 24)), ((x, y + r + 24), (x, H))]:
-            d.line([a, b], fill=GD, width=2)
-        if label:
-            name, coord = label
-            name, coord = name[: int(len(name) * k)], coord[: int(len(coord) * k)]
-            if name:
-                f1, f2 = font(64), font(48)
-                bw = max(f1.getlength(name), f2.getlength(coord)) + 40
-                bx = min(max(x + 60, 40), W - 60 - bw)
-                by = y - r - 180 if y - r - 180 > 280 else y + r + 40
-                d.rectangle([bx, by, bx + bw, by + 124], fill=BG, outline=G, width=3)
-                d.text((bx + 20, by + 4), name, font=f1, fill=G)
-                d.text((bx + 20, by + 66), coord, font=f2, fill=GM)
-
-    @staticmethod
-    def coord(p):
-        return f"{abs(p['lat']):.2f}{'N' if p['lat'] >= 0 else 'S'} {abs(p['lon']):.2f}{'E' if p['lon'] >= 0 else 'W'}"
-
-    def captions(self, d, t, i, y=CAP_Y):
-        cur = None
-        for ch in self.caps[i]:
-            if ch[0][0] <= t:
-                cur = ch
-        if cur is None or t > cur[-1][1] + 0.4:
-            return y
-        f = font(118)
-        rows, row = [], []
-        for idx, it in enumerate(cur):
-            if row and f.getlength(" ".join(x[2] for x in row + [it])) > 900:
-                rows.append(row)
-                row = []
-            row.append(it)
-        rows.append(row)
-        # small pop when a new chunk appears
-        age = t - cur[0][0]
-        dy = int(18 * max(0, 1 - age / 0.12))
-        for r in rows:
-            line = " ".join(x[2] for x in r)
-            x = (W - f.getlength(line)) / 2
-            for st, en, w in r:
-                col = AMB if st <= t < en + 0.04 else G
-                d.text((x, y + dy), w, font=f, fill=col, stroke_width=7, stroke_fill=BG)
-                x += f.getlength(w + " ")
-            y += 116
-        tag = self.src_tags[i]
-        if tag:
-            fs = font(44)
-            tw = fs.getlength(tag)
-            col = AMB if tag == "BACKGROUND" else GM
-            d.rectangle([(W - tw) / 2 - 18, y + 14, (W + tw) / 2 + 18, y + 70], fill=BG, outline=col, width=2)
-            d.text(((W - tw) / 2, y + 16), tag, font=fs, fill=col)
-        return y
-
-    # ---------- beats ----------
-    def beat_hook(self, im, d, P, t, ts):
-        if self.main:
-            x, y = P(self.main["lon"], self.main["lat"])
-            self.reticle(d, x, y, 90 + 160 * (1 - ease(ts / 0.6)), t)
-        f = font(124)
-        rows = wrap(self.s.get("headline") or self.lines[0]["text"].upper(), f, 940)[:3]
-        rows = wrap(self.lines[0]["text"].upper(), f, 940)[:4]
-        k = min(1.0, ts / 0.35)
-        y = 380
-        for r in rows:
-            s = r[: max(1, int(len(r) * k))]
-            d.text((60, y), s, font=f, fill=G, stroke_width=8, stroke_fill=BG)
-            y += 112
-        bar = self.s.get("hook_bar")
-        if bar and ts > 0.4:
-            sc = pop(ts, 0.4)
-            base = 150
-            while font(base).getlength(bar) > 920 and base > 60:
-                base -= 6
-            fb = font(max(20, int(base * sc)))
-            tw = fb.getlength(bar)
-            by = y + 30
-            d.rectangle([50, by, 50 + tw + 40, by + fb.size + 10], fill=AMB)
-            d.text((70, by - 2), bar, font=fb, fill=BG)
-        return True   # hook draws its own text, captions hidden
-
-    def beat_lock(self, im, d, P, t, ts, ln):
-        loc = ln.get("loc") or self.main
-        if not loc:
-            return False
-        x, y = P(loc["lon"], loc["lat"])
-        r = 110 + 220 * (1 - ease(ts / 0.6))
-        self.reticle(d, x, y, r, t, (loc["name"].split(",")[0], self.coord(loc)), ease((ts - 0.5) / 0.4))
-        return False
-
-    def beat_track(self, im, d, P, t, ts, ln):
-        arc = ln["arc"]
-        a, b = arc["from"], arc["to"]
-        ax, ay = P(a["lon"], a["lat"])
-        bx, by = P(b["lon"], b["lat"])
-        dist = math.hypot(bx - ax, by - ay)
-        lift = 0 if arc["type"] in ("troops", "naval") else max(160, dist * 0.45)
-        mx, my = (ax + bx) / 2, (ay + by) / 2 - lift
-
-        def pt(u):
-            return ((1 - u) ** 2 * ax + 2 * (1 - u) * u * mx + u * u * bx,
-                    (1 - u) ** 2 * ay + 2 * (1 - u) * u * my + u * u * by)
-        for j in range(0, 80, 3):
-            d.line([pt(j / 80), pt((j + 1.4) / 80)], fill=GD, width=3)
-        d.rectangle([ax - 14, ay - 14, ax + 14, ay + 14], outline=G, width=4)
-        d.text((ax + 24, ay - 30), a["name"].split(",")[0], font=font(56), fill=G, stroke_width=4, stroke_fill=BG)
-        u = ease((ts - 0.3) / 1.7)
-        if ts > 0.3:
-            n = max(2, int(80 * u))
-            tr = [pt(j / 80) for j in range(n)] + [pt(u)]
-            for j in range(len(tr) - 1):
-                d.line([tr[j], tr[j + 1]], fill=mix(AMB, 0.3 + 0.7 * (j + 1) / len(tr)), width=9)
-            hx, hy = pt(u)
-            if u < 1:
-                d.ellipse([hx - 16, hy - 16, hx + 16, hy + 16], fill=(255, 240, 200))
-        imp = ts - 2.0
-        if imp > 0:
-            for j in range(3):
-                rr = (imp * 300 + j * 70) % 330
-                d.ellipse([bx - rr, by - rr, bx + rr, by + rr], outline=mix(AMB, max(0, 1 - rr / 330)), width=6)
-            if imp < 0.25:
-                fl = 150 * (1 - imp / 0.25)
-                d.ellipse([bx - fl, by - fl, bx + fl, by + fl], fill=(255, 240, 200))
-        tag = {"missile": "MISSILE TRACK", "drone": "DRONE TRACK", "airstrike": "AIRSTRIKE",
-               "artillery": "ARTILLERY", "naval": "NAVAL MOVE", "troops": "TROOP MOVE"}[arc["type"]]
-        d.rectangle([60, 290, 60 + font(64).getlength(tag) + 30, 362], fill=AMB)
-        d.text((74, 292), tag, font=font(64), fill=BG)
-        d.text((62, 370), "REPORTED // PATH ILLUSTRATIVE", font=font(40), fill=GM)
-        return False
-
-    def beat_readout(self, im, d, t, ts, ln):
-        txt = "> " + ln["readout"]
-        f = font(96)
-        rows = wrap(txt, f, 900)
-        k = min(1.0, ts / 0.5)
-        total = sum(len(r) for r in rows)
-        shown = int(total * k)
-        y = 560
-        d.text((60, y - 70), "INCOMING DATA //", font=font(52), fill=GM)
-        for r in rows:
-            s = r[: max(0, shown)]
-            shown -= len(r)
-            d.rectangle([50, y - 6, W - 50, y + 102], fill=BG, outline=GD)
-            d.text((70, y), s, font=f, fill=G)
-            if 0 < len(s) < len(r) or (s == r and r is rows[-1] and int(t * 3) % 2 == 0):
-                cx = 70 + f.getlength(s) + 8
-                d.rectangle([cx, y + 12, cx + 40, y + 92], fill=G)
-            y += 112
-        return False
-
-    def beat_stat(self, im, d, t, ts, ln, i):
-        st = ln["stat"]
-        raw = st["value"]
-        m = re.search(r"[\d,.]+", raw)
-        k = ease(ts / 0.9)
-        shown = raw
-        if m:
-            s_ = m.group(0).replace(",", "")
-            try:
-                cur = float(s_) * k
-                body = f"{cur:,.1f}" if "." in s_ else (f"{int(round(cur)):,}" if "," in m.group(0) else str(int(round(cur))))
-                shown = raw[: m.start()] + body + raw[m.end():]
-            except ValueError:
-                pass
-        size = 480 if len(shown) <= 3 else (340 if len(shown) <= 6 else 240)
-        f = font(int(size * (1 + 0.1 * max(0, 1 - abs(ts - 0.95) / 0.2))))
-        d.text(((W - f.getlength(shown)) / 2, 380), shown, font=f, fill=G, stroke_width=10, stroke_fill=BG)
-        lab = st.get("label", "")
-        fl = font(110)
-        lw = fl.getlength(lab)
-        d.rectangle([(W - lw) / 2 - 30, 900, (W + lw) / 2 + 30, 1010], fill=AMB)
-        d.text(((W - lw) / 2, 900), lab, font=fl, fill=BG)
-        for j in range(20):
-            h = 20 + 80 * abs(math.sin(t * 4 + j * 0.7)) * k
-            d.rectangle([90 + j * 46, 1560 - h, 120 + j * 46, 1560], fill=GD)
-        return False
-
-    def beat_timeline(self, im, d, t, ts, ln):
-        year = ln["year"]
-        now = self.start_dt.year + self.start_dt.timetuple().tm_yday / 366
-        span = max(now - year, 0.5)
-        k = ease(ts / 1.2)
-        d.text((60, 330), str(year), font=font(300), fill=G, stroke_width=8, stroke_fill=BG)
-        lab = f"{span * k:.1f} YEARS"
-        d.text((W - 60 - font(120).getlength(lab), 660), lab, font=font(120), fill=AMB, stroke_width=6, stroke_fill=BG)
-        x0, x1, y = 80, W - 80, 880
-        d.line([(x0, y), (x1, y)], fill=GD, width=8)
-        px = x0 + (x1 - x0) * k
-        d.line([(x0, y), (px, y)], fill=AMB, width=12)
-        d.ellipse([px - 20, y - 20, px + 20, y + 20], fill=AMB)
-        for j in range(int(span) + 1):
-            yx = x0 + (x1 - x0) * min(1, j / span)
-            d.line([(yx, y - 22), (yx, y + 22)], fill=GM, width=3)
-        d.text((x1 - font(60).getlength("NOW"), y + 30), "NOW", font=font(60), fill=G)
-        return False
-
-    def beat_quote(self, im, d, t, ts, ln):
-        who = ln.get("who") or "OFFICIAL CLAIM"
-        d.rectangle([60, 360, 60 + font(64).getlength("CLAIM // " + who) + 30, 432], fill=AMB)
-        d.text((74, 362), "CLAIM // " + who, font=font(64), fill=BG)
-        f = font(108)
-        rows = wrap('"' + ln["text"] + '"', f, 940)
-        k = min(1.0, ts / 0.8)
-        total = sum(len(r) for r in rows)
-        shown = int(total * k)
-        y = 480
-        for r in rows[:6]:
-            d.text((60, y), r[: max(0, shown)], font=f, fill=G, stroke_width=6, stroke_fill=BG)
-            shown -= len(r)
-            y += 104
-        tag = self.src_tags[self._active(t)]
-        if tag:
-            d.text((62, y + 20), tag, font=font(48), fill=GM)
-        return True   # quote replaces captions
-
-    def beat_wide(self, im, d, P, t, ts, final):
-        for j, p in enumerate(self.places):
-            x, y = P(p["lon"], p["lat"])
-            ph = (t * 0.8 + j * 0.3) % 1
-            for q in range(2):
-                rr = 18 + ((ph + q / 2) % 1) * 120
-                d.ellipse([x - rr, y - rr, x + rr, y + rr], outline=mix(AMB, 1 - ((ph + q / 2) % 1)), width=5)
-            d.ellipse([x - 13, y - 13, x + 13, y + 13], fill=AMB)
-            nm = p["name"].split(",")[0]
-            fl = font(58)
-            lx = min(max(x + 28, 40), W - 50 - fl.getlength(nm))
-            d.text((lx, y - 70), nm, font=fl, fill=G, stroke_width=5, stroke_fill=BG)
-        return False
-
-    def glitch(self, arr, t, s):
-        rng = np.random.default_rng(int(t * 1000))
-        out = arr.copy()
-        for _ in range(int(12 * s) + 3):
-            y0 = int(rng.integers(0, H - 60))
-            hh = int(rng.integers(10, 100))
-            out[y0:y0 + hh] = np.roll(out[y0:y0 + hh], int(rng.integers(-110, 110) * s), axis=1)
-        out[..., 1] = np.roll(out[..., 1], int(8 * s), axis=1)
-        return out * (1 + 0.35 * s)
-
-    # ---------- frame ----------
-    def frame(self, t):
-        i = self._active(t)
-        ln = self.lines[i]
-        b = self.beats[i]
-        ts = t - self.tl[i][0]
-        cam = self.camera(t)
-        dim = 0.35 if b in ("stat", "timeline", "quote", "readout") else 1.0
-        im, d, P = self.draw_map(cam, dim)
-        hide_caps = False
-        if b == "hook":
-            hide_caps = self.beat_hook(im, d, P, t, ts)
-        elif b == "lock":
-            self.beat_lock(im, d, P, t, ts, ln)
-        elif b == "track":
-            self.beat_track(im, d, P, t, ts, ln)
-        elif b == "readout":
-            self.beat_readout(im, d, t, ts, ln)
-        elif b == "stat":
-            self.beat_stat(im, d, t, ts, ln, i)
-        elif b == "timeline":
-            self.beat_timeline(im, d, t, ts, ln)
-        elif b == "quote":
-            hide_caps = self.beat_quote(im, d, t, ts, ln)
+        i = self._line_at(t)
+        st = self.tl[i][0] if self.tl else 0
+        cur = self.cams[i]
+        if i == 0:
+            prev = (cur[0], cur[1] + cur[2] * 0.25, cur[2] * 1.35, cur[3] - 6)
+            e = ease(t / 2.2)
         else:
-            self.beat_wide(im, d, P, t, ts, i == len(self.lines) - 1)
-        self.hud(d, t)
-        if not hide_caps:
-            self.captions(d, t, i, 1300 if b in ("stat", "timeline") else CAP_Y)
-        end = self.tl[-1][0] + self.tl[-1][1]
-        if t > end:
-            msg = "> FOLLOW @OUTPOST.FEED"
-            k = min(1.0, (t - end) / 0.5)
-            d.text((60, 1560), msg[: int(len(msg) * k)], font=font(72), fill=G, stroke_width=5, stroke_fill=BG)
-        # CRT treatment
-        small = im.resize((W // 4, H // 4)).filter(ImageFilter.GaussianBlur(6))
-        arr = np.asarray(im, np.float32) + np.asarray(small.resize((W, H)), np.float32) * 0.75
-        arr = arr * self.mask * self.grain[int(t * FPS) % 4] * (0.95 + 0.05 * self.rng.random())
-        band = int((t * 520) % (H + 300)) - 150
-        y0, y1 = max(0, band), min(H, band + 140)
-        if y1 > y0:
-            arr[y0:y1] *= 1.1
-        for st, _ in self.tl[1:]:
-            if 0 <= t - st < 0.14:
-                arr = self.glitch(arr, t, 1 - (t - st) / 0.14)
-        if b == "hook" and 0.4 <= ts < 0.6:     # slam shake
-            s = int(16 * (1 - (ts - 0.4) / 0.2))
-            arr = np.roll(np.roll(arr, self.rng.randint(-s, s), 0), self.rng.randint(-s, s), 1)
-        if b == "track" and 2.0 <= ts < 2.3:
-            s = int(22 * (1 - (ts - 2.0) / 0.3))
-            arr = np.roll(np.roll(arr, self.rng.randint(-s, s), 0), self.rng.randint(-s, s), 1)
+            prev = self._cam_final(i - 1)
+            e = ease((t - st + 0.25) / 1.7)
+        cx = prev[0] + (cur[0] - prev[0]) * e
+        cy = prev[1] + (cur[1] - prev[1]) * e
+        span = math.exp(math.log(prev[2]) + (math.log(cur[2]) - math.log(prev[2])) * e)
+        yaw = prev[3] + (cur[3] - prev[3]) * e
+        loc = max(0.0, t - st)
+        span *= 1 - 0.014 * min(loc, 8)
+        yaw += 1.6 * math.sin(t * 0.21)
+        return cx, cy, span, math.radians(yaw)
+
+    def _cam_final(self, i):
+        cx, cy, span, yaw = self.cams[i]
+        st, en = self.tl[i]
+        nxt = self.tl[i + 1][0] if i + 1 < len(self.tl) else en
+        loc = max(0.0, nxt - 0.25 - st)
+        return cx, cy, span * (1 - 0.014 * min(loc, 8)), yaw
+
+    def project(self, lon, lat, cam):
+        cx, cy, span, yaw = cam
+        tx, ty = self.T(lon, lat)
+        dx, dy = (tx - cx) / span, (ty - cy) / span
+        c, s = math.cos(yaw), math.sin(yaw)
+        X = dx * c + dy * s
+        Y = -dx * s + dy * c
+        Yc = Y * math.cos(PITCH)
+        denom = FOC + Yc * math.sin(PITCH)
+        if denom <= 0.05:
+            return None
+        v = Yc * FOC * math.cos(PITCH) / denom
+        den = FOC * math.cos(PITCH) - v * math.sin(PITCH)
+        if den <= 0.06:
+            return None
+        u = X * den / FOC
+        return W / 2 + u * W, H * HORIZ + v * W, FOC * math.cos(PITCH) / den
+
+    def map_layer(self, cam, dim):
+        cx, cy, span, yaw = cam
+        c, s = math.cos(yaw), math.sin(yaw)
+        tx = (cx + (self.RX * c - self.RY * s) * span).astype(np.int32)
+        ty = (cy + (self.RX * s + self.RY * c) * span).astype(np.int32)
+        ok = self.valid & (tx >= 0) & (tx < self.TW) & (ty >= 0) & (ty < self.TH)
+        out = np.empty(tx.shape + (3,), np.float32)
+        out[:] = BG
+        out[ok] = self.tex[ty[ok], tx[ok]]
+        out = BG + (out - BG) * self.fade * dim
+        im = Image.fromarray(np.clip(out, 0, 255).astype(np.uint8))
+        return im.resize((W, H), Image.BILINEAR)
+
+    # ---- post ----
+    def _build_post(self):
+        yy = (np.arange(H)[:, None] - H / 2) / (H / 2)
+        xx = (np.arange(W)[None, :] - W / 2) / (W / 2)
+        vig = np.clip(1 - 0.32 * (xx ** 2 + 0.6 * yy ** 2), 0.5, 1).astype(np.float32)
+        rng = np.random.default_rng(9)
+        self.post = [(vig * rng.normal(1, 0.03, (H, W)).astype(np.float32))[..., None] for _ in range(6)]
+
+    def finish(self, im, fi):
+        small = im.resize((W // 6, H // 6), Image.BILINEAR).filter(ImageFilter.GaussianBlur(3))
+        arr = np.asarray(im, np.float32) + np.asarray(small.resize((W, H), Image.BILINEAR), np.float32) * 0.28
+        arr *= self.post[fi % len(self.post)]
         return np.clip(arr, 0, 255).astype(np.uint8)
 
+    # ---- overlay pieces ----
+    def revealed(self, t):
+        ids = []
+        for ln, (st, _) in zip(self.lines, self.tl):
+            if t < st + 0.2:
+                break
+            sc = ln["scene"]
+            for k in ("place", "from"):
+                if sc.get(k):
+                    ids.append(sc[k])
+            if sc.get("to"):
+                ids += sc["to"] if isinstance(sc["to"], list) else [sc["to"]]
+        return list(dict.fromkeys(i for i in ids if i in self.places))
 
-def render(script, timeline, total, audio: Path, out: Path, thumb: Path):
+    def marker(self, d, p, cam, a, name=True, big=False):
+        pr = self.project(p["lon"], p["lat"], cam)
+        if not pr:
+            return None
+        x, y, sc = pr
+        if not (-100 < x < W + 100 and -100 < y < H + 100):
+            return (x, y)
+        r = 9 if big else 6
+        d.rectangle([x - r, y - r, x + r, y + r], fill=rgba(INK, a))
+        if name:
+            d.text((x + 16, y + 10), p["name"].upper(), font=font("mono", 26), fill=rgba(INK if big else GM, a * 0.95))
+        return (x, y)
+
+    def rings(self, d, x, y, t, a):
+        for k in range(2):
+            ph = (t * 0.45 + k * 0.5) % 1
+            r = 22 + ph * 70
+            d.ellipse([x - r, y - r * 0.62, x + r, y + r * 0.62], outline=rgba(G, a * (1 - ph)), width=3)
+
+    def label_block(self, d, ax, ay, head, notes, src, a, slide):
+        fh, fn = font("sans", 64), font("mono", 29)
+        rows = [(head, fh, INK)] if head else []
+        rows += [(n, fn, GM) for n in notes if n]
+        if src:
+            rows.append((src, font("mono", 25), GM))
+        if not rows:
+            return
+        wmax = max(f.getlength(r) for r, f, _ in rows)
+        hsum = sum((f.size + 12) for _, f, _ in rows)
+        right = ax < W * 0.55
+        bx = ax + 46 if right else ax - 46 - wmax
+        bx = max(56, min(W - 150 - wmax, bx))
+        by = ay - 70 - hsum
+        by = max(250, min(1250 - hsum, by)) + (1 - slide) * 24
+        d.line([(ax, ay - 14), (bx + (0 if right else wmax), by + hsum + 6)], fill=rgba(GM, a * 0.6), width=2)
+        y = by
+        for r, f, col in rows:
+            d.text((bx, y), r, font=f, fill=rgba(col, a))
+            y += f.size + 12
+
+    def dots(self, d, x, y, n, cols, unit, col, a, prog, size=16, gap=6):
+        squares = int(round(n / unit))
+        lit = int(squares * prog)
+        for i in range(lit):
+            r, c = divmod(i, cols)
+            px, py = x + c * (size + gap), y - r * (size + gap)
+            d.rectangle([px, py, px + size, py + size], fill=rgba(col, a))
+        return squares
+
+    @staticmethod
+    def unit_for(n, max_sq=420):
+        for u in [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000,
+                  100000, 200000, 500000, 1e6, 2e6, 5e6, 1e7]:
+            if n / u <= max_sq:
+                return int(u)
+        return int(1e8)
+
+    @staticmethod
+    def count(value, prog):
+        nums = re.findall(r"\d[\d,]*\.?\d*", value)
+        if not nums or prog >= 1:
+            return value
+        raw = nums[0]
+        n = float(raw.replace(",", ""))
+        cur = n * ease(prog)
+        dec = len(raw.split(".")[1]) if "." in raw else 0
+        s = f"{cur:,.{dec}f}" if "," in raw else f"{cur:.{dec}f}"
+        return value.replace(raw, s, 1)
+
+    def subtitle(self, d, text, a):
+        f = font("sansr", 44)
+        rows = wrap(text, f, 860)
+        y0 = 1470 - len(rows) * 58 / 2
+        for i, r in enumerate(rows):
+            d.text(((W - f.getlength(r)) / 2, y0 + i * 58), r, font=f, fill=rgba(INK, a),
+                   stroke_width=3, stroke_fill=rgba(BG, a * 0.6))
+
+    def big_value(self, d, text, y, a, maxw=900, size=150):
+        f = font("sans", size)
+        while f.getlength(text) > maxw and size > 60:
+            size -= 8
+            f = font("sans", size)
+        d.text((78, y), text, font=f, fill=rgba(INK, a))
+        return size
+
+    # ---- one frame ----
+    def frame(self, t, fi):
+        i = self._line_at(t)
+        ln = self.lines[i] if self.lines else {"scene": {"type": "wide"}, "text": "", "note": ""}
+        sc = ln["scene"]
+        st, en = self.tl[i] if self.tl else (0, 1)
+        loc = t - st
+        cam = self.camera(t)
+        # map dim: panels push the map back
+        def dim_of(k):
+            return {"number": 0.5, "compare": 0.42, "quote": 0.36, "statement": 0.62}.get(k, 1.0)
+        dim = dim_of(sc["type"])
+        if i > 0:
+            pd = dim_of(self.lines[i - 1]["scene"]["type"])
+            dim = pd + (dim - pd) * ease((loc + 0.25) / 0.8)
+        if t < COVER_T and self.s.get("cover"):
+            dim *= 0.8
+        im = self.map_layer(cam, dim).convert("RGBA")
+        ov = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        d = ImageDraw.Draw(ov)
+        a_in = ease((loc - 0.1) / 0.45)
+        a_out = 1 - ease((t - (en + 0.25)) / 0.3) if i + 1 < len(self.lines) else 1.0
+        a = a_in * a_out
+        if self.s.get("cover") and i == 0:
+            gate = ease((t - COVER_T) / 0.35)
+            a *= gate
+            a_in *= gate
+        slide = ease((loc - 0.1) / 0.5)
+        map_a = 1.0 if sc["type"] in MAP_SCENES else 0.45
+
+        # context markers for places already mentioned
+        active = set()
+        if sc["type"] == "pin":
+            active = {sc["place"]}
+        elif sc["type"] == "route":
+            active = {sc["from"], sc["to"]}
+        elif sc["type"] == "flow":
+            active = {sc["from"], *sc["to"]}
+        for pid in self.revealed(t):
+            if pid not in active:
+                self.marker(d, self.places[pid], cam, map_a * 0.9, name=sc["type"] in MAP_SCENES)
+
+        k = sc["type"]
+        if k == "pin":
+            p = self.places[sc["place"]]
+            pos = self.marker(d, p, cam, max(a_in, 0.3), name=False, big=True)
+            if pos:
+                self.rings(d, pos[0], pos[1], t, a_in)
+                self.label_block(d, pos[0], pos[1], sc.get("head") or p["name"], sc.get("notes", []),
+                                 ln.get("note"), a, slide)
+        elif k == "route":
+            A, B = self.places[sc["from"]], self.places[sc["to"]]
+            prog = ease((loc - 0.15) / 1.0)
+            pts = []
+            for j in range(41):
+                f_ = j / 40 * prog
+                pr = self.project(A["lon"] + (B["lon"] - A["lon"]) * f_, A["lat"] + (B["lat"] - A["lat"]) * f_, cam)
+                if pr:
+                    pts.append(pr[:2])
+            for j in range(0, len(pts) - 1, 2):
+                d.line([pts[j], pts[j + 1]], fill=rgba(INK, a_in), width=6)
+            pa = self.marker(d, A, cam, a_in, big=True)
+            pb = self.marker(d, B, cam, a_in if prog > 0.95 else 0, big=True)
+            if pa and pb:
+                mx, my = (pa[0] + pb[0]) / 2, (pa[1] + pb[1]) / 2
+                if sc.get("style") == "cut" and loc > 1.1:
+                    e = ease((loc - 1.1) / 0.3) * 24
+                    d.line([(mx - e, my - e), (mx + e, my + e)], fill=rgba(G, a), width=7)
+                    d.line([(mx - e, my + e), (mx + e, my - e)], fill=rgba(G, a), width=7)
+                if sc.get("style") == "attack" and pts:
+                    ph = (t * 0.6) % 1
+                    q = pts[min(len(pts) - 1, int(ph * (len(pts) - 1)))]
+                    d.ellipse([q[0] - 9, q[1] - 9, q[0] + 9, q[1] + 9], fill=rgba(G, a))
+                self.label_block(d, mx, my, sc.get("label"), [sc.get("note")], ln.get("note"), a, slide)
+        elif k == "flow":
+            A = self.places[sc["from"]]
+            pa = self.marker(d, A, cam, a_in, big=True)
+            if pa:
+                self.rings(d, pa[0], pa[1], t, a_in * 0.8)
+            for j, dest in enumerate(sc["to"]):
+                B = self.places[dest]
+                # curved path in geo space
+                mlon = (A["lon"] + B["lon"]) / 2 + (B["lat"] - A["lat"]) * 0.18
+                mlat = (A["lat"] + B["lat"]) / 2 - (B["lon"] - A["lon"]) * 0.18
+                def bez(u):
+                    return ((1 - u) ** 2 * A["lon"] + 2 * (1 - u) * u * mlon + u * u * B["lon"],
+                            (1 - u) ** 2 * A["lat"] + 2 * (1 - u) * u * mlat + u * u * B["lat"])
+                grow = ease((loc - 0.2 - j * 0.25) / 0.9)
+                pts = [self.project(*bez(u / 30 * grow), cam) for u in range(31)]
+                pts = [p[:2] for p in pts if p]
+                if len(pts) > 1:
+                    d.line(pts, fill=rgba(GM, a_in * 0.8), width=3)
+                for m in range(7):
+                    u = ((t * 0.28 + m / 7 + j * 0.13) % 1) * grow
+                    pr = self.project(*bez(u), cam)
+                    if pr:
+                        d.ellipse([pr[0] - 7, pr[1] - 7, pr[0] + 7, pr[1] + 7], fill=rgba(INK, a_in * 0.9))
+                self.marker(d, B, cam, a_in * grow, big=True)
+            if pa:
+                self.label_block(d, pa[0], pa[1], sc.get("label"), [], ln.get("note"), a, slide)
+        elif k == "number":
+            prog = (loc - 0.1) / 0.9
+            self.big_value(d, self.count(sc["value"], prog), 300, a)
+            d.text((84, 480), sc.get("label", ""), font=font("mono", 34), fill=rgba(INK, a * 0.9))
+            if sc.get("detail"):
+                d.text((84, 526), sc["detail"], font=font("mono", 28), fill=rgba(GM, a))
+            d.text((84, 566), ln.get("note", ""), font=font("mono", 25), fill=rgba(GM, a * 0.85))
+            nums = re.findall(r"\d[\d,]*\.?\d*", sc["value"])
+            n = float(nums[0].replace(",", "")) if nums else 0
+            if n >= 100 and "%" not in sc["value"]:
+                unit = self.unit_for(n)
+                self.dots(d, 84, 1200, n, 26, unit, INK, a, ease((loc - 0.3) / 1.4), size=18, gap=6)
+                d.text((84, 1232), f"1 square = {unit:,}", font=font("mono", 25), fill=rgba(GM, a))
+        elif k == "compare":
+            A, B = sc["a"], sc["b"]
+            r = B["n"] / A["n"] if A["n"] else 0
+            head = (f"{r:.1f}".rstrip("0").rstrip(".") + "x") if r >= 1.2 else \
+                   ((f"{1 / r:.1f}".rstrip("0").rstrip(".") + "x") if 0 < r < 0.83 else "")
+            if head:
+                self.big_value(d, head, 300, a, size=140)
+                sub = f"{B['label']}  vs  {A['label']}" if r >= 1.2 else f"{A['label']}  vs  {B['label']}"
+                d.text((84, 470), sub, font=font("mono", 30), fill=rgba(INK, a * 0.9))
+            d.text((84, 514), ln.get("note", ""), font=font("mono", 25), fill=rgba(GM, a * 0.85))
+            unit = self.unit_for(max(A["n"], B["n"]), 480)
+            pa_ = ease((loc - 0.2) / 0.8)
+            pb_ = ease((loc - 0.9) / 1.3)
+            self.dots(d, 84, 1120, A["n"], 11, unit, GM, a, pa_, size=15, gap=5)
+            self.dots(d, 84 + 11 * 20 + 40, 1120, B["n"], 30, unit, INK, a, pb_, size=15, gap=5)
+            fv = font("sans", 50)
+            d.text((84, 1150), A["value"], font=fv, fill=rgba(GM, a))
+            d.text((84, 1208), A["label"], font=font("mono", 25), fill=rgba(GM, a))
+            d.text((344, 1150), B["value"], font=fv, fill=rgba(INK, a * (0.3 + 0.7 * pb_)))
+            d.text((344, 1208), B["label"], font=font("mono", 25), fill=rgba(GM, a * (0.3 + 0.7 * pb_)))
+            d.text((84, 1246), f"1 square = {unit:,}", font=font("mono", 23), fill=rgba(GM, a * 0.8))
+        elif k == "quote":
+            f = font("sans", 72)
+            rows = wrap("“" + sc["quote"] + "”", f, 900)
+            words_total = sum(len(r.split()) for r in rows)
+            shown = int(words_total * ease((loc - 0.1) / max(0.8, (en - st) * 0.75))) + 1
+            y, cnt = 380, 0
+            for r in rows:
+                x = 80
+                for w in r.split():
+                    cnt += 1
+                    aw = a if cnt <= shown else a * 0.14
+                    d.text((x, y), w, font=f, fill=rgba(INK, aw))
+                    x += f.getlength(w + " ")
+                y += 90
+            d.text((84, y + 30), sc.get("who", ""), font=font("mono", 32), fill=rgba(G, a))
+            d.text((84, y + 74), ln.get("note", ""), font=font("mono", 26), fill=rgba(GM, a))
+        elif k == "statement":
+            f = font("sans", 100)
+            for j, r in enumerate(sc["lines"]):
+                aj = a_out * ease((loc - 0.1 - j * 0.45) / 0.35)
+                d.text((78, 330 + j * 122 + (1 - aj) * 18), r, font=f, fill=rgba(INK, aj))
+        else:  # wide: every place in the story
+            for pid in self.places:
+                self.marker(d, self.places[pid], cam, a_in, big=True)
+
+        # chrome
+        d.text((60, 104), C.BRAND, font=font("sans", 34), fill=rgba(G, 1))
+        d.text((62, 150), (self.s.get("region") or "").upper(), font=font("mono", 25), fill=rgba(GM, 1))
+        d.text((62, 182), self.s.get("date", ""), font=font("mono", 23), fill=rgba(GM, 0.8))
+
+        # subtitle
+        cover_on = t < COVER_T and self.s.get("cover")
+        if not cover_on and ln.get("text"):
+            sa = ease((t - st + 0.05) / 0.2) * (1 - ease((t - en - 0.1) / 0.2))
+            if t < COVER_T + 0.3 and i == 0:
+                sa *= ease((t - COVER_T) / 0.3)
+            self.subtitle(d, ln["text"], sa)
+
+        # cover riddle
+        if self.s.get("cover") and t < COVER_T + 0.35:
+            ca = 1 - ease((t - COVER_T) / 0.35)
+            self.cover(d, ca)
+
+        # outro
+        if self.tl and t > self.tl[-1][1] + 0.2:
+            oa = ease((t - self.tl[-1][1] - 0.2) / 0.5)
+            d.text((62, 1690), "follow  " + C.HANDLE, font=font("mono", 32), fill=rgba(G, oa))
+
+        im = Image.alpha_composite(im, ov).convert("RGB")
+        return self.finish(im, fi)
+
+    def cover(self, d, a):
+        f = font("mono", 70)
+        tag = "  /  ".join(filter(None, [(self.s.get("region") or "").upper(), self.s.get("date", "")]))
+        d.rectangle([60, 640, 60 + font("mono", 26).getlength(tag) + 24, 684], fill=rgba(BG, a))
+        d.text((72, 648), tag, font=font("mono", 26), fill=rgba(G, a))
+        for j, ln in enumerate(self.s["cover"]):
+            y = 712 + j * 108
+            size = 70
+            while font("mono", size).getlength(ln) > 900 and size > 40:
+                size -= 4
+            fz = font("mono", size)
+            d.rectangle([60, y - 6, 60 + fz.getlength(ln) + 26, y + 92], fill=rgba((126, 246, 166), a))
+            d.text((73, y + (70 - size) / 2), ln, font=fz, fill=rgba(BG, a))
+
+
+def render(script, timeline, total, audio, out, thumb):
     r = Renderer(script, timeline, total)
-    n = int(total * FPS)
-    proc = subprocess.Popen([
-        "ffmpeg", "-y", "-loglevel", "error",
-        "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
-        "-i", str(audio),
-        "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p",
-        "-aspect", "9:16", "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", str(out)],
-        stdin=subprocess.PIPE)
-    thumb_t = LEAD + 0.9
-    for i in range(n):
-        t = i / FPS
-        fr = r.frame(t)
-        proc.stdin.write(fr.tobytes())
-        if abs(t - thumb_t) < 0.5 / FPS:
-            Image.fromarray(fr).save(thumb)
-        if i % (FPS * 5) == 0:
-            print(f"[render] {t:5.1f}s / {total:.1f}s")
-    proc.stdin.close()
-    if proc.wait() != 0:
-        raise RuntimeError("ffmpeg encode failed")
+    script["_terrain"] = r.terrain_src
+    Image.fromarray(r.frame(0.7 if script.get("cover") else LEAD + 1.0, 0)).save(thumb)
+    n = int(math.ceil(total * FPS))
+    cmd = ["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
+           "-r", str(FPS), "-i", "-", "-i", str(audio), "-map", "0:v", "-map", "1:a",
+           "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-pix_fmt", "yuv420p", "-aspect", "9:16",
+           "-c:a", "aac", "-b:a", "192k", "-t", f"{total:.2f}", "-movflags", "+faststart", str(out)]
+    p = subprocess.Popen(cmd, stdin=subprocess.PIPE)
+    for fi in range(n):
+        p.stdin.write(r.frame(fi / FPS, fi).tobytes())
+        if fi % 300 == 0:
+            print(f"[render] frame {fi}/{n}")
+    p.stdin.close()
+    p.wait()
+    if p.returncode:
+        raise RuntimeError("ffmpeg failed")
