@@ -104,24 +104,6 @@ jobs:
           path: ${{ env.DIR }}
           retention-days: 7
 
-      - name: Publish to TikTok via Buffer
-        # On only when the repo variable BUFFER_AUTOPOST is "true" and the BUFFER_API_KEY secret exists.
-        if: steps.run.outputs.made == 'true' && inputs.demo != true && vars.BUFFER_AUTOPOST == 'true'
-        env:
-          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
-          BUFFER_CHANNEL_ID: ${{ vars.BUFFER_CHANNEL_ID }}
-          BUFFER_MODE: ${{ vars.BUFFER_MODE || 'shareNow' }}  # post as soon as the video is ready
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          TAG="v$(date -u +%Y%m%d-%H%M%S)"
-          gh release create "$TAG" "$DIR/outpost.mp4" --title "OUTPOST $TAG" --notes-file "$DIR/tiktok.txt"
-          URL="https://github.com/${{ github.repository }}/releases/download/$TAG/outpost.mp4"
-          python publish.py --video-url "$URL" --caption-file "$DIR/tiktok.txt"
-          # keep only the last 7 days of video releases
-          CUT=$(date -u -d '7 days ago' +%Y-%m-%dT%H:%M:%SZ)
-          gh release list --limit 200 --json tagName,createdAt --jq ".[] | select(.createdAt < \"$CUT\") | .tagName" \
-            | xargs -r -n1 gh release delete --yes --cleanup-tag || true
-
       - name: Remember used headlines
         if: steps.run.outputs.made == 'true' && inputs.demo != true && inputs.script == ''
         run: |
