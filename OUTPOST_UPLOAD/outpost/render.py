@@ -27,6 +27,7 @@ GAP = 0.34         # breath between lines
 SCENE_GAP = 0.22   # extra breath when the picture changes kind
 OUTRO = 1.8
 COVER_T = 1.35
+HOOK_T = 3.2        # v6: how long the hook banner stays up
 PITCH = math.radians(40)
 FOC = 1.6
 HORIZ = 0.44
@@ -127,6 +128,9 @@ def sfx_events(script, timeline):
 class Renderer:
     def __init__(self, script, timeline, total):
         self.s = script
+        # v6 hook opener: no static cover, first scene live from frame 0, big hook banner on top
+        self.hook = bool(script.get("hook"))
+        self.covered = bool(script.get("cover")) and not self.hook
         self.tl = timeline
         self.total = total
         self.lines = script["lines"]
@@ -1014,7 +1018,7 @@ class Renderer:
         if i > 0:
             pd = dim_of(self.lines[i - 1]["scene"])
             dim = pd + (dim - pd) * swap
-        if t < COVER_T and self.s.get("cover"):
+        if t < COVER_T and self.covered:
             dim *= 0.8
         im = self.map_layer(cam, dim).convert("RGBA")
         ov = Image.new("RGBA", (W, H), (0, 0, 0, 0))
@@ -1022,18 +1026,22 @@ class Renderer:
         a_in = ease((loc - 0.1) / 0.45)
         a_out = 1 - ease((t - (en + 0.25)) / 0.3) if i + 1 < len(self.lines) else 1.0
         a = a_in * a_out
-        if self.s.get("cover") and i == 0:
+        if self.covered and i == 0:
             gate = ease((t - COVER_T) / 0.35)
             a *= gate
             a_in *= gate
         slide = ease((loc - 0.1) / 0.5)
+        if self.hook and i == 0:
+            # the opening scene is already on screen at frame 0
+            a_in, slide = 1.0, 1.0
+            a = a_out
         map_a = 1.0 if sc["type"] in MAP_SCENES else (0.0 if sc["type"] in ("barrel", "chart", "walkout", "pulse", "breach") else 0.45)
 
         # detail scenes: cut from the map to a waving green flag of the country
         fc = self.flag_for(sc) if sc["type"] in PANEL_SCENES else None
         prev_sc = self.lines[i - 1]["scene"] if i > 0 else None
         pfc = self.flag_for(prev_sc) if prev_sc and prev_sc["type"] in PANEL_SCENES else None
-        if fc and not (t < COVER_T + 0.3 and self.s.get("cover")):
+        if fc and not (t < COVER_T + 0.3 and self.covered):
             fa = swap if pfc != fc else 1.0
             self.draw_flag(d, fc, t, fa)
             map_a = 0.0
@@ -1214,7 +1222,7 @@ class Renderer:
             f = font("sans", size)
             for j, r in enumerate(sc["lines"]):
                 aj = a_out * ease((loc - 0.1 - j * 0.45) / 0.35)
-                if self.s.get("cover") and i == 0:
+                if self.covered and i == 0:
                     aj *= ease((t - COVER_T) / 0.35)
                 col = self.accents[j % len(self.accents)] if self.accents else INK
                 d.text((78, 330 + j * int(size * 1.22) + (1 - aj) * 18), r, font=f, fill=rgba(col, aj))
@@ -1228,17 +1236,19 @@ class Renderer:
         d.text((62, 182), self.s.get("date", ""), font=font("mono", 23), fill=rgba(GM, 0.8))
 
         # subtitle
-        cover_on = t < COVER_T and self.s.get("cover")
+        cover_on = t < COVER_T and self.covered
         if not cover_on and ln.get("text"):
             sa = ease((t - st + 0.05) / 0.2) * (1 - ease((t - en - 0.1) / 0.2))
-            if t < COVER_T + 0.3 and i == 0:
+            if self.covered and t < COVER_T + 0.3 and i == 0:
                 sa *= ease((t - COVER_T) / 0.3)
             self.subtitle(d, ln["text"], sa)
 
         # cover riddle
-        if self.s.get("cover") and t < COVER_T + 0.35:
+        if self.covered and t < COVER_T + 0.35:
             ca = 1 - ease((t - COVER_T) / 0.35)
             self.cover(d, ca)
+        if self.hook and t < HOOK_T + 0.4:
+            self.hook_banner(d, 1 - ease((t - HOOK_T) / 0.4), t)
 
         # outro
         if self.tl and t > self.tl[-1][1] + 0.2:
@@ -1247,6 +1257,22 @@ class Renderer:
 
         im = Image.alpha_composite(im, ov).convert("RGB")
         return self.finish(im, fi)
+
+    def hook_banner(self, d, a, t):
+        """v6: the hook sits over the live opening scene for the first few seconds."""
+        lines = self.s.get("hook_lines") or self.s.get("cover") or []
+        y = 232
+        for j, ln in enumerate(lines[:3]):
+            size = 96 if j == 0 else 74
+            while font("sans", size).getlength(ln) > 940 and size > 44:
+                size -= 4
+            fz = font("sans", size)
+            aj = a * ease((t + 0.25 - j * 0.35) / 0.2)
+            box = RED if j == 0 else (126, 246, 166)
+            ink = (255, 255, 255) if j == 0 else BG
+            d.rectangle([56, y - 8, 56 + fz.getlength(ln) + 32, y + size + 14], fill=rgba(box, aj))
+            d.text((72, y), ln, font=fz, fill=rgba(ink, aj))
+            y += size + 34
 
     def cover(self, d, a):
         f = font("mono", 70)
@@ -1268,7 +1294,7 @@ class Renderer:
 def render(script, timeline, total, audio, out, thumb):
     r = Renderer(script, timeline, total)
     script["_terrain"] = r.terrain_src
-    Image.fromarray(r.frame(0.7 if script.get("cover") else LEAD + 1.0, 0)).save(thumb)
+    Image.fromarray(r.frame(0.6 if script.get("hook") else (0.7 if script.get("cover") else LEAD + 1.0), 0)).save(thumb)
     n = int(math.ceil(total * FPS))
     cmd = ["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
            "-r", str(FPS), "-i", "-", "-i", str(audio), "-map", "0:v", "-map", "1:a",
