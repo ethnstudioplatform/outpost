@@ -10,6 +10,10 @@ on:
         description: "Use placeholder test data"
         type: boolean
         default: false
+      script:
+        description: "Hand-written script file in fixtures/ (optional)"
+        type: string
+        default: ""
 
 permissions:
   contents: write
@@ -84,7 +88,8 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           RELIEFWEB_APPNAME: ${{ secrets.RELIEFWEB_APPNAME }}
         run: |
-          if [ "${{ inputs.demo }}" = "true" ]; then python run.py --demo; else python run.py; fi
+          if [ -n "${{ inputs.script }}" ]; then python run.py --script "${{ inputs.script }}";
+          elif [ "${{ inputs.demo }}" = "true" ]; then python run.py --demo; else python run.py; fi
           if [ -f out/latest.txt ]; then
             echo "made=true" >> $GITHUB_OUTPUT
             echo "DIR=$(cat out/latest.txt)" >> $GITHUB_ENV
@@ -101,7 +106,7 @@ jobs:
           retention-days: 7
 
       - name: Remember used headlines
-        if: steps.run.outputs.made == 'true' && inputs.demo != true
+        if: steps.run.outputs.made == 'true' && inputs.demo != true && inputs.script == ''
         run: |
           git config user.name "outpost-bot"
           git config user.email "outpost-bot@users.noreply.github.com"
