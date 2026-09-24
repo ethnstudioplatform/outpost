@@ -2,6 +2,7 @@
  "question": "How did Yemen's displacement count nearly triple in a week?",
  "cover": ["15,786 in 8 months.", "46,000 in a week.", "What changed?"],
  "region": "YEMEN / TAIZ + WEST COAST",
+ "country": "YE",
  "places": {
   "MOKHA": {"id": "MOKHA", "name": "Mokha", "lat": 13.32, "lon": 43.25},
   "TAIZ": {"id": "TAIZ", "name": "Taiz", "lat": 13.58, "lon": 44.02},
