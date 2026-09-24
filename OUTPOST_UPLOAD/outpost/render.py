@@ -267,7 +267,7 @@ class Renderer:
         if t == "pin":
             p = pl[sc["place"]]
             x, y = self.T(p["lon"], p["lat"])
-            return x, y, self._deg(2.1)
+            return x, y, self._deg(float(sc.get("span", 2.1)))
         if t == "tankers":
             p = pl[sc["place"]]
             x, y = self.T(p["lon"], p["lat"])
