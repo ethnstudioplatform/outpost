@@ -393,6 +393,10 @@ def audio(c, path):
 if __name__ == "__main__":
     spec = json.load(open(sys.argv[1]))
     out = sys.argv[2]
+    if spec.get("engine") == "multi":     # splitting multi-ball engine
+        import ping2
+        ping2.main(spec, out)
+        sys.exit(0)
     import os
     tmp = os.path.dirname(os.path.abspath(out))
     v, a = os.path.join(tmp, "_fp_video.mp4"), os.path.join(tmp, "_fp_audio.wav")
