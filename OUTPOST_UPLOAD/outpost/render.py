@@ -121,6 +121,13 @@ def sfx_events(script, timeline):
         if prev and prev != k:
             ev.append((max(0, st - 0.4), "swell"))
         prev = k
+    if str(script.get("style") or "").lower() == "maproom" and timeline:
+        # a quiet wall clock ticking under the whole story
+        end = timeline[-1][1] + OUTRO
+        n = 0
+        while n + 0.5 < end:
+            ev.append((n + 0.5, "clock" if n % 2 == 0 else "clock2"))
+            n += 1
     return ev
 
 
@@ -141,6 +148,12 @@ class Renderer:
         self._build_cams()
         self._build_post()
         self._build_flags()
+        # opt-in "map room" style (lamp-lit table, CRT wall, film finish)
+        self.room = None
+        if str(script.get("style") or "").lower() == "maproom":
+            from .maproom import MapRoom
+            self.font_ = font
+            self.room = MapRoom(self)
 
     # ---- map texture ----
     def _build_texture(self):
@@ -401,7 +414,10 @@ class Renderer:
     def finish(self, im, fi):
         small = im.resize((W // 6, H // 6), Image.BILINEAR).filter(ImageFilter.GaussianBlur(3))
         arr = np.asarray(im, np.float32) + np.asarray(small.resize((W, H), Image.BILINEAR), np.float32) * 0.28
-        arr *= self.post[fi % len(self.post)]
+        if self.room:
+            arr = self.room.film(arr, fi, fi / FPS)
+        else:
+            arr *= self.post[fi % len(self.post)]
         return np.clip(arr, 0, 255).astype(np.uint8)
 
     # ---- overlay pieces ----
@@ -1022,6 +1038,16 @@ class Renderer:
             dim *= 0.8
         im = self.map_layer(cam, dim).convert("RGBA")
         ov = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        room_a = 0.0
+        if self.room:
+            def on_map(scn):
+                return 1.0 if scn["type"] in MAP_SCENES else 0.0
+            room_a = on_map(sc)
+            if i > 0:
+                pm = on_map(self.lines[i - 1]["scene"])
+                room_a = pm + (room_a - pm) * ease((loc + 0.25) / 0.8)
+            im = self.room.table(im, t, room_a)
+            self.room.screens(ov, t, room_a, i, self.lines, self.places)
         d = ImageDraw.Draw(ov)
         a_in = ease((loc - 0.1) / 0.45)
         a_out = 1 - ease((t - (en + 0.25)) / 0.3) if i + 1 < len(self.lines) else 1.0
@@ -1230,10 +1256,14 @@ class Renderer:
             for pid in self.places:
                 self.marker(d, self.places[pid], cam, a_in, big=True, red=True)
 
-        # chrome
-        d.text((60, 104), C.BRAND, font=font("sans", 34), fill=rgba(G, 1))
-        d.text((62, 150), (self.s.get("region") or "").upper(), font=font("mono", 25), fill=rgba(GM, 1))
-        d.text((62, 182), self.s.get("date", ""), font=font("mono", 23), fill=rgba(GM, 0.8))
+        if self.room:
+            self.room.monitor(ov, 1 - room_a)
+            d = ImageDraw.Draw(ov)
+        # chrome (map room: the brand lives on the middle monitor, so only show it on the close-ups)
+        ca_ = 1.0 if not self.room else (1 - room_a)
+        d.text((60, 104), C.BRAND, font=font("sans", 34), fill=rgba(G, ca_))
+        d.text((62, 150), (self.s.get("region") or "").upper(), font=font("mono", 25), fill=rgba(GM, ca_))
+        d.text((62, 182), self.s.get("date", ""), font=font("mono", 23), fill=rgba(GM, 0.8 * ca_))
 
         # subtitle
         cover_on = t < COVER_T and self.covered
@@ -1241,7 +1271,11 @@ class Renderer:
             sa = ease((t - st + 0.05) / 0.2) * (1 - ease((t - en - 0.1) / 0.2))
             if self.covered and t < COVER_T + 0.3 and i == 0:
                 sa *= ease((t - COVER_T) / 0.3)
-            self.subtitle(d, ln["text"], sa)
+            if self.room:
+                from .maproom import typewriter
+                typewriter(d, ln["text"], (t - st + 0.05) / max(0.6, (en - st) * 0.82), sa, font, INK, BG)
+            else:
+                self.subtitle(d, ln["text"], sa)
 
         # cover riddle
         if self.covered and t < COVER_T + 0.35:

@@ -274,6 +274,10 @@ def build_track(segments, out: Path, sfx=()):
         elif kind == "pulse":     # low, round pulse for a key number
             m = int(0.9 * SR); kk = np.arange(m) / SR
             s_ = 0.22 * np.sin(2 * np.pi * (62 - 12 * kk) * kk) * np.exp(-kk * 4.5)
+        elif kind in ("clock", "clock2"):   # map room: a quiet wall clock, tick then tock
+            m = int(0.06 * SR); kk = np.arange(m) / SR
+            fq = 1900 if kind == "clock" else 1450
+            s_ = (0.028 * np.sin(2 * np.pi * fq * kk) + 0.02 * np.sin(2 * np.pi * 380 * kk)) * np.exp(-kk * 140)
         elif kind == "swell":     # air swell on big camera moves
             m = int(1.2 * SR); kk = np.arange(m) / m
             s_ = rng.normal(0, 1, m) * np.sin(np.pi * kk) ** 2 * 0.03
