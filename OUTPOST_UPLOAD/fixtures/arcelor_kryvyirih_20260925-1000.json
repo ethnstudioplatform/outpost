@@ -1,0 +1,28 @@
+{"question": "Will foreign companies stay in Ukraine?", "country": "UA", "voice_speed": 0.95, "gap": 0.4, "hook": true,
+"hook_lines": ["STEEL GIANT SHUTS PLANT", "4 missile strikes, 5 weeks"],
+"cover": ["STEEL GIANT.", "4 STRIKES.", "PLANT SHUT."],
+"region": "UKRAINE",
+"places": {"KRYVYI_RIH": {"id": "KRYVYI_RIH", "name": "Kryvyi Rih", "lat": 47.91, "lon": 33.39}, "KYIV": {"id": "KYIV", "name": "Kyiv", "lat": 50.45, "lon": 30.52}, "EUROPE": {"id": "EUROPE", "name": "Europe", "lat": 50.08, "lon": 14.43}},
+"lines": [
+{"text": "Steel giant ArcelorMittal says it can no longer safely run its Kryvyi Rih plant in Ukraine.", "src": [0, 1], "context": false, "note": "ArcelorMittal, 25 Sep", "scene": {"type": "pin", "place": "KRYVYI_RIH", "head": "Plant can't restart", "notes": ["ArcelorMittal", "statement 25 Sep"]}},
+{"text": "The reason: four missile strikes on the plant in five weeks.", "src": [0, 1], "context": false, "note": "ArcelorMittal, 25 Sep", "scene": {"type": "statement", "lines": ["4 missile strikes.", "5 weeks."], "flag": "UA"}},
+{"text": "Reuters reports the strikes were Russian. The latest hit on 21 September.", "src": [2, 0], "context": false, "note": "Reuters, 25 Sep", "scene": {"type": "pin", "place": "KRYVYI_RIH", "head": "Latest strike: 21 Sep", "notes": ["Reuters: Russian", "missile strikes"]}},
+{"text": "Five people were killed and seventeen injured, one of them critically.", "src": [0, 1], "context": false, "note": "ArcelorMittal, 25 Sep", "scene": {"type": "number", "value": "5", "label": "killed", "detail": "17 injured", "flag": "UA"}},
+{"text": "About 17,000 people work there, Interfax-Ukraine reports.", "src": [1], "context": false, "note": "Interfax-Ukraine, 25 Sep", "scene": {"type": "number", "value": "17,000", "label": "workers", "detail": "Interfax-Ukraine", "flag": "UA"}},
+{"text": "It is Ukraine's largest producer of rolled steel.", "src": [1], "context": false, "note": "Interfax-Ukraine, 25 Sep", "scene": {"type": "statement", "lines": ["Ukraine's largest", "rolled steel maker."], "flag": "UA"}},
+{"text": "Since February 2022, the company says it has put in more than 700 million dollars to keep it running.", "src": [0], "context": false, "note": "ArcelorMittal, 25 Sep", "scene": {"type": "number", "value": "$700M+", "label": "support since 2022", "detail": "ArcelorMittal", "flag": "UA"}},
+{"text": "Now it expects a one billion dollar impairment charge.", "src": [0, 2], "context": false, "note": "ArcelorMittal / Reuters", "scene": {"type": "number", "value": "$1BN", "label": "impairment charge", "detail": "non-cash, expected", "flag": "UA"}},
+{"text": "Chief executive Mauro Longobardo says they are \"no longer able to safely operate\" the plant.", "src": [0], "context": false, "note": "ArcelorMittal, 25 Sep", "scene": {"type": "quote", "quote": "no longer able to safely operate", "who": "Mauro Longobardo", "flag": "UA"}},
+{"text": "The company says it will now focus on preserving the infrastructure.", "src": [0], "context": false, "note": "ArcelorMittal, 25 Sep", "scene": {"type": "statement", "lines": ["Next step:", "preserve the site."], "flag": "UA"}},
+{"text": "Kryvyi Rih is also President Zelensky's home town.", "src": [3], "context": false, "note": "CBS News", "scene": {"type": "pin", "place": "KRYVYI_RIH", "head": "Zelensky's home town", "notes": ["central Ukraine"]}},
+{"text": "JP Morgan analysts say Ukrainian supply disruptions could tighten Europe's steel supply and support prices.", "src": [2], "context": false, "note": "JP Morgan via Reuters", "scene": {"type": "flow", "from": "KRYVYI_RIH", "to": ["EUROPE"], "label": "Tighter steel supply"}},
+{"text": "One of the world's biggest steelmakers has stopped a Ukrainian plant. Will other foreign companies stay?", "src": [], "context": true, "note": "", "scene": {"type": "wide"}}
+],
+"sources": [
+{"n": 0, "outlet": "ArcelorMittal (GlobeNewswire)", "title": "ArcelorMittal announces that it is unable to safely and sustainably restart operations at ArcelorMittal Kryvyi Rih following multiple recent missile strikes", "url": "https://www.globenewswire.com/news-release/2026/09/25/3368859/0/en/arcelormittal-announces-that-it-is-unable-to-safely-and-sustainably-restart-operations-at-arcelormittal-kryvyi-rih-following-multiple-recent-missile-strikes.html"},
+{"n": 1, "outlet": "Interfax-Ukraine", "title": "ArcelorMittal informs Ukraine it cannot continue operations at Kryvyi Rih plant", "url": "https://en.interfax.com.ua/news/economic/1209841.html"},
+{"n": 2, "outlet": "Reuters via Global Banking & Finance Review", "title": "ArcelorMittal to book $1 billion charge after missile strikes in Ukraine", "url": "https://www.globalbankingandfinance.com/arcelormittal-book-1-billion-charge-missile-strikes-ukraine/"},
+{"n": 3, "outlet": "CBS News", "title": "Russian airstrike in Zelenskyy's hometown in Ukraine kills at least 18", "url": "https://www.cbsnews.com/amp/news/russia-strike-ukraine-zelenskky-kryvyi-rih"}
+],
+"caption": "Steel giant ArcelorMittal says it can no longer safely run its huge Kryvyi Rih plant in Ukraine after four missile strikes in five weeks. About 17,000 people work there. Will other foreign companies stay?",
+"hashtags": ["ukraine", "arcelormittal", "steel", "kryvyirih", "outpost"]}
