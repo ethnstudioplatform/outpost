@@ -278,6 +278,14 @@ def build_track(segments, out: Path, sfx=()):
             m = int(0.06 * SR); kk = np.arange(m) / SR
             fq = 1900 if kind == "clock" else 1450
             s_ = (0.028 * np.sin(2 * np.pi * fq * kk) + 0.02 * np.sin(2 * np.pi * 380 * kk)) * np.exp(-kk * 140)
+        elif kind == "whoosh":    # punch style: quick air whoosh on every cut
+            m = int(0.28 * SR); kk = np.arange(m) / m
+            s_ = rng.normal(0, 1, m) * np.sin(np.pi * kk) ** 3 * 0.09
+            s_ = np.convolve(s_, np.ones(18) / 18, mode="same")
+        elif kind == "slam":      # punch style: stamp slam, low thump plus a crack
+            m = int(0.7 * SR); kk = np.arange(m) / SR
+            s_ = 0.34 * np.sin(2 * np.pi * (70 - 30 * kk) * kk) * np.exp(-kk * 7)
+            s_[:int(0.03 * SR)] += rng.normal(0, 0.18, int(0.03 * SR)) * np.linspace(1, 0, int(0.03 * SR))
         elif kind == "swell":     # air swell on big camera moves
             m = int(1.2 * SR); kk = np.arange(m) / m
             s_ = rng.normal(0, 1, m) * np.sin(np.pi * kk) ** 2 * 0.03

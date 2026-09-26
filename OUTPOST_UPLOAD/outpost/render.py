@@ -121,6 +121,15 @@ def sfx_events(script, timeline):
         if prev and prev != k:
             ev.append((max(0, st - 0.4), "swell"))
         prev = k
+    if str(script.get("style") or "").lower() == "punch" and timeline:
+        # punch style: a whoosh on every cut, a slam when a stamp lands, no slow swells
+        ev = [e for e in ev if e[1] != "swell"]
+        for j, (ln, (st, _)) in enumerate(zip(script["lines"], timeline)):
+            if j:
+                ev.append((max(0, st - 0.1), "whoosh"))
+            sc = ln["scene"]
+            if sc.get("stamp"):
+                ev.append((st + float(sc.get("stamp_at", 1.0)), "slam"))
     if str(script.get("style") or "").lower() == "maproom" and timeline:
         # a quiet wall clock ticking under the whole story
         end = timeline[-1][1] + OUTRO
@@ -150,6 +159,9 @@ class Renderer:
         self._build_flags()
         # opt-in "map room" style (lamp-lit table, CRT wall, film finish)
         self.room = None
+        # opt-in "punch" style (big karaoke captions, zoom punch per line, progress bar, stamps)
+        self.punch = str(script.get("style") or "").lower() == "punch"
+        self._shake = 0.0
         if str(script.get("style") or "").lower() == "maproom":
             from .maproom import MapRoom
             self.font_ = font
@@ -1026,7 +1038,7 @@ class Renderer:
             k_ = scn["type"]
             if k_ in PANEL_SCENES and self.flag_for(scn):
                 return 0.16
-            if k_ in ("walkout", "barrel", "chart", "pulse", "breach"):
+            if k_ in ("walkout", "barrel", "chart", "pulse", "breach", "plan7"):
                 return 0.14
             return {"number": 0.5, "compare": 0.42, "quote": 0.36, "statement": 0.62}.get(k_, 1.0)
         dim = dim_of(sc)
@@ -1061,7 +1073,7 @@ class Renderer:
             # the opening scene is already on screen at frame 0
             a_in, slide = 1.0, 1.0
             a = a_out
-        map_a = 1.0 if sc["type"] in MAP_SCENES else (0.0 if sc["type"] in ("barrel", "chart", "walkout", "pulse", "breach") else 0.45)
+        map_a = 1.0 if sc["type"] in MAP_SCENES else (0.0 if sc["type"] in ("barrel", "chart", "walkout", "pulse", "breach", "plan7") else 0.45)
 
         # detail scenes: cut from the map to a waving green flag of the country
         fc = self.flag_for(sc) if sc["type"] in PANEL_SCENES else None
@@ -1185,6 +1197,10 @@ class Renderer:
             self.chart(d, sc, ln, loc, en - st, t, a)
         elif k == "pulse":
             self.pulse(d, sc, ln, loc, t, a)
+        elif k == "plan7":
+            if self.flag_for(sc):
+                self.draw_flag(d, self.flag_for(sc), t, 0.55 * a_in)
+            self.plan7(ov, d, sc, ln, loc, en - st, t, a, a_in, first=(self.hook and i == 0))
         elif k == "breach":
             self.breach(d, sc, ln, loc, en - st, t, a)
         elif k == "walkout":
@@ -1192,12 +1208,25 @@ class Renderer:
             if ln.get("note"):
                 d.text((76, 400), ln["note"], font=font("mono", 26), fill=rgba(GM, a))
         elif k == "number":
+            py = 260 if self.punch else 0
             prog = (loc - 0.1) / 0.9
-            self.big_value(d, self.count(sc["value"], prog), 300, a)
-            d.text((84, 480), sc.get("label", ""), font=font("mono", 34), fill=rgba(INK, a * 0.9))
+            self.big_value(d, self.count(sc["value"], prog), 300 + py, a)
+            d.text((84, 480 + py), sc.get("label", ""), font=font("mono", 34), fill=rgba(INK, a * 0.9))
             if sc.get("detail"):
-                d.text((84, 526), sc["detail"], font=font("mono", 28), fill=rgba(GM, a))
-            d.text((84, 566), ln.get("note", ""), font=font("mono", 25), fill=rgba(GM, a * 0.85))
+                d.text((84, 526 + py), sc["detail"], font=font("mono", 28), fill=rgba(GM, a))
+            d.text((84, 566 + py), ln.get("note", ""), font=font("mono", 25), fill=rgba(GM, a * 0.85))
+            m_ = re.fullmatch(r"\s*(\d+) in (\d+)\s*", sc["value"])
+            if self.punch and m_ and 0 < int(m_.group(2)) <= 10:
+                # "1 in 5": a row of big tokens, the first ones lit in turn
+                k_, n_ = int(m_.group(1)), int(m_.group(2))
+                r_ = 58
+                gx = (W - n_ * (2 * r_ + 26) + 26) / 2
+                for q in range(n_):
+                    aq = a * ease((loc - 0.25 - q * 0.12) / 0.2)
+                    cx_ = gx + q * (2 * r_ + 26) + r_
+                    lit = q < k_
+                    d.ellipse([cx_ - r_, 700 + py - r_, cx_ + r_, 700 + py + r_],
+                              fill=rgba(RED if lit else GD, aq), outline=rgba(INK if lit else GM, aq), width=4)
             nums = re.findall(r"\d[\d,]*\.?\d*", sc["value"])
             n = float(nums[0].replace(",", "")) if nums else 0
             if n >= 100 and re.fullmatch(r"[\d,\.]+", sc["value"].strip()):
@@ -1230,7 +1259,7 @@ class Renderer:
             rows = wrap("“" + sc["quote"] + "”", f, 900)
             words_total = sum(len(r.split()) for r in rows)
             shown = int(words_total * ease((loc - 0.1) / max(0.8, (en - st) * 0.75))) + 1
-            y, cnt = 380, 0
+            y, cnt = 380 + (240 if self.punch else 0), 0
             for r in rows:
                 x = 80
                 for w in r.split():
@@ -1251,7 +1280,7 @@ class Renderer:
                 if self.covered and i == 0:
                     aj *= ease((t - COVER_T) / 0.35)
                 col = self.accents[j % len(self.accents)] if self.accents else INK
-                d.text((78, 330 + j * int(size * 1.22) + (1 - aj) * 18), r, font=f, fill=rgba(col, aj))
+                d.text((78, 330 + (300 if self.punch else 0) + j * int(size * 1.22) + (1 - aj) * 18), r, font=f, fill=rgba(col, aj))
         else:  # wide: every place in the story
             for pid in self.places:
                 self.marker(d, self.places[pid], cam, a_in, big=True, red=True)
@@ -1274,6 +1303,8 @@ class Renderer:
             if self.room:
                 from .maproom import typewriter
                 typewriter(d, ln["text"], (t - st + 0.05) / max(0.6, (en - st) * 0.82), sa, font, INK, BG)
+            elif self.punch:
+                self.karaoke(d, ln["text"], t - st, en - st, sa)
             else:
                 self.subtitle(d, ln["text"], sa)
 
@@ -1290,7 +1321,129 @@ class Renderer:
             d.text((62, 1690), "follow  " + C.HANDLE, font=font("mono", 32), fill=rgba(G, oa))
 
         im = Image.alpha_composite(im, ov).convert("RGB")
+        if self.punch:
+            im = self.punch_post(im, t, i, st)
         return self.finish(im, fi)
+
+    # ---- punch style ----
+    def punch_post(self, im, t, i, st):
+        """Zoom punch on every new line, a short shake when a stamp lands, a progress bar on top."""
+        k = 1.0
+        loc = t - st
+        if 0 <= loc < 0.32:
+            k = 1 + 0.065 * (1 - ease(loc / 0.32))
+        sx = sy = 0
+        if self._shake > 0:
+            amp = self._shake
+            sx = int(amp * math.sin(t * 97))
+            sy = int(amp * math.cos(t * 71))
+            self._shake = 0.0
+        if sx or sy:
+            k = max(k, 1.04)
+        if k > 1.001:
+            cw, ch = W / k, H / k
+            x0 = min(max(0, (W - cw) / 2 - sx), W - cw)
+            y0 = min(max(0, (H - ch) / 2 - sy), H - ch)
+            im = im.resize((W, H), Image.BILINEAR, box=(x0, y0, x0 + cw, y0 + ch))
+        d = ImageDraw.Draw(im)
+        end = self.tl[-1][1] if self.tl else self.total
+        prog = max(0.0, min(1.0, t / max(0.1, end)))
+        d.rectangle([0, 0, W, 9], fill=(16, 40, 26))
+        d.rectangle([0, 0, int(W * prog), 9], fill=G)
+        ser = self.s.get("series")
+        if ser:
+            f = font("mono", 30)
+            tw = f.getlength(ser)
+            d.rectangle([W - 60 - tw - 28, 40, W - 60, 88], fill=RED)
+            d.text((W - 60 - tw - 14, 46), ser, font=f, fill=(255, 255, 255))
+        return im
+
+    def karaoke(self, d, text, loc, dur, a):
+        """Big burned-in captions, 1 to 4 words at a time, the spoken word lit up."""
+        words = str(text).split()
+        if not words:
+            return
+        wts = [len(w) + 2.5 for w in words]
+        tot = sum(wts)
+        span = max(0.4, dur * 0.97)
+        starts, acc = [], 0.0
+        for w_ in wts:
+            starts.append(acc / tot * span)
+            acc += w_
+        # chunks: break after punctuation or every 3 words (4 if short)
+        chunks, cur = [], []
+        for j, w in enumerate(words):
+            cur.append(j)
+            if w[-1] in ",.?!:;" or len(cur) >= 3 and sum(len(words[q]) for q in cur) > 9 or len(cur) >= 4:
+                chunks.append(cur)
+                cur = []
+        if cur:
+            chunks.append(cur)
+        now = max(0, min(len(words) - 1, sum(1 for s0 in starts if s0 <= loc) - 1))
+        ch = next(c for c in chunks if now in c)
+        c_start = starts[ch[0]]
+        pop = ease((loc - c_start) / 0.12)
+        size = int(86 * (0.86 + 0.14 * pop))
+        f = font("sans", size)
+        line = " ".join(words[q] for q in ch).upper()
+        while f.getlength(line) > 940 and size > 50:
+            size -= 4
+            f = font("sans", size)
+        x = (W - f.getlength(line)) / 2
+        y = 1300 + (1 - pop) * 14
+        for q in ch:
+            w = words[q].upper()
+            lit = q == now
+            col = (255, 222, 60) if lit else (255, 255, 255)
+            d.text((x, y), w, font=f, fill=rgba(col, a), stroke_width=9, stroke_fill=rgba((0, 0, 0), a))
+            x += f.getlength(w + " ")
+
+    def plan7(self, ov, d, sc, ln, loc, dur, t, a, a_in, first=False):
+        """A 7-day plan as a stack of day tiles; optional range highlight and a stamp that slams down."""
+        days = sc.get("days", [])
+        n = len(days)
+        hi = sc.get("hi") or [1, n]
+        reveal = float(sc.get("reveal", 1.1))
+        lead = 0.0
+        if first:
+            reveal, lead = 0.45, 0.2   # frame 0 already moving: tiles cascade in under the hook
+        head = sc.get("head", "")
+        y0 = 590
+        if head and not (first and t < HOOK_T):
+            d.text((84, y0 - 66), head, font=font("mono", 38), fill=rgba(G, a_in))
+        rh = 112
+        for j, dd in enumerate(days):
+            lab, txt = (dd if isinstance(dd, (list, tuple)) else (f"DAY {j + 1}", dd))
+            aj = a * ease((loc + lead - j * reveal / max(1, n)) / 0.22)
+            on = hi[0] <= j + 1 <= hi[1]
+            y = y0 + j * rh + (1 - aj) * 26
+            box = G if on else GD
+            d.rectangle([60, y, 60 + 230, y + rh - 18], fill=rgba(box, aj * (1 if on else 0.8)))
+            d.text((80, y + 22), lab, font=font("mono", 42), fill=rgba(BG if on else GM, aj))
+            d.text((316, y + 14), txt, font=font("sans", 58), fill=rgba(INK if on else GM, aj))
+        if ln.get("note"):
+            d.text((84, y0 + n * rh + 8), ln["note"], font=font("mono", 25), fill=rgba(GM, a * 0.85))
+        stamp = sc.get("stamp")
+        if stamp:
+            ts = loc - float(sc.get("stamp_at", 1.0))
+            if ts >= 0:
+                e = ease(ts / 0.16)
+                sz = 2.3 - 1.3 * e
+                if 0 <= ts < 0.28:
+                    self._shake = 16 * (1 - ts / 0.28)
+                f = font("sans", 150)
+                tw = int(f.getlength(stamp)) + 80
+                img = Image.new("RGBA", (tw, 230), (0, 0, 0, 0))
+                g = ImageDraw.Draw(img)
+                al = int(255 * min(1, e * 1.4) * a_in)
+                g.rectangle([8, 8, tw - 8, 222], outline=(*RED, al), width=14)
+                g.text((40, 22), stamp, font=f, fill=(*RED, al))
+                img = img.resize((int(tw * sz), int(230 * sz)), Image.BILINEAR).rotate(-11, expand=True, resample=Image.BICUBIC)
+                cx, cy = W // 2, y0 + n * rh // 2
+                px, py = cx - img.width // 2, cy - img.height // 2
+                cl, ct = max(0, -px), max(0, -py)
+                img = img.crop((cl, ct, min(img.width, W - px), min(img.height, H - py)))
+                ov.alpha_composite(img, (px + cl, py + ct))
 
     def hook_banner(self, d, a, t):
         """v6: the hook sits over the live opening scene for the first few seconds."""
