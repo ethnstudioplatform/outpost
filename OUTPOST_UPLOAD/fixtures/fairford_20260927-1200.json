@@ -1,0 +1,26 @@
+{"style": "punch", "short": true, "question": "Would you feel safe living next to a US bomber base, yes or no?", "country": "GB", "voice_speed": 1.05, "gap": 0.18, "scene_gap": 0.06, "hook": true,
+"hook_lines": ["RAF FAIRFORD: EXPLOSIVES ARRESTS", "Village near US bombers evacuated"],
+"cover": ["RAF FAIRFORD.", "EXPLOSIVES ARRESTS.", "HOMES EVACUATED."],
+"region": "GLOUCESTERSHIRE, UK",
+"places": {"FAIRFORD": {"id": "FAIRFORD", "name": "RAF Fairford", "lat": 51.682, "lon": -1.79}, "WHELFORD": {"id": "WHELFORD", "name": "Whelford", "lat": 51.688, "lon": -1.762}, "LONDON": {"id": "LONDON", "name": "London", "lat": 51.507, "lon": -0.128}},
+"lines": [
+{"text": "Police have arrested several men on suspicion of explosives offences near RAF Fairford, a base used by US bombers.", "src": [0, 1, 2], "context": false, "note": "Gloucestershire Police via ITV News, Reuters, ABC News, 27 Sep", "scene": {"type": "pin", "place": "FAIRFORD", "head": "RAF Fairford", "notes": ["Explosives Act arrests", "Sunday 27 Sep"], "span": 6}},
+{"text": "Homes in the nearby village of Whelford were evacuated this morning, after police declared a major incident.", "src": [0, 2], "context": false, "note": "Gloucestershire Police statement via ITV, ABC", "scene": {"type": "pin", "place": "WHELFORD", "head": "Whelford", "notes": ["Homes evacuated", "Major incident declared"], "span": 3}},
+{"text": "Residents were taken to a nearby leisure centre. Armed police are guarding a cordon.", "src": [0, 3], "context": false, "note": "ITV News, Perspective Media", "scene": {"type": "statement", "lines": ["Residents moved out.", "Armed police", "hold a cordon."], "flag": "GB"}},
+{"text": "The Army's bomb disposal team has been examining vehicles in the area.", "src": [0, 2], "context": false, "note": "ITV News, ABC News", "scene": {"type": "statement", "lines": ["ARMY", "BOMB DISPOSAL", "checks vehicles"], "flag": "GB"}},
+{"text": "Gloucestershire Police say: we believe this incident is contained.", "src": [0, 2], "context": false, "note": "Gloucestershire Police via ITV News and ABC News, verbatim", "scene": {"type": "quote", "quote": "we believe this incident is contained", "who": "Gloucestershire Police", "flag": "GB"}},
+{"text": "Sky News reports security at the base had already been stepped up before the arrests.", "src": [1], "context": false, "note": "Reuters citing Sky News, 27 Sep", "scene": {"type": "statement", "lines": ["Sky News:", "security stepped up", "BEFORE the arrests"], "flag": "GB"}},
+{"text": "ABC News says US B-52 and B-1 bombers have flown from Fairford during the Iran war, which began in February.", "src": [2, 4], "context": false, "note": "ABC News; Ynetnews (limited strike missions against Iranian targets)", "scene": {"type": "route", "from": "FAIRFORD", "to": "LONDON", "label": "US bomber base in England", "note": "B-52 and B-1 bombers"}},
+{"text": "Police have not said whether the arrests are linked to the base. A US Air Force spokesperson says they remain vigilant.", "src": [2, 4, 5], "context": false, "note": "ABC News, The Week (no link confirmed); USAF spokesperson via Ynetnews", "scene": {"type": "quote", "quote": "remain vigilant", "who": "US Air Force spokesperson", "flag": "US"}},
+{"text": "So, would you feel safe living next to a US bomber base, yes or no?", "src": [], "context": true, "note": "", "scene": {"type": "statement", "lines": ["NEXT TO A", "US BOMBER BASE:", "SAFE, YES OR NO?"], "flag": "GB"}}
+],
+"sources": [
+{"n": 0, "outlet": "ITV News", "title": "Major incident declared near RAF Fairford, as residents evacuated", "url": "https://www.itv.com/news/2026-09-27/major-incident-declared-near-raf-fairford-as-residents-evacuated"},
+{"n": 1, "outlet": "Reuters (via US News)", "title": "Police declare major incident at UK's Fairford air base, used by US air forces", "url": "https://www.usnews.com/news/world/articles/2026-09-27/security-increased-at-us-fairford-air-base-in-england"},
+{"n": 2, "outlet": "ABC News", "title": "UK police arrest several under explosives act in 'major incident' near US air base", "url": "https://abcnews.com/International/uk-police-arrest-explosives-act-major-incident-us/story?id=136793301"},
+{"n": 3, "outlet": "Perspective Media (PA)", "title": "Men arrested under Explosives Act as villagers evacuated near RAF Fairford", "url": "https://www.perspectivemedia.com/men-arrested-under-explosives-act-as-villagers-evacuated-near-raf-fairford/"},
+{"n": 4, "outlet": "Ynetnews", "title": "Explosives probe triggers arrests near UK base used by US Air Force", "url": "https://www.ynetnews.com/article/bkyjmuuqgl"},
+{"n": 5, "outlet": "The Week", "title": "Several arrested, bomb squad deployed, homes evacuated after major incident in Whelford near RAF base in UK", "url": "https://www.theweek.in/news/world/2026/09/27/several-arrested-bomb-squad-deployed-homes-evacuated-after-major-incident-in-whelford-near-raf-base-in-uk.html"}
+],
+"caption": "RAF Fairford: police have arrested several men on suspicion of explosives offences near the base used by US bombers, and evacuated homes in nearby Whelford. Police say they believe the incident is contained. Would you feel safe living next to a US bomber base, yes or no?",
+"hashtags": ["raffairford", "fairford", "whelford", "usairforce", "outpost"]}
