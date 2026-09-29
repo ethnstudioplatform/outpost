@@ -22,6 +22,11 @@ GM = (74, 166, 110)
 GD = (26, 66, 42)
 RED = (255, 74, 62)     # waypoints only
 
+# opt-in full-colour palette ("palette": "colour"): navy sea, natural land, amber accents
+COLOUR = {"BG": (5, 14, 34), "INK": (244, 247, 255), "G": (255, 190, 60), "GM": (156, 184, 222), "GD": (36, 56, 96)}
+LAND_LO = (44, 104, 62)     # lowland green
+LAND_HI = (178, 150, 104)   # upland tan
+
 LEAD = 0.45        # voice starts under the cover
 GAP = 0.34         # breath between lines
 SCENE_GAP = 0.22   # extra breath when the picture changes kind
@@ -144,6 +149,9 @@ def sfx_events(script, timeline):
 class Renderer:
     def __init__(self, script, timeline, total):
         self.s = script
+        self.colour = str(script.get("palette") or "").lower() in ("colour", "color")
+        if self.colour:
+            globals().update(COLOUR)
         # v6 hook opener: no static cover, first scene live from frame 0, big hook banner on top
         self.hook = bool(script.get("hook"))
         self.covered = bool(script.get("cover")) and not self.hook
@@ -232,8 +240,16 @@ class Renderer:
         shade = np.clip(0.52 + (-gx * 0.62 - gy * 0.78) * 2.4, 0, 1)
         en = np.clip(hm / max(600.0, float(np.percentile(hm[land > 0.5], 98)) if (land > 0.5).any() else 1), 0, 1)
         tex = np.zeros((TH, TW, 3), np.float32)
-        for c in range(3):
-            tex[..., c] = BG[c] + land * (shade * (22, 64, 38)[c] + (5, 12, 8)[c] + en * (6, 16, 10)[c])
+        if self.colour:
+            # hypsometric tint (green lowland to tan upland) lit by the hillshade; sea gets a soft depth gradient
+            ys = np.linspace(0, 1, TH, dtype=np.float32)[:, None]
+            for c in range(3):
+                base = LAND_LO[c] + (LAND_HI[c] - LAND_LO[c]) * np.sqrt(en)
+                sea = BG[c] + (8, 18, 30)[c] * (0.6 + 0.4 * ys)
+                tex[..., c] = sea * (1 - land) + land * base * (0.42 + 0.9 * shade)
+        else:
+            for c in range(3):
+                tex[..., c] = BG[c] + land * (shade * (22, 64, 38)[c] + (5, 12, 8)[c] + en * (6, 16, 10)[c])
         # faint graticule over the sea
         gimg = Image.new("L", (TW, TH), 0)
         gd = ImageDraw.Draw(gimg)
@@ -242,9 +258,9 @@ class Renderer:
         for la in range(int(math.floor(lat0)), int(math.ceil(lat1)) + 1):
             gd.line([self.T(lon0, la), self.T(lon1, la)], fill=255, width=2)
         grid = np.asarray(gimg, np.float32)[..., None] / 255 * (1 - land[..., None])
-        tex += grid * np.array([10, 26, 17], np.float32)
+        tex += grid * np.array([22, 40, 70] if self.colour else [10, 26, 17], np.float32)
         ol = np.asarray(lines_img.filter(ImageFilter.GaussianBlur(0.8)), np.float32)[..., None] / 255
-        tex = tex * (1 - ol * 0.8) + ol * 0.8 * np.array([70, 150, 100], np.float32)
+        tex = tex * (1 - ol * 0.8) + ol * 0.8 * np.array([196, 222, 255] if self.colour else [70, 150, 100], np.float32)
         self.tex = np.clip(tex, 0, 255).astype(np.uint8)
 
     def _synthetic_height(self, mask):
@@ -1455,7 +1471,7 @@ class Renderer:
                 size -= 4
             fz = font("sans", size)
             aj = a  # all hook lines on screen from frame 0, so the first frame (the TikTok cover) is the hook
-            box = RED if j == 0 else (126, 246, 166)
+            box = RED if j == 0 else (G if self.colour else (126, 246, 166))
             ink = (255, 255, 255) if j == 0 else BG
             d.rectangle([56, y - 8, 56 + fz.getlength(ln) + 32, y + size + 14], fill=rgba(box, aj))
             d.text((72, y), ln, font=fz, fill=rgba(ink, aj))
