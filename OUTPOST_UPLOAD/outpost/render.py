@@ -174,6 +174,11 @@ class Renderer:
             from .maproom import MapRoom
             self.font_ = font
             self.room = MapRoom(self)
+        # opt-in anchor-desk bulletin ("studio"/"desk" scenes, per-line "ticker")
+        self.studio = None
+        if any(l["scene"]["type"] in ("studio", "desk") or l.get("ticker") for l in self.lines):
+            from .studio import Studio
+            self.studio = Studio(self)
 
     # ---- map texture ----
     def _build_texture(self):
@@ -1144,7 +1149,7 @@ class Renderer:
             k_ = scn["type"]
             if k_ in PANEL_SCENES and self.flag_for(scn):
                 return 0.16
-            if k_ in ("walkout", "barrel", "chart", "pulse", "breach", "plan7", "cabin", "cockpit"):
+            if k_ in ("walkout", "barrel", "chart", "pulse", "breach", "plan7", "cabin", "cockpit", "studio", "desk"):
                 return 0.14
             return {"number": 0.5, "compare": 0.42, "quote": 0.36, "statement": 0.62}.get(k_, 1.0)
         dim = dim_of(sc)
@@ -1155,6 +1160,8 @@ class Renderer:
         if t < COVER_T and self.covered:
             dim *= 0.8
         im = self.map_layer(cam, dim).convert("RGBA")
+        if self.studio and sc["type"] in ("studio", "desk"):
+            im = self.studio.frame(t, i, st, en, sc)
         ov = Image.new("RGBA", (W, H), (0, 0, 0, 0))
         room_a = 0.0
         if self.room:
@@ -1179,7 +1186,7 @@ class Renderer:
             # the opening scene is already on screen at frame 0
             a_in, slide = 1.0, 1.0
             a = a_out
-        map_a = 1.0 if sc["type"] in MAP_SCENES else (0.0 if sc["type"] in ("barrel", "chart", "walkout", "pulse", "breach", "plan7", "cabin", "cockpit") else 0.45)
+        map_a = 1.0 if sc["type"] in MAP_SCENES else (0.0 if sc["type"] in ("barrel", "chart", "walkout", "pulse", "breach", "plan7", "cabin", "cockpit", "studio", "desk") else 0.45)
 
         # detail scenes: cut from the map to a waving green flag of the country
         fc = self.flag_for(sc) if sc["type"] in PANEL_SCENES else None
@@ -1315,6 +1322,8 @@ class Renderer:
             self.plan7(ov, d, sc, ln, loc, en - st, t, a, a_in, first=(self.hook and i == 0))
         elif k == "breach":
             self.breach(d, sc, ln, loc, en - st, t, a)
+        elif k in ("studio", "desk"):
+            pass
         elif k == "cabin":
             self.cabin(d, sc, ln, loc, en - st, t, a)
         elif k == "cockpit":
@@ -1409,6 +1418,9 @@ class Renderer:
         d.text((60, 104), C.BRAND, font=font("sans", 34), fill=rgba(G, ca_))
         d.text((62, 150), (self.s.get("region") or "").upper(), font=font("mono", 25), fill=rgba(GM, ca_))
         d.text((62, 182), self.s.get("date", ""), font=font("mono", 23), fill=rgba(GM, 0.8 * ca_))
+
+        if self.studio:
+            self.studio.strap(d, t, i, st, studio_line=sc["type"] == "studio")
 
         # subtitle
         cover_on = t < COVER_T and self.covered
