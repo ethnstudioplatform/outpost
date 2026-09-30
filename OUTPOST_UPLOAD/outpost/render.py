@@ -870,7 +870,8 @@ class Renderer:
             gy = y0 - (y0 - y1) * (gv - lo) / (hi - lo)
             for x in range(x0, x1, 22):
                 d.line([(x, gy), (x + 10, gy)], fill=rgba(GD, a), width=2)
-            d.text((x0 - 8 - font("mono", 24).getlength(f"${gv}"), gy - 14), f"${gv}", font=font("mono", 24), fill=rgba(GM, a))
+            gtxt = f"{sc.get('prefix', '$')}{gv:,}{sc.get('suffix', '')}"
+            d.text((x0 - 8 - font("mono", 24).getlength(gtxt), gy - 14), gtxt, font=font("mono", 24), fill=rgba(GM, a))
         d.line([(x0, y0), (x1, y0)], fill=rgba(GM, a), width=2)
         prog = ease((loc - 0.15) / max(1.4, dur * 0.7))
         xe = x0 + (x1 - x0) * prog
@@ -896,7 +897,7 @@ class Renderer:
             if last:
                 self.rings(d, px, py, t, a)
             f = font("sans", 40 if last else 34)
-            txt = f"${float(v):.0f}"
+            txt = f"{sc.get('prefix', '$')}{float(v):,.0f}{sc.get('suffix', '')}"
             tx = min(x1 + 30 - f.getlength(txt), max(60, px - f.getlength(txt) / 2))
             d.text((tx, py - 62), txt, font=f, fill=rgba(col, a))
             fl = font("mono", 22)
@@ -964,6 +965,95 @@ class Renderer:
         d.rectangle([x - bw / 2, y - bh / 2, x + bw / 2, y + bh / 2], fill=rgba(col, a))
         d.ellipse([x - 8, y - 12, x + 8, y + 4], fill=rgba(BG, a))
         d.rectangle([x - 3, y, x + 3, y + 18], fill=rgba(BG, a))
+
+    def _scene_head(self, d, sc, ln, a):
+        if sc.get("head"):
+            f = font("sans", 64); size = 64
+            while f.getlength(sc["head"]) > 940 and size > 40:
+                size -= 4; f = font("sans", size)
+            d.text((70, 300), sc["head"], font=f, fill=rgba(INK, a))
+            self.accent_bar(d, 76, 300 + size * 1.15, a)
+        if sc.get("label"):
+            d.text((84, 420), sc["label"], font=font("mono", 30), fill=rgba(INK, a * 0.9))
+        if ln.get("note"):
+            d.text((84, 462), ln["note"], font=font("mono", 25), fill=rgba(GM, a * 0.85))
+        fm = font("mono", 24)
+        d.text((W - 80 - fm.getlength("ILLUSTRATION"), 640), "ILLUSTRATION", font=fm, fill=rgba(GM, a * 0.7))
+
+    def cabin(self, d, sc, ln, loc, dur, t, a):
+        """Side-on cutaway of a narrow-body jet: rows of plain silhouettes turn towards the front,
+        a question mark flickers at the closed cockpit door. No faces, no action shown."""
+        self._scene_head(d, sc, ln, a)
+        x0, x1, yc, hh = 70, 1010, 1010, 190       # fuselage: tail left, nose right
+        grow = ease((loc - 0.05) / 0.5)
+        # fuselage: one capsule, tail fin on the left
+        top, bot = yc - hh, yc + hh
+        d.rounded_rectangle([x0, top, x1, bot], radius=hh, outline=rgba(INK, a * grow), width=5)
+        d.polygon([(x0 + 70, top + 30), (x0 + 20, top - 140), (x0 + 90, top - 140), (x0 + 200, top + 4)],
+                  outline=rgba(INK, a * grow), width=5)
+        # floor and windows
+        d.line([(x0 + 30, bot - 50), (x1 - 150, bot - 50)], fill=rgba(GM, a), width=3)
+        for wx in range(x0 + 150, x1 - 250, 46):
+            d.rounded_rectangle([wx, top + 40, wx + 22, top + 72], radius=8, fill=rgba(GD, a))
+        # cockpit bulkhead and door
+        dx = x1 - 215
+        d.line([(dx, top + 20), (dx, bot - 50)], fill=rgba(INK, a), width=6)
+        d.rectangle([dx - 8, top + 90, dx + 8, bot - 52], fill=rgba(GD, a), outline=rgba(INK, a), width=3)
+        # passengers: plain silhouettes, heads turn to the front (right) over time
+        turn = ease((loc - 0.6) / 0.8)
+        for k_, sx in enumerate(range(x0 + 150, dx - 60, 58)):
+            ra = a * ease((loc - 0.15 - k_ * 0.03) / 0.3)
+            for row, off in ((0, 0), (1, 18)):
+                bx, by = sx + off, bot - 52 - row * 0
+                if row == 1:
+                    continue
+                # seat back
+                d.rounded_rectangle([bx - 18, by - 118, bx - 4, by - 10], radius=5, fill=rgba(GD, ra))
+                # body
+                d.rounded_rectangle([bx - 6, by - 92, bx + 22, by - 30], radius=10, fill=rgba(GM, ra))
+                # head, with a small nose-dot that swings to the front as heads turn
+                hx, hy = bx + 8 + 6 * turn, by - 112
+                d.ellipse([hx - 17, hy - 17, hx + 17, hy + 17], fill=rgba(GM, ra))
+                d.ellipse([hx + 10 * turn + 2, hy - 3, hx + 10 * turn + 8, hy + 3], fill=rgba(INK, ra * turn))
+        # flickering question mark at the cockpit door
+        fl = 0.55 + 0.45 * (1 if (int(t * 6) % 3) else 0.2)
+        qa = a * ease((loc - 1.0) / 0.3) * fl
+        fq = font("sans", 120)
+        d.text((dx - fq.getlength("?") / 2, top - 150), "?", font=fq, fill=rgba(RED, qa))
+        if qa > 0:
+            self.rings(d, dx, top + 60, t, qa * 0.8)
+
+    def cockpit(self, d, sc, ln, loc, dur, t, a):
+        """The closed cockpit door: a red warning lamp pulses above it and a dim glow leaks round
+        the frame. No figures."""
+        self._scene_head(d, sc, ln, a)
+        cx, top, bot, hw = W / 2, 700, 1240, 200
+        # dim glow leaking round the door edges
+        pulse = 0.5 + 0.5 * math.sin(t * 5.2)
+        for g_ in range(6, 0, -1):
+            e = g_ * 16
+            d.rounded_rectangle([cx - hw - e, top - e, cx + hw + e, bot + e], radius=20 + e,
+                                fill=rgba(RED, a * (0.018 + 0.012 * pulse)))
+        # bulkhead wall and door
+        d.rectangle([60, top - 90, W - 60, bot + 40], outline=rgba(GM, a), width=3)
+        d.rounded_rectangle([cx - hw, top, cx + hw, bot], radius=16, fill=rgba(BG, a), outline=rgba(INK, a), width=6)
+        d.rounded_rectangle([cx - hw + 40, top + 50, cx + hw - 40, top + 210], radius=10, outline=rgba(GM, a), width=3)
+        d.ellipse([cx - 60 - 9, top + 110, cx - 60 + 9, top + 128], fill=rgba(GD, a))   # peephole
+        # handle and keypad
+        d.rounded_rectangle([cx + hw - 80, top + 330, cx + hw - 30, top + 360], radius=10, fill=rgba(INK, a))
+        for r_ in range(3):
+            for c_ in range(3):
+                kx, ky = cx - hw - 130 + c_ * 26, top + 300 + r_ * 26
+                d.rectangle([kx, ky, kx + 18, ky + 18], fill=rgba(GD, a), outline=rgba(GM, a), width=2)
+        # LOCKED plate
+        fm = font("mono", 30)
+        d.text((cx - fm.getlength("CLOSED") / 2, top + 450), "CLOSED", font=fm, fill=rgba(INK, a * 0.85))
+        # red warning lamp
+        on = 0.35 + 0.65 * (1 if (int(t * 2.4) % 2 == 0) else 0.15)
+        lx, ly = cx, top - 45
+        for g_ in (4, 3, 2):
+            d.ellipse([lx - 14 * g_, ly - 14 * g_, lx + 14 * g_, ly + 14 * g_], fill=rgba(RED, a * on * 0.08))
+        d.ellipse([lx - 22, ly - 22, lx + 22, ly + 22], fill=rgba(RED, a * on), outline=rgba(INK, a * 0.6), width=3)
 
     def breach(self, d, sc, ln, loc, dur, t, a):
         """An agent node tries a wall of blocks, is refused, then routes around it to the lock."""
@@ -1054,7 +1144,7 @@ class Renderer:
             k_ = scn["type"]
             if k_ in PANEL_SCENES and self.flag_for(scn):
                 return 0.16
-            if k_ in ("walkout", "barrel", "chart", "pulse", "breach", "plan7"):
+            if k_ in ("walkout", "barrel", "chart", "pulse", "breach", "plan7", "cabin", "cockpit"):
                 return 0.14
             return {"number": 0.5, "compare": 0.42, "quote": 0.36, "statement": 0.62}.get(k_, 1.0)
         dim = dim_of(sc)
@@ -1089,7 +1179,7 @@ class Renderer:
             # the opening scene is already on screen at frame 0
             a_in, slide = 1.0, 1.0
             a = a_out
-        map_a = 1.0 if sc["type"] in MAP_SCENES else (0.0 if sc["type"] in ("barrel", "chart", "walkout", "pulse", "breach", "plan7") else 0.45)
+        map_a = 1.0 if sc["type"] in MAP_SCENES else (0.0 if sc["type"] in ("barrel", "chart", "walkout", "pulse", "breach", "plan7", "cabin", "cockpit") else 0.45)
 
         # detail scenes: cut from the map to a waving green flag of the country
         fc = self.flag_for(sc) if sc["type"] in PANEL_SCENES else None
@@ -1122,6 +1212,12 @@ class Renderer:
                 self.rings(d, pos[0], pos[1], t, a_in)
                 self.label_block(d, pos[0], pos[1], sc.get("head") or p["name"], sc.get("notes", []),
                                  ln.get("note"), a, slide)
+                if sc.get("icon") == "hospital":
+                    ia = a * ease((loc - 0.5) / 0.35)
+                    hx, hy, r_ = pos[0] + 80, pos[1] + 50, 30
+                    d.rounded_rectangle([hx - r_, hy - r_, hx + r_, hy + r_], radius=8, fill=rgba((244, 247, 255), ia), outline=rgba(RED, ia), width=4)
+                    d.rectangle([hx - 6, hy - 20, hx + 6, hy + 20], fill=rgba(RED, ia))
+                    d.rectangle([hx - 20, hy - 6, hx + 20, hy + 6], fill=rgba(RED, ia))
         elif k == "route":
             A, B = self.places[sc["from"]], self.places[sc["to"]]
             prog = ease((loc - 0.15) / 1.0)
@@ -1219,6 +1315,10 @@ class Renderer:
             self.plan7(ov, d, sc, ln, loc, en - st, t, a, a_in, first=(self.hook and i == 0))
         elif k == "breach":
             self.breach(d, sc, ln, loc, en - st, t, a)
+        elif k == "cabin":
+            self.cabin(d, sc, ln, loc, en - st, t, a)
+        elif k == "cockpit":
+            self.cockpit(d, sc, ln, loc, en - st, t, a)
         elif k == "walkout":
             self.hall(d, sc, loc, en - st, t, a)
             if ln.get("note"):
