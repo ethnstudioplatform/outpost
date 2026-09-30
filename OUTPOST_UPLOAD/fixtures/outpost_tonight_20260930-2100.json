@@ -1,0 +1,333 @@
+{
+ "question": "The flight or Iran, which matters most tonight?",
+ "country": "IL",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "series": "OUTPOST TONIGHT ep1",
+ "hook_lines": [
+  "FLYDUBAI: 174 LAND IN ISRAEL",
+  "Outpost Tonight: 4 stories"
+ ],
+ "cover": [
+  "OUTPOST",
+  "TONIGHT"
+ ],
+ "region": "OUTPOST TONIGHT",
+ "places": {
+  "TELAVIV": {
+   "id": "TELAVIV",
+   "name": "Ben Gurion",
+   "lat": 32.01,
+   "lon": 34.89
+  },
+  "TABUK": {
+   "id": "TABUK",
+   "name": "Tabuk",
+   "lat": 28.37,
+   "lon": 36.62
+  },
+  "DUBAI": {
+   "id": "DUBAI",
+   "name": "Dubai",
+   "lat": 25.25,
+   "lon": 55.36
+  },
+  "HORMUZ": {
+   "id": "HORMUZ",
+   "name": "Strait of Hormuz",
+   "lat": 26.57,
+   "lon": 56.25
+  },
+  "KYIV": {
+   "id": "KYIV",
+   "name": "Kyiv",
+   "lat": 50.45,
+   "lon": 30.52
+  },
+  "GAZA": {
+   "id": "GAZA",
+   "name": "Gaza",
+   "lat": 31.5,
+   "lon": 34.47
+  }
+ },
+ "lines": [
+  {
+   "text": "Good evening. 174 people from the diverted Flydubai jet have landed in Israel. This is Outpost Tonight.",
+   "src": [
+    0,
+    1,
+    2
+   ],
+   "context": false,
+   "note": "Times of Israel, Ynet, 30 Sep",
+   "scene": {
+    "type": "studio",
+    "ots": "TELAVIV",
+    "ots_label": "Flydubai",
+    "ots_span": 6
+   },
+   "ticker": "FLYDUBAI: PASSENGERS REACH ISRAEL"
+  },
+  {
+   "text": "Our top story. A rescue flight brought them from Tabuk to Ben Gurion Airport this evening.",
+   "src": [
+    0,
+    1,
+    2
+   ],
+   "context": false,
+   "note": "Times of Israel, Ynet, Jerusalem Post",
+   "scene": {
+    "type": "flight",
+    "from": {
+     "lat": 28.37,
+     "lon": 36.62
+    },
+    "to": "TELAVIV",
+    "label": "Rescue flight lands",
+    "sub": "174 on board"
+   }
+  },
+  {
+   "text": "Their Dubai flight was diverted to Tabuk, Saudi Arabia this morning after a reported cockpit fight.",
+   "src": [
+    3,
+    4
+   ],
+   "context": false,
+   "note": "The National, Euronews, 30 Sep",
+   "scene": {
+    "type": "route",
+    "from": "DUBAI",
+    "to": "TABUK",
+    "label": "Diverted",
+    "note": "Wed morning"
+   }
+  },
+  {
+   "text": "Both pilots went to hospital. Flydubai says all passengers are safe.",
+   "src": [
+    3,
+    4
+   ],
+   "context": false,
+   "note": "Tabuk airport; Flydubai statement",
+   "scene": {
+    "type": "pin",
+    "place": "TABUK",
+    "head": "2 pilots to hospital",
+    "notes": [
+     "passengers safe"
+    ],
+    "span": 5,
+    "icon": "hospital"
+   }
+  },
+  {
+   "text": "Day 215 of the Iran war. Tehran says it has received Washington's reply to its latest offer.",
+   "src": [
+    5,
+    6
+   ],
+   "context": false,
+   "note": "Daily Sabah (AP), Times of Israel",
+   "scene": {
+    "type": "desk",
+    "ots": "HORMUZ",
+    "ots_label": "Hormuz: Day 215",
+    "ots_span": 6
+   },
+   "ticker": "HORMUZ: DAY 215"
+  },
+  {
+   "text": "Reports say Iran offered to reopen Hormuz within a week, if the US lifted its port blockade.",
+   "src": [
+    5
+   ],
+   "context": false,
+   "note": "Daily Sabah, citing AP",
+   "scene": {
+    "type": "pin",
+    "place": "HORMUZ",
+    "head": "Reopen offer",
+    "notes": [
+     "reply not made public"
+    ],
+    "span": 4
+   }
+  },
+  {
+   "text": "Iran's rial has now passed two and a half million to the dollar, a record low.",
+   "src": [
+    7,
+    8
+   ],
+   "context": false,
+   "note": "PBS NewsHour (AP); Democracy Now",
+   "scene": {
+    "type": "number",
+    "value": "2,500,000+",
+    "label": "rials to one US dollar",
+    "detail": "record low",
+    "flag": "IR"
+   },
+   "ticker": "IRAN RIAL: RECORD LOW"
+  },
+  {
+   "text": "In Ukraine, Russian missiles and drones hit Kyiv overnight.",
+   "src": [
+    9,
+    10
+   ],
+   "context": false,
+   "note": "Kyiv Independent, Al Jazeera",
+   "scene": {
+    "type": "desk",
+    "ots": "KYIV",
+    "ots_label": "Kyiv",
+    "ots_span": 5
+   },
+   "ticker": "KYIV HIT OVERNIGHT"
+  },
+  {
+   "text": "The grid operator says power was cut across parts of the capital.",
+   "src": [
+    9
+   ],
+   "context": false,
+   "note": "Ukrenergo via Kyiv Independent",
+   "scene": {
+    "type": "pin",
+    "place": "KYIV",
+    "head": "Power cuts",
+    "notes": [
+     "Ukrenergo"
+    ],
+    "span": 4
+   }
+  },
+  {
+   "text": "And Hamas, Islamic Jihad and ex-Fatah official Mohammed Dahlan plan a joint election list, the AP reports.",
+   "src": [
+    11,
+    12,
+    13
+   ],
+   "context": false,
+   "note": "AP via Middle East Monitor, Ynet, i24",
+   "scene": {
+    "type": "desk",
+    "ots": "GAZA",
+    "ots_label": "Palestinian vote",
+    "ots_span": 4
+   },
+   "ticker": "HAMAS, DAHLAN: JOINT LIST (REPORTED)"
+  },
+  {
+   "text": "The flight or Iran, which matters most tonight? That's the latest from Outpost. Follow for more.",
+   "src": [],
+   "context": true,
+   "note": "",
+   "scene": {
+    "type": "desk"
+   },
+   "ticker": "OUTPOST TONIGHT: 30 SEP"
+  }
+ ],
+ "sources": [
+  {
+   "n": 1,
+   "outlet": "Times of Israel",
+   "title": "Liveblog 30 Sep 2026: Flydubai rescue flight lands in Israel",
+   "url": "https://www.timesofisrael.com/liveblog-september-30-2026/"
+  },
+  {
+   "n": 2,
+   "outlet": "Ynet",
+   "title": "After hours of terror, 174 Flydubai passengers finally land at Ben Gurion Airport",
+   "url": "https://www.ynetnews.com/article/bjobtic9zg"
+  },
+  {
+   "n": 3,
+   "outlet": "Jerusalem Post",
+   "title": "Rescue flight lands in Israel with all passengers",
+   "url": "https://www.jpost.com/middle-east/article-910203"
+  },
+  {
+   "n": 4,
+   "outlet": "The National",
+   "title": "Flydubai flight to Tel Aviv diverted to Saudi Arabia",
+   "url": "https://www.thenationalnews.com/news/gulf/2026/09/30/flydubai-flight-to-tel-aviv-diverted-to-saudi-arabia-after-incident-on-board/"
+  },
+  {
+   "n": 5,
+   "outlet": "Euronews",
+   "title": "Flydubai plane diverted to Saudi Arabia",
+   "url": "https://www.euronews.com/2026/09/30/flydubai-plane-traveling-to-israel-diverted-to-saudi-arabia-after-alleged-dispute-between-"
+  },
+  {
+   "n": 6,
+   "outlet": "Daily Sabah",
+   "title": "Iran confirms US reply to latest proposal but provides no detail",
+   "url": "https://www.dailysabah.com/world/mid-east/iran-confirms-us-reply-to-latest-proposal-but-provides-no-detail"
+  },
+  {
+   "n": 7,
+   "outlet": "Times of Israel",
+   "title": "Iran received official US response (liveblog 30 Sep)",
+   "url": "https://www.timesofisrael.com/liveblog-september-30-2026/"
+  },
+  {
+   "n": 8,
+   "outlet": "PBS NewsHour",
+   "title": "Iran's currency hits a new record low",
+   "url": "https://www.pbs.org/newshour/world/irans-currency-hits-a-new-record-low-as-war-erodes-the-countrys-economic-stability"
+  },
+  {
+   "n": 9,
+   "outlet": "Democracy Now",
+   "title": "Iranian rial hits record low",
+   "url": "https://www.democracynow.org/2026/9/30/headlines/iranian_rial_hits_record_low_against_the_dollar_as_war_takes_heavy_toll_on_economy"
+  },
+  {
+   "n": 10,
+   "outlet": "Kyiv Independent",
+   "title": "Russian ballistic missiles rock Kyiv, disrupt electricity",
+   "url": "https://kyivindependent.com/russian-ballistic-missiles-rock-kyiv-disrupt-electricity-as-multi-day-russian-attacks-on-capital-continue/"
+  },
+  {
+   "n": 11,
+   "outlet": "Al Jazeera",
+   "title": "Russian attacks on Kyiv region target power grid",
+   "url": "https://www.aljazeera.com/news/2026/9/30/russian-attacks-on-ukraines-kyiv-region-kill-four-target-power-grid"
+  },
+  {
+   "n": 12,
+   "outlet": "Middle East Monitor (AP)",
+   "title": "Hamas, Islamic Jihad and Dahlan faction form electoral alliance",
+   "url": "https://www.middleeastmonitor.com/20260930-hamas-islamic-jihad-and-dahlan-faction-form-electoral-alliance-to-challenge-fatah/"
+  },
+  {
+   "n": 13,
+   "outlet": "Ynet",
+   "title": "Hamas, Islamic Jihad and a powerful ex-Fatah official form an unlikely electoral alliance",
+   "url": "https://www.ynetnews.com/article/byehepyqfl"
+  },
+  {
+   "n": 14,
+   "outlet": "i24NEWS",
+   "title": "Mohammed Dahlan, Hamas and Islamic Jihad form electoral alliance - report",
+   "url": "https://www.i24news.tv/en/news/middle-east/palestinian-territories/artc-mohammed-dahlan-hamas-and-islamic-jihad-form-electoral-alliance-report"
+  }
+ ],
+ "caption": "Flydubai passengers land in Israel after the Tabuk diversion, Iran gets Washington's reply on day 215, and Kyiv is hit overnight. Tonight's Outpost in one minute. The flight or Iran, which matters most?",
+ "hashtags": [
+  "flydubai",
+  "hormuz",
+  "iran",
+  "kyiv",
+  "outpost"
+ ]
+}
