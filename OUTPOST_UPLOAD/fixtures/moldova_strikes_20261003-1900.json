@@ -1,0 +1,38 @@
+{"question": "Stray or deliberate, which is it?", "country": "MD", "voice_speed": 0.95, "gap": 0.4, "hook": true, "palette": "colour", "accents": [[0, 70, 174], [255, 210, 0], [204, 9, 47]],
+"hook_lines": ["5 RUSSIAN WEAPONS HIT MOLDOVA", "8 breaches in 7 days"],
+"cover": ["5 RUSSIAN", "WEAPONS HIT", "MOLDOVA"],
+"region": "MOLDOVA / ODESA BORDER",
+"places": {
+ "CROCMAZ": {"id": "CROCMAZ", "name": "Crocmaz", "lat": 46.36, "lon": 30.0},
+ "CAUSENI": {"id": "CAUSENI", "name": "Causeni", "lat": 46.64, "lon": 29.41},
+ "ANENII": {"id": "ANENII", "name": "Anenii Noi", "lat": 46.88, "lon": 29.22},
+ "CHISINAU": {"id": "CHISINAU", "name": "Chisinau", "lat": 47.01, "lon": 28.86},
+ "TALMAZA": {"id": "TALMAZA", "name": "Talmaza", "lat": 46.63, "lon": 29.66},
+ "ODESA": {"id": "ODESA", "name": "Odesa", "lat": 46.48, "lon": 30.72}
+},
+"lines": [
+ {"text": "Five Russian missiles and drones have hit Moldova, its defence ministry says.", "src": [0, 1], "context": false, "note": "Moldova MoD via UA.News: three missiles and two drones, 3 Oct", "scene": {"type": "pin", "place": "CROCMAZ", "head": "Moldova", "notes": ["3 missiles, 2 drones", "3 October"], "span": 3}},
+ {"text": "They came in during Russia's morning attack on Ukraine, all within about fifteen minutes.", "src": [2, 3], "context": false, "note": "UNITED24: five incursions between about 07:45 and 08:00; Cotidianul: in 15 minutes", "scene": {"type": "number", "value": "15", "label": "minutes, five incursions", "detail": "about 07:45 to 08:00, UNITED24", "flag": "MD"}},
+ {"text": "Explosions were reported near villages including Crocmaz, Dubovca and Constantinovca.", "src": [0, 2], "context": false, "note": "Kyiv Independent; UNITED24", "scene": {"type": "pin", "place": "CROCMAZ", "head": "Crocmaz", "notes": ["explosion", "in a vineyard"], "span": 1.6}},
+ {"text": "Near Crocmaz, a blast in a vineyard damaged a farm building and broke windows.", "src": [2], "context": false, "note": "UNITED24", "scene": {"type": "statement", "lines": ["Vineyard blast.", "Farm building damaged.", "Windows broken."], "flag": "MD"}},
+ {"text": "Wreckage was found in four districts, including Causeni and Anenii Noi.", "src": [2], "context": false, "note": "UNITED24: Causeni, Stefan Voda, Anenii Noi, Hincesti", "scene": {"type": "flow", "from": "ODESA", "to": ["CROCMAZ", "CAUSENI", "ANENII"], "label": "Wreckage in 4 districts"}},
+ {"text": "No injuries were reported, and police and the army are investigating.", "src": [0, 2], "context": false, "note": "Kyiv Independent; UNITED24: no casualties", "scene": {"type": "statement", "lines": ["No injuries.", "Police and army", "investigating."], "flag": "MD"}},
+ {"text": "The foreign ministry says Russia's war is a concrete threat to Moldova and the region.", "src": [2], "context": false, "note": "UNITED24, Moldovan MFA verbatim", "scene": {"type": "quote", "quote": "Russia's war against Ukraine continues to generate concrete threats to our country and to the security of the entire region.", "who": "Moldovan foreign ministry", "flag": "MD"}},
+ {"text": "Yeni Safak counts eight breaches of Moldova's airspace in seven days.", "src": [4], "context": false, "note": "Yeni Safak 3 Oct: eight separate airspace violations over seven days", "scene": {"type": "number", "value": "8", "label": "airspace breaches in 7 days", "detail": "Yeni Safak, 3 October", "flag": "MD"}},
+ {"text": "On Thursday, Moldova summoned Russia's ambassador, Oleg Ozerov, over three drones in one day.", "src": [4], "context": false, "note": "Yeni Safak: summoned Thursday after three drone violations in a single day", "scene": {"type": "pin", "place": "CHISINAU", "head": "Chisinau", "notes": ["ambassador summoned", "Thursday"], "span": 2}},
+ {"text": "He rejected the claims, saying Russia is fed up with unsubstantiated accusations.", "src": [4], "context": false, "note": "Ozerov via Yeni Safak, verbatim", "scene": {"type": "quote", "quote": "We are fed up with unsubstantiated accusations", "who": "Oleg Ozerov, Russia's ambassador", "flag": "RU"}},
+ {"text": "In August, a missile Ukraine called a Russian Banderol exploded near Talmaza, Moldova says.", "src": [5], "context": false, "note": "Kyiv Independent 17 Aug 2026: Ukraine Air Force says S8000 Banderol; Moldova MoD: explosion recorded near Talmaza", "scene": {"type": "pin", "place": "TALMAZA", "head": "Talmaza", "notes": ["explosion", "17 August"], "span": 2}},
+ {"text": "President Maia Sandu has said some arrive by chance, and others because they are sent.", "src": [5], "context": false, "note": "Kyiv Independent, Sandu verbatim", "scene": {"type": "quote", "quote": "some (munitions) arrive by chance and others arrive because they are sent", "who": "Maia Sandu, President of Moldova", "flag": "MD"}},
+ {"text": "Five weapons in fifteen minutes. Stray or deliberate, which is it?", "src": [], "context": false, "note": "", "scene": {"type": "statement", "lines": ["5 weapons. 15 minutes.", "Stray or deliberate?", "WHICH IS IT?"], "flag": "MD"}}
+],
+"sources": [
+ {"n": 0, "outlet": "The Kyiv Independent", "title": "5 Russian missiles and drones exploded on Moldova's territory in overnight attack against Ukraine, Sandu says", "url": "https://kyivindependent.com/5-russian-missiles-and-drones-exploded-over-moldovas-airspace-sandu-says/"},
+ {"n": 1, "outlet": "UA.News", "title": "Moldova's Ministry of Defense reported that three Russian missiles and two drones had struck the country", "url": "https://ua.news/en/world/v-minoboroni-moldovi-zaiavili-pro-vluchannia-trokh-raket-ta-dvokh-droniv-rf"},
+ {"n": 2, "outlet": "UNITED24 Media", "title": "Five Drones Breach Moldova in 15 Minutes as Explosions and Wreckage Reported Across Country", "url": "https://united24media.com/world/five-drones-breach-moldova-in-15-minutes-as-explosions-and-wreckage-reported-across-country-23081"},
+ {"n": 3, "outlet": "Cotidianul", "title": "Five drones and missiles, in 15 minutes over the Republic of Moldova", "url": "https://www.cotidianul.md"},
+ {"n": 4, "outlet": "Yeni Safak", "title": "Moldova reports Russian weapons violated airspace, exploded", "url": "https://en.yenisafak.com/world/moldova-reports-russian-weapons-violated-airspace-exploded-3724072"},
+ {"n": 5, "outlet": "The Kyiv Independent", "title": "Russian Banderol missile enters Moldovan airspace, Ukraine claims, explosion reported near village", "url": "https://kyivindependent.com/russian-banderol-missile-enters-moldovan-airspace-ukraine-claims-explosion-reported-near-village/"}
+],
+"caption": "Moldova says five Russian missiles and drones came down on its territory this morning during Russia's attack on Ukraine. No one was hurt, but it is the eighth airspace breach in seven days. Stray or deliberate, which is it?",
+"hashtags": ["moldova", "maiasandu", "chisinau", "russia", "outpost"],
+"notes_full": ["First reported 3 Oct about 08:35 UTC (Sandu post, RMF24 09:29, TVP World 09:56, Kyiv Independent 10:03 UTC, UNITED24, Euromaidan Press, Yahoo 12:48, Yeni Safak 11:28 UTC)", "Moldova MoD: three missiles and two drones; one more object crossed 08:04 to 08:05 from Udobne towards Biliaivka", "Sandu 3 Oct: 'Moscow is putting lives at risk across Europe and must be stopped' (not used)", "Ukraine-wide toll deliberately left out"]}
