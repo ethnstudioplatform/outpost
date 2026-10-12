@@ -160,8 +160,16 @@ class Renderer:
         self.lines = script["lines"]
         self.places = script.get("places") or {}
         self.notes = []
-        self._build_texture()
-        self._build_rays()
+        # opt-in 3D globe ("style": "globe"): NASA Blue Marble on a sphere, perspective camera
+        self.globe = None
+        if str(script.get("style") or "").lower() == "globe":
+            from .globe import Globe
+            self.TW, self.TH, self.k = 360, 180, 1.0
+            self.globe = Globe(self, W, H)
+            self.terrain_src = self.globe.src
+        else:
+            self._build_texture()
+            self._build_rays()
         self._build_cams()
         self._build_post()
         self._build_flags()
@@ -282,6 +290,8 @@ class Renderer:
         return np.clip(inland - 0.45, 0, 1) * 1.8 * (0.2 + ridge ** 2)
 
     def T(self, lon, lat):
+        if self.globe:
+            return (lon, -lat)
         lon0, lat0, lon1, lat1 = self.bbox
         return ((lon - lon0) * self.cosc * self.k, (lat1 - lat) * self.k)
 
@@ -300,7 +310,7 @@ class Renderer:
         self.fade = (fade * self.valid)[..., None].astype(np.float32)
 
     def _deg(self, d):
-        return d * self.k
+        return d if self.globe else d * self.k
 
     def _target(self, sc):
         pl = self.places
@@ -314,6 +324,8 @@ class Renderer:
         if not allp:
             return self.TW / 2, self.TH / 2, self.TW * 0.45
         t = sc["type"]
+        if self.globe and t not in ("pin", "route", "flow", "flight", "tankers"):
+            return self.globe.target(sc, pl)
         if t == "pin":
             p = pl[sc["place"]]
             x, y = self.T(p["lon"], p["lat"])
@@ -374,7 +386,11 @@ class Renderer:
         i = self._line_at(t)
         st = self.tl[i][0] if self.tl else 0
         cur = self.cams[i]
-        if i == 0:
+        if i == 0 and self.globe:
+            # open on the whole planet, already turning, and dive in to the first place
+            prev = (cur[0] - 38, cur[1] + 14, 150.0, cur[3] - 6)
+            e = ease(t / 2.6)
+        elif i == 0:
             prev = (cur[0], cur[1] + cur[2] * 0.25, cur[2] * 1.35, cur[3] - 6)
             e = ease(t / 2.2)
         else:
@@ -406,6 +422,8 @@ class Renderer:
         return cx, cy, span * (1 - 0.014 * min(loc, 8)), yaw
 
     def project(self, lon, lat, cam):
+        if self.globe:
+            return self.globe.project(lon, lat, cam)
         cx, cy, span, yaw = cam
         tx, ty = self.T(lon, lat)
         dx, dy = (tx - cx) / span, (ty - cy) / span
@@ -424,6 +442,8 @@ class Renderer:
         return W / 2 + u * W, H * HORIZ + v * W, FOC * math.cos(PITCH) / den
 
     def map_layer(self, cam, dim):
+        if self.globe:
+            return self.globe.layer(cam, dim, np.array(BG, np.float32))
         cx, cy, span, yaw = cam
         c, s = math.cos(yaw), math.sin(yaw)
         tx = (cx + (self.RX * c - self.RY * s) * span).astype(np.int32)
@@ -1619,10 +1639,34 @@ class Renderer:
             d.text((73, y + (70 - size) / 2), ln, font=fz, fill=rgba(ink, a))
 
 
+def qa_sheet(r, timeline, total):
+    """Print a small JPEG contact sheet into the log (base64, "[qa64]" lines) for remote QA."""
+    import base64
+    ts = [0.0, 0.5, 1.0, 2.0]
+    for st, en in timeline:
+        ts.append(st + min(2.5, (en - st) * 0.7))
+    ts = ts[:20]
+    cw, ch = 216, 384
+    cols = 5
+    sheet = Image.new("RGB", (cw * cols, ch * ((len(ts) + cols - 1) // cols)))
+    for k, t in enumerate(ts):
+        im = Image.fromarray(r.frame(t, int(t * FPS))).resize((cw, ch), Image.BILINEAR)
+        sheet.paste(im, ((k % cols) * cw, (k // cols) * ch))
+    buf = __import__("io").BytesIO()
+    sheet.save(buf, "JPEG", quality=62)
+    b = base64.b64encode(buf.getvalue()).decode()
+    print(f"[qa] contact sheet {sheet.size[0]}x{sheet.size[1]}, times {[round(x, 1) for x in ts]}")
+    for i in range(0, len(b), 3000):
+        print("[qa64] " + b[i:i + 3000])
+    print("[qa64end]")
+
+
 def render(script, timeline, total, audio, out, thumb):
     r = Renderer(script, timeline, total)
     script["_terrain"] = r.terrain_src
     Image.fromarray(r.frame(0.0 if script.get("hook") else (0.7 if script.get("cover") else LEAD + 1.0), 0)).save(thumb)
+    if script.get("qa"):
+        qa_sheet(r, timeline, total)
     n = int(math.ceil(total * FPS))
     cmd = ["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
            "-r", str(FPS), "-i", "-", "-i", str(audio), "-map", "0:v", "-map", "1:a",
