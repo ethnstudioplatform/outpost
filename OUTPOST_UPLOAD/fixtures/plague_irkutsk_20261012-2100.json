@@ -4,6 +4,8 @@
  "voice_speed": 0.95,
  "gap": 0.4,
  "hook": true,
+ "style": "globe",
+ "qa": true,
  "palette": "colour",
  "accents": [
   [
@@ -12,14 +14,14 @@
    255
   ],
   [
-   0,
-   57,
-   166
+   110,
+   165,
+   255
   ],
   [
-   213,
-   43,
-   30
+   230,
+   60,
+   48
   ]
  ],
  "hook_lines": [
@@ -134,7 +136,7 @@
      "Early reports:",
      "possible plague"
     ],
-    "span": 3
+    "span": 4
    }
   },
   {
