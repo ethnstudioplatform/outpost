@@ -1,0 +1,332 @@
+{
+ "question": "Energy ceasefire: real truce, or just words?",
+ "country": "UA",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   87,
+   183
+  ],
+  [
+   255,
+   215,
+   0
+  ],
+  [
+   255,
+   255,
+   255
+  ]
+ ],
+ "hook_lines": [
+  "RUSSIA HITS POWER PLANTS",
+  "Hours after Trump's 'ceasefire'"
+ ],
+ "cover": [
+  "RUSSIA HITS",
+  "POWER PLANTS",
+  "AFTER 'CEASEFIRE'"
+ ],
+ "region": "KHARKIV / KYIV / WASHINGTON",
+ "places": {
+  "KHARKIV": {
+   "id": "KHARKIV",
+   "name": "Kharkiv",
+   "lat": 49.99,
+   "lon": 36.23
+  },
+  "KYIV": {
+   "id": "KYIV",
+   "name": "Kyiv",
+   "lat": 50.45,
+   "lon": 30.52
+  },
+  "WASHINGTON": {
+   "id": "WASHINGTON",
+   "name": "Washington",
+   "lat": 38.9,
+   "lon": -77.04
+  },
+  "MOSCOW": {
+   "id": "MOSCOW",
+   "name": "Moscow",
+   "lat": 55.76,
+   "lon": 37.62
+  },
+  "LONDON": {
+   "id": "LONDON",
+   "name": "London",
+   "lat": 51.5,
+   "lon": -0.13
+  }
+ },
+ "lines": [
+  {
+   "text": "Zelensky says Russia hit Ukrainian power plants, hours after Donald Trump announced an energy ceasefire.",
+   "src": [
+    0,
+    1,
+    2
+   ],
+   "context": false,
+   "note": "Zelensky, 11 Oct evening (Telegram / nightly address); first reported about 16:45 UTC 11 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "KHARKIV",
+    "head": "Kharkiv",
+    "notes": [
+     "Power plant hit",
+     "Zelensky says"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "Today, grid operator Ukrenergo has hourly power cuts in some regions, after Russian strikes.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "Ukrinform 12 Oct: hourly outage schedules 06:00 to 23:59 on Monday in certain regions, due to the consequences of Russian strikes on energy infrastructure (Ukrenergo on Facebook)",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "HOURLY POWER CUTS",
+     "MONDAY 12 OCT",
+     "Ukrenergo says"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "On Sunday, Trump posted: Effective immediately, there is an energy ceasefire in the war between Russia and Ukraine.",
+   "src": [
+    1,
+    2
+   ],
+   "context": false,
+   "note": "Trump on Truth Social, 11 Oct (Euronews verbatim)",
+   "scene": {
+    "type": "quote",
+    "quote": "Effective immediately, there is an ENERGY CEASEFIRE in the War between Russia and Ukraine.",
+    "who": "Donald Trump, Truth Social",
+    "flag": "US"
+   }
+  },
+  {
+   "text": "He added: Both sides have agreed. No terms, no monitoring.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Kyiv Post: 'Both sides have agreed. Do not violate it!'; post did not outline monitoring or terms",
+   "scene": {
+    "type": "pin",
+    "place": "WASHINGTON",
+    "head": "Washington",
+    "notes": [
+     "'Both sides",
+     "have agreed'"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "Zelensky's reply: It was news for me. But if Russians agree to an energy ceasefire, Ukraine will agree.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Zelensky, 11 Oct, via Euronews",
+   "scene": {
+    "type": "quote",
+    "quote": "It was news for me. But if Russians agree to an energy ceasefire, Ukraine will agree.",
+    "who": "Volodymyr Zelensky, President of Ukraine",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "He says Ukraine's army has orders to comply.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Kyiv Post: Ukraine's armed forces had received orders to comply with the ceasefire",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "ORDERS:",
+     "COMPLY",
+     "Zelensky says"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Then, he says, Russia hit Kharkiv's CHP-5 power plant.",
+   "src": [
+    0,
+    2
+   ],
+   "context": false,
+   "note": "Zelensky: 'Just now there was a strike on CHP-5 in Kharkiv' (Euromaidan Press); Kharkiv's second-largest power plant",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "CHP-5, KHARKIV",
+     "HIT SUNDAY EVENING",
+     "Zelensky says"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "A drone also hit a Kyiv power station, cutting power in several districts.",
+   "src": [
+    1,
+    2
+   ],
+   "context": false,
+   "note": "Euronews and Kyiv Post: Kyiv power plant hit by a drone, outages in several districts",
+   "scene": {
+    "type": "pin",
+    "place": "KYIV",
+    "head": "Kyiv",
+    "notes": [
+     "Power station hit",
+     "outages in districts"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "Zelensky says Russia made over 200 strikes on Ukraine's power system this week.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Zelensky: more than 200 strikes on power generation and transmission this week (Euromaidan Press)",
+   "scene": {
+    "type": "number",
+    "value": "200+",
+    "label": "strikes on Ukraine's grid",
+    "detail": "this week, Zelensky says",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Moscow has not confirmed any agreement.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Euronews 12 Oct: 'Russia has not yet confirmed this agreement.'",
+   "scene": {
+    "type": "pin",
+    "place": "MOSCOW",
+    "head": "Moscow",
+    "notes": [
+     "No confirmation",
+     "from Moscow"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "In London, Prime Minister Andy Burnham backed Trump's call for a sustained energy ceasefire.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Euronews: Burnham echoed support and Trump's call 'for a sustained energy ceasefire to start now' (spoken line paraphrases)",
+   "scene": {
+    "type": "pin",
+    "place": "LONDON",
+    "head": "London",
+    "notes": [
+     "UK backs",
+     "energy ceasefire"
+    ],
+    "span": 7
+   }
+  },
+  {
+   "text": "Oil fell. Brent crude is down one and a half per cent, to about 103 dollars.",
+   "src": [
+    4
+   ],
+   "context": false,
+   "note": "HDFC Sky 12 Oct: Brent futures down 1.5% to $103; WTI down 1.8% to $90.2",
+   "scene": {
+    "type": "number",
+    "value": "$103",
+    "label": "Brent crude, a barrel",
+    "detail": "down 1.5% on Monday",
+    "flag": "GB"
+   }
+  },
+  {
+   "text": "Energy ceasefire: real truce, or just words?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "ENERGY CEASEFIRE:",
+     "REAL TRUCE",
+     "OR JUST WORDS?"
+    ],
+    "flag": "UA"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "Euromaidan Press",
+   "title": "Hours after Trump declared an energy ceasefire, Russia hit Kharkiv power plant, one of 200-plus strikes on Ukraine's grid this week, Zelenskyy says",
+   "url": "https://euromaidanpress.com/2026/10/11/hours-after-trump-declared-an-energy-ceasefire-russia-hit-kharkiv-power-plant-one-of-200-plus-strikes-on-ukraines-grid-this-week-zelenskyy-says/"
+  },
+  {
+   "n": 1,
+   "outlet": "Euronews",
+   "title": "Energy ceasefire: confusion in Kyiv, support from allies, silence from Moscow and fresh strikes",
+   "url": "https://www.euronews.com/2026/10/12/energy-ceasefire-confusion-in-kyiv-support-from-allies-silence-from-moscow-and-fresh-strik"
+  },
+  {
+   "n": 2,
+   "outlet": "Kyiv Post",
+   "title": "Russia Strikes Ukrainian Power Plants After Trump Announces Energy Truce, Zelensky Says",
+   "url": "https://www.kyivpost.com/post/86763"
+  },
+  {
+   "n": 3,
+   "outlet": "Ukrinform",
+   "title": "Power outage schedules in effect in some regions on Monday",
+   "url": "https://www.ukrinform.net/rubric-economy/4173406-power-outage-schedules-in-effect-in-some-regions-on-monday.html"
+  },
+  {
+   "n": 4,
+   "outlet": "HDFC Sky",
+   "title": "Oil Prices Today, October 12, 2026: Brent Falls 1.5% To $103",
+   "url": "https://hdfcsky.com/news/brent-crude-oil-price-today-october-12-2026-brent-falls-1-5percent-to-103-wti-drops-1-8percent-to-90-2-middle-east-risks-persist"
+  }
+ ],
+ "caption": "Kharkiv, Kyiv, Trump's energy ceasefire: Zelensky says Russia struck Ukrainian power plants hours after Trump announced an energy ceasefire, and Moscow has not confirmed any deal. Ukraine has hourly power cuts in some regions today. Real truce, or just words?",
+ "hashtags": [
+  "energyceasefire",
+  "kharkiv",
+  "zelensky",
+  "ukraine",
+  "outpost"
+ ],
+ "notes_full": [
+  "Trump's Truth Social post first reported about 14:30 UTC 11 Oct (Euronews 14:34, France 24 14:39, CNN 14:45); Kharkiv CHP-5 strike first reported about 16:47 UTC 11 Oct (Ukrainska Pravda, Kyiv Independent 17:21, ABC 18:11); Ukrenergo Monday schedules about 06:00 UTC 12 Oct; Brent move Monday morning. Newest facts under 3h, oldest about 17.5h at 09:00 UK",
+  "Removal-risk: events and statements made, all attributed; weekly toll (150+ killed) left out; Kremlin claim that Trump wants Zelensky replaced left out (regime-change rule); no future-attack framing; neutral either/or"
+ ]
+}
