@@ -1358,6 +1358,19 @@ class Renderer:
                 unit = self.unit_for(n)
                 self.dots(d, 84, 1200, n, 26, unit, INK, a, ease((loc - 0.3) / 1.4), size=18, gap=6)
                 d.text((84, 1232), f"1 square = {unit:,}", font=font("mono", 25), fill=rgba(GM, a))
+            elif sc.get("grid"):
+                # opt-in dot grid: "grid": {"of": total squares, "lit": squares lit, "cols": 20,
+                # "red": true to light in red, "caption": text under the grid}
+                g_ = sc["grid"]
+                tot_, lit_ = int(g_.get("of", 0)), int(g_.get("lit", 0))
+                cols_ = int(g_.get("cols", 20))
+                if tot_ > 0:
+                    self.dots(d, 84, 1200, tot_, cols_, 1, GD, a, ease((loc - 0.2) / 0.6), size=18, gap=6)
+                if lit_ > 0:
+                    self.dots(d, 84, 1200, lit_, cols_, 1, RED if g_.get("red") else INK, a,
+                              ease((loc - 0.5) / 1.2), size=18, gap=6)
+                if g_.get("caption"):
+                    d.text((84, 1232), g_["caption"], font=font("mono", 25), fill=rgba(GM, a))
         elif k == "compare":
             A, B = sc["a"], sc["b"]
             r = B["n"] / A["n"] if A["n"] else 0
