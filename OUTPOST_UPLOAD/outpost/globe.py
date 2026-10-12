@@ -125,6 +125,11 @@ class Globe:
         self.sy = (1 - (ys + 0.5) / self.h * 2).ravel() * self.tanv
         self._build_textures()
         self._build_stars()
+        # keep captions and the hook banner readable over bright desert or ice
+        yy = (np.arange(self.h, dtype=np.float32) + 0.5) / self.h
+        top = 0.72 + 0.28 * np.clip(yy / 0.2, 0, 1)
+        bot = 1 - 0.55 * np.clip((yy - 0.58) / 0.3, 0, 1)
+        self.vshade = (top * bot)[:, None, None]
 
     # ---- imagery ----
     def _build_textures(self):
@@ -250,7 +255,7 @@ class Globe:
             fres = (1 - ndv) ** 3
             col = col * (1 - fres[:, None] * 0.55) + fres[:, None] * ATMO * 0.75
             out[hit] = col
-        out = out.reshape(self.h, self.w, 3)
+        out = out.reshape(self.h, self.w, 3) * self.vshade
         out = BG + (out - BG) * dim
         im = Image.fromarray(np.clip(out, 0, 255).astype(np.uint8))
         return im.resize((self.W, self.H), Image.BICUBIC)
