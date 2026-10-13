@@ -1,0 +1,323 @@
+{
+ "question": "Will the UN Security Council step in, yes or no?",
+ "country": "ET",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   7,
+   137,
+   48
+  ],
+  [
+   252,
+   221,
+   9
+  ],
+  [
+   218,
+   18,
+   26
+  ]
+ ],
+ "hook_lines": [
+  "ETHIOPIAN TROOPS AT ERITREA'S BORDER",
+  "Zalambessa entered, 6 sources say"
+ ],
+ "cover": [
+  "ETHIOPIA",
+  "REACHES",
+  "ERITREA'S BORDER"
+ ],
+ "region": "ETHIOPIA, ERITREA BORDER",
+ "places": {
+  "ZALAMBESSA": {
+   "id": "ZALAMBESSA",
+   "name": "Zalambessa",
+   "lat": 14.52,
+   "lon": 39.38
+  },
+  "ASMARA": {
+   "id": "ASMARA",
+   "name": "Asmara",
+   "lat": 15.33,
+   "lon": 38.93
+  },
+  "ADDIS": {
+   "id": "ADDIS",
+   "name": "Addis Ababa",
+   "lat": 9.03,
+   "lon": 38.74
+  },
+  "MEKELLE": {
+   "id": "MEKELLE",
+   "name": "Mekelle",
+   "lat": 13.5,
+   "lon": 39.47
+  }
+ },
+ "lines": [
+  {
+   "text": "Ethiopian government troops have reached Zalambessa, a town right on the border with Eritrea.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Reuters, 13 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "ZALAMBESSA",
+    "head": "Zalambessa, Ethiopia",
+    "notes": [
+     "Ethiopian troops in",
+     "on Eritrea's border"
+    ],
+    "span": 4
+   }
+  },
+  {
+   "text": "Reuters says six sources confirmed it, including a diplomat and a conflict expert.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Reuters, 13 Oct",
+   "scene": {
+    "type": "number",
+    "value": "6",
+    "label": "sources confirm",
+    "detail": "incl. a diplomat",
+    "flag": "ET",
+    "grid": {
+     "of": 6,
+     "lit": 6,
+     "cols": 6,
+     "caption": "Reuters, 13 Oct"
+    }
+   }
+  },
+  {
+   "text": "Rebels had held the town, home to about 15,000 people.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Reuters, 13 Oct",
+   "scene": {
+    "type": "number",
+    "value": "15,000",
+    "label": "people in Zalambessa",
+    "detail": "town held by rebels",
+    "flag": "ET"
+   }
+  },
+  {
+   "text": "Witnesses and a conflict monitor say Eritrean troops crossed into the town last week to back the rebels.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Reuters, 13 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "ZALAMBESSA",
+    "head": "Zalambessa",
+    "notes": [
+     "Eritrean troops",
+     "last week, witnesses say"
+    ],
+    "span": 3
+   }
+  },
+  {
+   "text": "Eritrea denies any incursion into Ethiopia.",
+   "src": [
+    0,
+    3
+   ],
+   "context": false,
+   "note": "Reuters, SABC",
+   "scene": {
+    "type": "pin",
+    "place": "ASMARA",
+    "head": "Asmara, Eritrea",
+    "notes": [
+     "denies",
+     "any incursion"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "It has written to the UN Security Council, asking it to act against Ethiopia under Chapter Seven.",
+   "src": [
+    0,
+    3
+   ],
+   "context": false,
+   "note": "Reuters, SABC",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "ERITREA TO UN:",
+     "ACT UNDER",
+     "CHAPTER VII"
+    ],
+    "flag": "ER"
+   }
+  },
+  {
+   "text": "Asmara says Ethiopia's invasion accusations amount to a declaration of war.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Reuters, 13 Oct",
+   "scene": {
+    "type": "quote",
+    "quote": "declaration of war",
+    "who": "Eritrea, on Ethiopia's claims",
+    "flag": "ER"
+   }
+  },
+  {
+   "text": "Ethiopia told the Council that Eritrean troops had advanced up to 60 kilometres inside its territory.",
+   "src": [
+    0,
+    2
+   ],
+   "context": false,
+   "note": "Reuters, Hiiraan Online",
+   "scene": {
+    "type": "number",
+    "value": "60 km",
+    "label": "Ethiopia's claim",
+    "detail": "Eritrean advance",
+    "flag": "ET"
+   }
+  },
+  {
+   "text": "Addis Ababa says it is acting in self-defence.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Hiiraan Online, 13 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "ADDIS",
+    "head": "Addis Ababa",
+    "notes": [
+     "Ethiopia says:",
+     "self-defence"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "Fighting resumed last month, when a rebel alliance led by the TPLF went on the offensive in Tigray.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Reuters, 13 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "MEKELLE",
+    "head": "Tigray",
+    "notes": [
+     "TPLF-led alliance",
+     "offensive, Sept"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "The army's counter-offensive has since pushed the rebels north, out of several towns.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Reuters, 13 Oct",
+   "scene": {
+    "type": "route",
+    "from": "MEKELLE",
+    "to": "ZALAMBESSA",
+    "label": "Rebels pushed north",
+    "note": "army counter-offensive"
+   }
+  },
+  {
+   "text": "Security Council members were due to meet behind closed doors today.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Reuters, Greek UN presidency",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "UN SECURITY COUNCIL",
+     "CLOSED-DOOR",
+     "MEETING TODAY"
+    ],
+    "flag": "ET"
+   }
+  },
+  {
+   "text": "Will the UN Security Council step in, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "wide"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "Reuters via The New Arab",
+   "title": "Ethiopian troops enter town on border with Eritrea, stoking war fears",
+   "url": "https://www.newarab.com/news/ethiopian-troops-enter-town-border-eritrea-stoking-war-fears"
+  },
+  {
+   "n": 1,
+   "outlet": "Reuters via Arab News",
+   "title": "Ethiopian troops enter town on border with Eritrea, stoking war fears",
+   "url": "https://www.arabnews.com/world/ethiopian-troops-enter-town-on-border-with-eritrea-stoking-war-fears-3006143"
+  },
+  {
+   "n": 2,
+   "outlet": "Hiiraan Online",
+   "title": "Ethiopia tells UN it is acting in self-defense against Eritrea",
+   "url": "https://www.hiiraan.com/"
+  },
+  {
+   "n": 3,
+   "outlet": "SABC News",
+   "title": "Eritrea asks UN to intervene in standoff with Ethiopia",
+   "url": "https://www.sabcnews.com/"
+  }
+ ],
+ "caption": "Ethiopia, Eritrea, Zalambessa: Ethiopian government troops have reached the border town of Zalambessa, Reuters says, citing six sources. Eritrea denies any incursion and has asked the UN Security Council to act, while Ethiopia says it is acting in self-defence. Will the UN Security Council step in, yes or no?",
+ "hashtags": [
+  "ethiopia",
+  "eritrea",
+  "tigray",
+  "zalambessa",
+  "outpost"
+ ],
+ "notes_full": [
+  "First reported 13 Oct 16:26 UTC (Reuters), syndicated by Arab News, The New Arab, TimesLIVE, Business Day; about 4h old at delivery",
+  "Removal-risk: events and statements only, Eritrean presence framed as witnesses say, no toll, no future-war framing (Reuters 'war fears' line not used), neutral yes/no",
+  "Globe: 4 places (place limit)"
+ ]
+}
