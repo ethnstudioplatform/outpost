@@ -1,0 +1,363 @@
+{
+ "question": "Should NATO escort ships in the Black Sea, yes or no?",
+ "country": "BG",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   255,
+   255,
+   255
+  ],
+  [
+   0,
+   150,
+   110
+  ],
+  [
+   214,
+   38,
+   18
+  ]
+ ],
+ "hook_lines": [
+  "BULGARIA SUMMONS RUSSIA'S ENVOY",
+  "2 ships hit, 1 sunk overnight"
+ ],
+ "cover": [
+  "BULGARIA",
+  "CALLS IN",
+  "RUSSIA'S ENVOY"
+ ],
+ "region": "BLACK SEA, OFF BULGARIA",
+ "places": {
+  "CHELSEA": {
+   "id": "CHELSEA",
+   "name": "Chelsea 3",
+   "lat": 42.87,
+   "lon": 28.3
+  },
+  "SUNK": {
+   "id": "SUNK",
+   "name": "Ship sunk",
+   "lat": 43.63,
+   "lon": 28.95
+  },
+  "BYALA": {
+   "id": "BYALA",
+   "name": "Byala",
+   "lat": 42.87,
+   "lon": 27.89
+  },
+  "KRAPETS": {
+   "id": "KRAPETS",
+   "name": "Krapets",
+   "lat": 43.63,
+   "lon": 28.57
+  },
+  "VARNA": {
+   "id": "VARNA",
+   "name": "Varna",
+   "lat": 43.21,
+   "lon": 27.92
+  },
+  "SOFIA": {
+   "id": "SOFIA",
+   "name": "Sofia",
+   "lat": 42.7,
+   "lon": 23.32
+  },
+  "ALFAWATAN": {
+   "id": "ALFAWATAN",
+   "name": "Alfa Watan, 6 Oct",
+   "lat": 42.95,
+   "lon": 29.45
+  },
+  "BRUSSELS": {
+   "id": "BRUSSELS",
+   "name": "Brussels",
+   "lat": 50.85,
+   "lon": 4.35
+  }
+ },
+ "lines": [
+  {
+   "text": "Bulgaria has called in Russia's ambassador after drones hit two ships off its coast.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Radev via BTA, Al Jazeera",
+   "scene": {
+    "type": "pin",
+    "place": "CHELSEA",
+    "head": "Black Sea, Bulgaria",
+    "notes": [
+     "2 ships hit",
+     "1 sunk overnight"
+    ],
+    "span": 4
+   }
+  },
+  {
+   "text": "Prime Minister Rumen Radev says one sank, 17 nautical miles east of Krapets.",
+   "src": [
+    0,
+    2
+   ],
+   "context": false,
+   "note": "Radev via BTA, Sofia Globe",
+   "scene": {
+    "type": "pin",
+    "place": "SUNK",
+    "head": "Off Krapets",
+    "notes": [
+     "17 nm east",
+     "ship sank"
+    ],
+    "span": 3
+   }
+  },
+  {
+   "text": "The other, the Chelsea 3, was hit by three drones.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Radev via BTA, Al Jazeera",
+   "scene": {
+    "type": "pin",
+    "place": "CHELSEA",
+    "head": "Off Byala",
+    "notes": [
+     "Chelsea 3",
+     "hit by 3 drones"
+    ],
+    "span": 3
+   }
+  },
+  {
+   "text": "BTA says it is Ukrainian-owned and Malta-flagged.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "BTA, Al Jazeera",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "CHELSEA 3",
+     "Malta flag",
+     "Ukrainian-owned"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Border Police rescued all 15 crew, seven Ukrainians and eight Azerbaijanis, and took them to Varna.",
+   "src": [
+    0,
+    2
+   ],
+   "context": false,
+   "note": "Radev via BTA, Sofia Globe",
+   "scene": {
+    "type": "route",
+    "from": "CHELSEA",
+    "to": "VARNA",
+    "label": "crew to Varna",
+    "note": "15 rescued"
+   }
+  },
+  {
+   "text": "Radev calls it absolutely unacceptable, but says there is no clear evidence against anyone.",
+   "src": [
+    0,
+    2
+   ],
+   "context": false,
+   "note": "Radev via BTA, Sofia Globe",
+   "scene": {
+    "type": "quote",
+    "quote": "absolutely unacceptable",
+    "who": "Rumen Radev, Bulgarian PM",
+    "flag": "BG"
+   }
+  },
+  {
+   "text": "He says logic indicates the result is in favour of the Russian Federation.",
+   "src": [
+    2,
+    3
+   ],
+   "context": false,
+   "note": "Radev via Sofia Globe, Euronews",
+   "scene": {
+    "type": "quote",
+    "quote": "the result is in favour of the Russian Federation",
+    "who": "Rumen Radev, 13 Oct",
+    "flag": "BG"
+   }
+  },
+  {
+   "text": "In Sofia, he has now held talks with Russia's ambassador, Eleonora Mitrofanova.",
+   "src": [
+    2,
+    4
+   ],
+   "context": false,
+   "note": "Sofia Globe, BGNES",
+   "scene": {
+    "type": "pin",
+    "place": "SOFIA",
+    "head": "Sofia",
+    "notes": [
+     "Russian envoy",
+     "called in"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "It is the second attack in a week.",
+   "src": [
+    1,
+    3
+   ],
+   "context": false,
+   "note": "Al Jazeera, Euronews",
+   "scene": {
+    "type": "number",
+    "value": "2",
+    "label": "attacks in a week",
+    "detail": "6 Oct and 13 Oct",
+    "flag": "BG",
+    "grid": {
+     "of": 2,
+     "lit": 2,
+     "cols": 20,
+     "red": true
+    }
+   }
+  },
+  {
+   "text": "On the sixth of October, the Alfa Watan sank further out to sea.",
+   "src": [
+    2,
+    3
+   ],
+   "context": false,
+   "note": "Sofia Globe, Euronews",
+   "scene": {
+    "type": "pin",
+    "place": "ALFAWATAN",
+    "head": "Black Sea",
+    "notes": [
+     "6 Oct",
+     "Alfa Watan sank"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "The EU's Ursula von der Leyen calls the Black Sea another front of escalation.",
+   "src": [
+    1,
+    3
+   ],
+   "context": false,
+   "note": "von der Leyen on X, via Al Jazeera",
+   "scene": {
+    "type": "quote",
+    "quote": "another front of escalation",
+    "who": "Ursula von der Leyen, EU",
+    "flag": "BG"
+   }
+  },
+  {
+   "text": "NATO's Mark Rutte spoke to Radev, and says NATO will adjust its defences as needed.",
+   "src": [
+    3,
+    5
+   ],
+   "context": false,
+   "note": "Euronews, Report.az",
+   "scene": {
+    "type": "pin",
+    "place": "BRUSSELS",
+    "head": "NATO",
+    "notes": [
+     "Rutte: defences",
+     "adjusted as needed"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "Should NATO escort ships in the Black Sea, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "wide"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "BTA",
+   "title": "Bulgarian Prime Minister Reports New Drone Attacks on Ships in Black Sea",
+   "url": "https://www.bta.bg/en/news/bulgaria/1223292-bulgarian-prime-minister-reports-new-drone-attacks-on-ships-in-black-sea"
+  },
+  {
+   "n": 1,
+   "outlet": "Al Jazeera",
+   "title": "Drone attack sinks ship off Bulgaria's Black Sea coast, PM says",
+   "url": "https://www.aljazeera.com/news/2026/10/13/drone-attack-sinks-ship-off-bulgarias-black-sea-coast-pm-says"
+  },
+  {
+   "n": 2,
+   "outlet": "The Sofia Globe",
+   "title": "New drone attacks on ships in Bulgaria's Black Sea EEZ, one sunk",
+   "url": "https://sofiaglobe.com/2026/10/13/new-drone-attacks-on-ships-in-bulgarias-black-sea-eez-one-sunk/"
+  },
+  {
+   "n": 3,
+   "outlet": "Euronews",
+   "title": "NATO will adjust defences 'as needed' after Black Sea strikes, Mark Rutte says",
+   "url": "https://www.euronews.com/2026/10/13/two-ships-hit-by-drones-in-black-sea-one-sank-bulgarias-pm-says"
+  },
+  {
+   "n": 4,
+   "outlet": "BGNES",
+   "title": "Bulgarian PM Holds Talks with Russian Ambassador Over Black Sea Drone Attacks",
+   "url": "https://bgnes.com/"
+  },
+  {
+   "n": 5,
+   "outlet": "Report.az",
+   "title": "NATO chief discusses Black Sea drone attacks with Bulgarian PM",
+   "url": "https://report.az/en/other-countries/nato-chief-discusses-black-sea-drone-attacks-with-bulgarian-pm"
+  }
+ ],
+ "caption": "Bulgaria, Black Sea, Russia: drones have hit two ships off Bulgaria's coast and one has sunk, the second attack in a week. PM Rumen Radev says there is no clear evidence against anyone, but logic points to Russia benefiting, and he has called in Russia's ambassador. Should NATO escort ships in the Black Sea, yes or no?",
+ "hashtags": [
+  "bulgaria",
+  "blacksea",
+  "radev",
+  "nato",
+  "outpost"
+ ],
+ "notes_full": [
+  "First reported 13 Oct about 01:30 to 02:00 UTC (Radev Facebook, BTA, Fakti, AP 02:07, Maritime Executive 02:55, Reuters 05:27), then BBC, Al Jazeera, Euronews, Politico, Bloomberg; about 9h old at delivery",
+  "Removal-risk: events and statements; attribution only as Radev's own words (no clear evidence, logic favours Russia); no missing-crew count or toll; no future-attack framing; neutral yes/no; 6 Oct Bulgaria video was FYP-restricted, so this one is diplomacy-led and toll-free"
+ ]
+}
