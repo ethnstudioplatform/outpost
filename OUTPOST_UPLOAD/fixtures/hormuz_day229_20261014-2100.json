@@ -1,0 +1,338 @@
+{
+ "series": "HORMUZ · DAY 229",
+ "question": "Will the strait reopen this year, yes or no?",
+ "country": "IR",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   35,
+   159,
+   64
+  ],
+  [
+   255,
+   255,
+   255
+  ],
+  [
+   218,
+   0,
+   0
+  ]
+ ],
+ "hook_lines": [
+  "TWO SHIPS SINK NEAR HORMUZ",
+  "Singapore says projectile hit"
+ ],
+ "cover": [
+  "HORMUZ",
+  "DAY 229",
+  "TWO SHIPS SINK"
+ ],
+ "region": "STRAIT OF HORMUZ / SINGAPORE",
+ "places": {
+  "HORMUZ": {
+   "id": "HORMUZ",
+   "name": "Strait of Hormuz",
+   "lat": 26.57,
+   "lon": 56.25
+  },
+  "SINGAPORE": {
+   "id": "SINGAPORE",
+   "name": "Singapore",
+   "lat": 1.29,
+   "lon": 103.85
+  },
+  "TEHRAN": {
+   "id": "TEHRAN",
+   "name": "Tehran",
+   "lat": 35.69,
+   "lon": 51.39
+  },
+  "WASHINGTON": {
+   "id": "WASHINGTON",
+   "name": "Washington",
+   "lat": 38.9,
+   "lon": -77.04
+  }
+ },
+ "lines": [
+  {
+   "text": "Two cargo ships have sunk near the Strait of Hormuz after projectile strikes, Reuters says.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Reuters, 14 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "HORMUZ",
+    "head": "Strait of Hormuz",
+    "notes": [
+     "2 ships sunk",
+     "after projectile hits"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "Singapore says its ship GFS Pride was struck on Tuesday, caught fire and sank.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Singapore MPA, 14 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "SINGAPORE",
+    "head": "Singapore",
+    "notes": [
+     "GFS Pride sunk",
+     "MPA confirms"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "All twenty one crew were evacuated, with no injuries reported.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Singapore MPA, 14 Oct",
+   "scene": {
+    "type": "number",
+    "value": "21",
+    "label": "crew evacuated",
+    "detail": "no injuries, MPA says",
+    "flag": "SG",
+    "grid": {
+     "of": 21,
+     "lit": 21,
+     "cols": 7,
+     "caption": "all 21 crew safe"
+    }
+   }
+  },
+  {
+   "text": "A second Singapore ship, GFS Giselle, was hit on Wednesday but reached anchorage.",
+   "src": [
+    1,
+    2
+   ],
+   "context": false,
+   "note": "Singapore MPA, 14 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "GFS GISELLE HIT",
+     "REACHED ANCHORAGE",
+     "22 crew safe, MPA says"
+    ],
+    "flag": "SG"
+   }
+  },
+  {
+   "text": "Singapore calls the attacks unprovoked, unjustifiable, and a breach of international law.",
+   "src": [
+    1,
+    2
+   ],
+   "context": false,
+   "note": "Singapore MPA, 14 Oct",
+   "scene": {
+    "type": "quote",
+    "quote": "unprovoked, unjustifiable, and a breach of international law",
+    "who": "Maritime and Port Authority of Singapore",
+    "flag": "SG"
+   }
+  },
+  {
+   "text": "Iran's Revolutionary Guards say a ship carrying 2,500 containers sank after hitting a mine.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "IRGC via Independent, 14 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "TEHRAN",
+    "head": "Tehran",
+    "notes": [
+     "IRGC: ship hit a mine",
+     "2,500 containers"
+    ],
+    "span": 7
+   }
+  },
+  {
+   "text": "The other is the Cape Dao, hit in September, IMO data shows.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Reuters, IMO data",
+   "scene": {
+    "type": "pin",
+    "place": "HORMUZ",
+    "head": "Cape Dao",
+    "notes": [
+     "hit 23 Sep",
+     "now sunk, IMO data"
+    ],
+    "span": 3
+   }
+  },
+  {
+   "text": "Reuters says that makes three ships sunk since the war began.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Reuters, IMO data",
+   "scene": {
+    "type": "number",
+    "value": "3",
+    "label": "ships sunk since 28 Feb",
+    "detail": "IMO casualty data",
+    "flag": "IR",
+    "grid": {
+     "of": 3,
+     "lit": 3,
+     "cols": 3,
+     "red": true,
+     "caption": "3 sunk since 28 Feb"
+    }
+   }
+  },
+  {
+   "text": "Attacks have surged for ten days, and Iran says it is answering the US blockade.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Reuters, 14 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "ATTACKS SURGE",
+     "PAST 10 DAYS",
+     "over US blockade, Iran says"
+    ],
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "US Central Command says American forces and partners clearly control the strait.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "CENTCOM via gCaptain",
+   "scene": {
+    "type": "pin",
+    "place": "WASHINGTON",
+    "head": "Washington",
+    "notes": [
+     "CENTCOM: we control",
+     "the strait"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "Iran's Guards say it remains under Iranian control.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "gCaptain, 14 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "IRGC:",
+     "STRAIT UNDER",
+     "IRANIAN CONTROL"
+    ],
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "Before the war, a fifth of the world's oil and gas passed through here.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Reuters",
+   "scene": {
+    "type": "number",
+    "value": "1/5",
+    "label": "of world oil and gas",
+    "detail": "passed here before the war",
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "Day two hundred and thirty tomorrow. Will the strait reopen this year, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "REOPEN THIS YEAR?",
+     "YES",
+     "OR NO?"
+    ],
+    "flag": "IR"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "Reuters via KSL",
+   "title": "Two Singapore-registered vessels struck in Strait of Hormuz; one sinks",
+   "url": "https://www.ksl.com/article/51636281/two-singapore-registered-vessels-struck-in-strait-of-hormuz-one-sinks"
+  },
+  {
+   "n": 1,
+   "outlet": "Reuters via ThePrint",
+   "title": "Two ships sink near Hormuz after being hit by projectiles amid surge in attacks",
+   "url": "https://theprint.in/world/two-ships-sink-near-hormuz-after-being-hit-by-projectiles-amid-surge-in-attacks/3072080/"
+  },
+  {
+   "n": 2,
+   "outlet": "gCaptain",
+   "title": "Containership Sinks as Hormuz Attacks Spiral Out of Control",
+   "url": "https://gcaptain.com/containership-sinks-as-hormuz-attacks-spiral-out-of-control/"
+  },
+  {
+   "n": 3,
+   "outlet": "The Independent",
+   "title": "Ship carrying 2,500 containers sinks after hitting mine in Strait of Hormuz, claim Iran's Guards",
+   "url": "https://www.independent.co.uk/"
+  }
+ ],
+ "caption": "Hormuz, Iran, Singapore, GFS Pride: two cargo ships have sunk near the Strait of Hormuz after projectile strikes, as attacks surge. Iran's Revolutionary Guards say a container ship hit a mine. Will the strait reopen this year, yes or no?",
+ "hashtags": [
+  "hormuz",
+  "straitofhormuz",
+  "iran",
+  "singapore",
+  "outpost"
+ ],
+ "notes_full": [
+  "IRGC claim first reported 14 Oct about 09:23 UTC; Singapore MPA confirmation about 13:00 to 15:00 UTC; Reuters two-ships story 17:22 UTC; about 10h old at delivery",
+  "Removal-risk: events and statements only, no death toll (Cape Dao crew death left out), no future-attack framing, neutral yes/no",
+  "Globe: 4 places (place limit)"
+ ]
+}
