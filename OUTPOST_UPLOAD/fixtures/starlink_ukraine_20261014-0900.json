@@ -1,0 +1,316 @@
+{
+ "question": "Will SpaceX lift the limits, yes or no?",
+ "country": "UA",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   87,
+   183
+  ],
+  [
+   255,
+   215,
+   0
+  ],
+  [
+   255,
+   255,
+   255
+  ]
+ ],
+ "hook_lines": [
+  "SPACEX LIMITS STARLINK IN UKRAINE",
+  "Cut above 160 km/h, Kyiv says"
+ ],
+ "cover": [
+  "SPACEX",
+  "LIMITS STARLINK",
+  "IN UKRAINE"
+ ],
+ "region": "UKRAINE, POLAND",
+ "places": {
+  "KYIV": {
+   "id": "KYIV",
+   "name": "Kyiv",
+   "lat": 50.45,
+   "lon": 30.52
+  },
+  "ZAPORIZHZHIA": {
+   "id": "ZAPORIZHZHIA",
+   "name": "Zaporizhzhia",
+   "lat": 47.84,
+   "lon": 35.14
+  },
+  "MELITOPOL": {
+   "id": "MELITOPOL",
+   "name": "Melitopol",
+   "lat": 46.85,
+   "lon": 35.37
+  },
+  "WARSAW": {
+   "id": "WARSAW",
+   "name": "Warsaw",
+   "lat": 52.23,
+   "lon": 21.01
+  }
+ },
+ "lines": [
+  {
+   "text": "Ukraine says SpaceX has restricted some Starlink services over Ukraine, without warning.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Reuters, 14 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "KYIV",
+    "head": "Kyiv, Ukraine",
+    "notes": [
+     "Starlink restricted",
+     "overnight, Kyiv says"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "Presidential adviser Serhiy Beskrestnov says it hit overnight and disrupted several drone missions.",
+   "src": [
+    0,
+    2
+   ],
+   "context": false,
+   "note": "Reuters, 14 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "STARLINK LIMITED",
+     "DRONE MISSIONS",
+     "DISRUPTED"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "He says the military version stopped working above 160 kilometres an hour.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Reuters, 14 Oct",
+   "scene": {
+    "type": "number",
+    "value": "160 km/h",
+    "label": "Starlink cut-off",
+    "detail": "Beskrestnov says",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "In his words, Ukraine's forces did not receive a warning about this limitation.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Reuters, 14 Oct",
+   "scene": {
+    "type": "quote",
+    "quote": "did not receive a warning about this limitation",
+    "who": "Serhiy Beskrestnov",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Ukraine's Seventh Rapid Reaction Corps, in the southeast, told Reuters the link could drop for 10 to 20 seconds.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Reuters, 14 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "ZAPORIZHZHIA",
+    "head": "Southeast front",
+    "notes": [
+     "link drops 10-20s",
+     "7th Corps says"
+    ],
+    "span": 4
+   }
+  },
+  {
+   "text": "It says that happened at just 110 to 120 kilometres an hour, and some missions were cancelled.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Reuters, 14 Oct",
+   "scene": {
+    "type": "compare",
+    "a": {
+     "n": 120,
+     "value": "120 km/h",
+     "label": "drops seen"
+    },
+    "b": {
+     "n": 160,
+     "value": "160 km/h",
+     "label": "stated cap"
+    }
+   }
+  },
+  {
+   "text": "Starlink guides Ukraine's longer-range drone strikes in the occupied south and east.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Reuters, 14 Oct",
+   "scene": {
+    "type": "route",
+    "from": "ZAPORIZHZHIA",
+    "to": "MELITOPOL",
+    "label": "Drone strikes",
+    "note": "Starlink-guided"
+   }
+  },
+  {
+   "text": "Poland says it pays for Kyiv's Starlink subscription.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Reuters, Warsaw",
+   "scene": {
+    "type": "pin",
+    "place": "WARSAW",
+    "head": "Warsaw, Poland",
+    "notes": [
+     "pays for Kyiv's",
+     "Starlink, Poland says"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "Foreign Minister Radoslaw Sikorski asked Elon Musk on X if he is playing politics with his products again.",
+   "src": [
+    1,
+    3
+   ],
+   "context": false,
+   "note": "Sikorski on X, 14 Oct",
+   "scene": {
+    "type": "quote",
+    "quote": "are you playing politics with your products again?",
+    "who": "Radoslaw Sikorski, on X",
+    "flag": "PL"
+   }
+  },
+  {
+   "text": "He added: as your European customers, we are watching you.",
+   "src": [
+    1,
+    3
+   ],
+   "context": false,
+   "note": "Sikorski on X, 14 Oct",
+   "scene": {
+    "type": "quote",
+    "quote": "As your European customers, we are watching you",
+    "who": "Radoslaw Sikorski",
+    "flag": "PL"
+   }
+  },
+  {
+   "text": "Reuters says SpaceX did not immediately respond to a request for comment.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Reuters, 14 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "SPACEX:",
+     "NO COMMENT",
+     "SO FAR"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "It also says the reason for the limit is not clear.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Reuters, 14 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "REASON",
+     "FOR THE LIMIT",
+     "NOT CLEAR"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Will SpaceX lift the limits, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "wide"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "Reuters via The Moscow Times",
+   "title": "Ukraine Says SpaceX Limits Starlink Operations, Disrupting Military",
+   "url": "https://www.themoscowtimes.com/2026/10/14/ukraine-says-spacex-limits-starlink-operations-disrupting-military-a93970"
+  },
+  {
+   "n": 1,
+   "outlet": "Reuters via WHBL",
+   "title": "Poland's Sikorski asks 'big man' Musk if he is playing politics with Starlink in Ukraine",
+   "url": "https://whbl.com/2026/10/14/polands-sikorski-asks-big-man-musk-if-he-is-playing-politics-with-starlink-in-ukraine/"
+  },
+  {
+   "n": 2,
+   "outlet": "Interfax-Ukraine",
+   "title": "SpaceX limits Starlink terminal speed in Ukraine overnight without warning, presidential adviser",
+   "url": "https://interfax.com.ua/"
+  },
+  {
+   "n": 3,
+   "outlet": "UNN",
+   "title": "Poland's Foreign Minister addressed Musk following reports of restrictions on Starlink for Ukraine",
+   "url": "https://unn.ua/en/news/polands-foreign-minister-addressed-musk-following-reports-of-restrictions-on-starlink-for-ukraine"
+  }
+ ],
+ "caption": "Starlink, SpaceX, Elon Musk, Ukraine: Kyiv says SpaceX restricted some Starlink services overnight without warning, disrupting drone missions. Poland's Radoslaw Sikorski, whose government pays for Kyiv's subscription, asked Musk if he is playing politics. Will SpaceX lift the limits, yes or no?",
+ "hashtags": [
+  "starlink",
+  "spacex",
+  "elonmusk",
+  "ukraine",
+  "outpost"
+ ],
+ "notes_full": [
+  "First reported 14 Oct about 05:30 UTC (Sternenko, UNN, Ukrainska Pravda), Reuters 06:34 UTC; about 5h old at delivery",
+  "Removal-risk: statements only, no toll, no future-attack framing, US refinery pressure context left out to avoid implying a motive, neutral yes/no",
+  "Globe: 4 places (place limit)"
+ ]
+}
