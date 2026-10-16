@@ -1,0 +1,316 @@
+{
+ "question": "Will the energy truce come back, yes or no?",
+ "country": "RU",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   87,
+   183
+  ],
+  [
+   255,
+   215,
+   0
+  ],
+  [
+   255,
+   255,
+   255
+  ]
+ ],
+ "hook_lines": [
+  "RUSSIA SAYS 644 DRONES DOWNED",
+  "94 were heading for Moscow"
+ ],
+ "cover": [
+  "644 DRONES",
+  "26 REGIONS",
+  "ONE NIGHT"
+ ],
+ "region": "RUSSIA / UKRAINE",
+ "places": {
+  "MOSCOW": {
+   "id": "MOSCOW",
+   "name": "Moscow",
+   "lat": 55.75,
+   "lon": 37.62
+  },
+  "RYAZAN": {
+   "id": "RYAZAN",
+   "name": "Ryazan",
+   "lat": 54.63,
+   "lon": 39.74
+  },
+  "VLADIMIR": {
+   "id": "VLADIMIR",
+   "name": "Vladimir",
+   "lat": 56.13,
+   "lon": 40.41
+  },
+  "ROSTOV": {
+   "id": "ROSTOV",
+   "name": "Rostov-on-Don",
+   "lat": 47.23,
+   "lon": 39.72
+  }
+ },
+ "lines": [
+  {
+   "text": "Russia says it shot down 644 Ukrainian drones overnight, over 26 regions and Crimea.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Russian MoD via TASS, 16 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "MOSCOW",
+    "head": "Russia: 644 drones",
+    "notes": [
+     "26 regions + Crimea",
+     "overnight, 16 Oct"
+    ],
+    "span": 14
+   }
+  },
+  {
+   "text": "Mayor Sergei Sobyanin says 94 were downed on their way to Moscow.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Sobyanin via Moscow Times",
+   "scene": {
+    "type": "number",
+    "value": "94",
+    "label": "heading for Moscow",
+    "detail": "Mayor Sobyanin says",
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "Nearly 160 flights were delayed or cancelled at Moscow's four main airports.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "The Moscow Times, 16 Oct",
+   "scene": {
+    "type": "number",
+    "value": "160",
+    "label": "flights hit in Moscow",
+    "detail": "delayed or cancelled",
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "In Rostov, the governor reports about 50 drones and projectiles, and one man injured.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Gov. Slyusar via TASS",
+   "scene": {
+    "type": "pin",
+    "place": "ROSTOV",
+    "head": "Rostov region",
+    "notes": [
+     "about 50 drones",
+     "one man injured"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "In Vladimir, the governor says heating infrastructure was targeted, with minor damage.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Gov. Avdeyev via Moscow Times",
+   "scene": {
+    "type": "pin",
+    "place": "VLADIMIR",
+    "head": "Vladimir",
+    "notes": [
+     "heating targeted",
+     "minor damage"
+    ],
+    "span": 4
+   }
+  },
+  {
+   "text": "On Thursday, drones set fire to the Ryazan refinery, one of Russia's largest.",
+   "src": [
+    2,
+    3
+   ],
+   "context": false,
+   "note": "Militarnyi, Moscow Times, 15 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "RYAZAN",
+    "head": "Ryazan refinery",
+    "notes": [
+     "fire, 15 Oct",
+     "17m tonnes a year"
+    ],
+    "span": 4
+   }
+  },
+  {
+   "text": "Zelensky says Ukraine is no longer bound by any restrictions on such attacks.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Militarnyi, 15 Oct",
+   "scene": {
+    "type": "quote",
+    "quote": "no longer bound by any restrictions on such attacks",
+    "who": "Volodymyr Zelensky",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Last weekend, Trump announced both sides had agreed not to hit each other's energy sites.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "The Moscow Times",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "ENERGY TRUCE",
+     "ANNOUNCED",
+     "by Trump, last weekend"
+    ],
+    "flag": "US"
+   }
+  },
+  {
+   "text": "Now Trump says the strikes push up world oil prices, adding: I think that's a disgrace.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Newsmax via Moscow Times",
+   "scene": {
+    "type": "quote",
+    "quote": "Well, I think that's a disgrace",
+    "who": "Donald Trump, Newsmax",
+    "flag": "US"
+   }
+  },
+  {
+   "text": "Putin says the attacks caused nothing particularly significant.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "The Moscow Times",
+   "scene": {
+    "type": "quote",
+    "quote": "nothing particularly significant",
+    "who": "Vladimir Putin",
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "Russian strikes left 370,000 people in Ukraine's Volyn region without power.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "The Moscow Times",
+   "scene": {
+    "type": "number",
+    "value": "370,000",
+    "label": "without power in Volyn",
+    "detail": "after Russian strikes",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Zelensky says Ukraine could pause again, but only with more US Patriot missiles.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Militarnyi, 15 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "NEW PAUSE?",
+     "FOR PATRIOTS",
+     "Zelensky's condition"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Will the energy truce come back, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "ENERGY TRUCE",
+     "YES",
+     "OR NO?"
+    ],
+    "flag": "UA"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "The Moscow Times",
+   "title": "Russia Repels 644 Ukrainian Drones as Trump Calls Attacks on Russian Refineries 'Disgrace'",
+   "url": "https://www.themoscowtimes.com/2026/10/16/russia-repels-644-ukrainian-drones-as-trump-calls-attacks-on-russian-refineries-disgrace-a93997"
+  },
+  {
+   "n": 1,
+   "outlet": "TASS",
+   "title": "Russian defenses down 644 drones overnight, civilian injured in Rostov Region",
+   "url": "https://tass.com/politics/2202841"
+  },
+  {
+   "n": 2,
+   "outlet": "Militarnyi",
+   "title": "Ukraine Strikes Ryazan Oil Refinery After Announcing Resumption of Attacks",
+   "url": "https://militarnyi.com/en/news/ukraine-strikes-ryazan-oil-refinery-after-announcing-resumption-of-attacks/"
+  },
+  {
+   "n": 3,
+   "outlet": "The Moscow Times",
+   "title": "Ukrainian Drones Spark Fire at Ryazan Refinery as Zelensky Vows to Resume Attacks",
+   "url": "https://www.themoscowtimes.com/2026/10/15/ukrainian-drones-spark-fire-at-ryazan-refinery-as-zelensky-vows-to-resume-attacks-a93981"
+  }
+ ],
+ "caption": "Russia, Ukraine, Moscow drones: Russia says it shot down 644 Ukrainian drones overnight, 94 of them heading for Moscow, after Ukraine dropped the energy truce. Trump calls the refinery strikes a disgrace. Will the energy truce come back, yes or no?",
+ "hashtags": [
+  "moscow",
+  "russia",
+  "ukraine",
+  "drones",
+  "outpost"
+ ],
+ "notes_full": [
+  "Overnight 15 to 16 Oct (8pm to 8am Moscow time); Russian MoD figure first reported about 05:00 UTC 16 Oct (TASS), Moscow Times 08:45 UTC, Anadolu 09:24 UTC; under 7h old at delivery",
+  "Ryazan refinery fire overnight 14 to 15 Oct given as context only; Trump Newsmax quote late 15 Oct (Le Monde 02:38 UTC, Guardian 06:02 UTC)",
+  "Removal-risk: all figures attributed, no death toll, no future-attack framing, leader quotes attributed and balanced, Trump-Zelensky feud not framed as who wins, neutral yes/no",
+  "Globe: 4 places (place limit)"
+ ]
+}
