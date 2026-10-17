@@ -1,0 +1,335 @@
+{
+ "series": "HORMUZ · DAY 232",
+ "question": "Will the strait reopen this year, yes or no?",
+ "country": "IR",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   35,
+   159,
+   64
+  ],
+  [
+   255,
+   255,
+   255
+  ],
+  [
+   218,
+   0,
+   0
+  ]
+ ],
+ "hook_lines": [
+  "IRAN SAYS SUPERTANKER HIT MINE",
+  "2 million barrels on board"
+ ],
+ "cover": [
+  "HORMUZ",
+  "DAY 232",
+  "TANKER HIT MINE"
+ ],
+ "region": "STRAIT OF HORMUZ / INDIA",
+ "places": {
+  "HORMUZ": {
+   "id": "HORMUZ",
+   "name": "Strait of Hormuz",
+   "lat": 26.57,
+   "lon": 56.25
+  },
+  "TEHRAN": {
+   "id": "TEHRAN",
+   "name": "Tehran",
+   "lat": 35.69,
+   "lon": 51.39
+  },
+  "NEWDELHI": {
+   "id": "NEWDELHI",
+   "name": "New Delhi",
+   "lat": 28.61,
+   "lon": 77.21
+  },
+  "WASHINGTON": {
+   "id": "WASHINGTON",
+   "name": "Washington",
+   "lat": 38.9,
+   "lon": -77.04
+  }
+ },
+ "lines": [
+  {
+   "text": "Iran's Revolutionary Guards say a supertanker hit a mine in the Strait of Hormuz and caught fire.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "IRGC via Anadolu, 17 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "HORMUZ",
+    "head": "Strait of Hormuz",
+    "notes": [
+     "IRGC: tanker hit mine",
+     "caught fire"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "They say it was carrying more than two million barrels of crude oil.",
+   "src": [
+    0,
+    2
+   ],
+   "context": false,
+   "note": "IRGC via Report.az",
+   "scene": {
+    "type": "number",
+    "value": "2M",
+    "label": "barrels on board",
+    "detail": "IRGC says",
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "The Guards say it switched off its tracking and took an unauthorised route.",
+   "src": [
+    1,
+    2
+   ],
+   "context": false,
+   "note": "IRGC via Tasnim, Mirror",
+   "scene": {
+    "type": "pin",
+    "place": "TEHRAN",
+    "head": "Tehran",
+    "notes": [
+     "IRGC: tracking off",
+     "banned route"
+    ],
+    "span": 7
+   }
+  },
+  {
+   "text": "The ship and its flag are not named, and nothing is independently confirmed yet.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Anadolu, Mirror, 17 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "NO SHIP NAMED",
+     "NOT CONFIRMED",
+     "no independent check yet"
+    ],
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "Separately, India says the tanker MT ST 3 was hit by a projectile in the strait on Friday.",
+   "src": [
+    3,
+    4
+   ],
+   "context": false,
+   "note": "Sonowal on X, 16 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "NEWDELHI",
+    "head": "New Delhi",
+    "notes": [
+     "MT ST 3 struck",
+     "Friday, 16 Oct"
+    ],
+    "span": 9
+   }
+  },
+  {
+   "text": "Shipping minister Sarbananda Sonowal says all fifteen Indian crew are safe.",
+   "src": [
+    3,
+    4
+   ],
+   "context": false,
+   "note": "Sonowal via The National",
+   "scene": {
+    "type": "number",
+    "value": "15",
+    "label": "Indian crew safe",
+    "detail": "no injuries, India says",
+    "flag": "IN",
+    "grid": {
+     "of": 15,
+     "lit": 15,
+     "cols": 5,
+     "caption": "all 15 crew safe"
+    }
+   }
+  },
+  {
+   "text": "The Guards' statement adds: The Strait of Hormuz is closed.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "IRGC via Mirror, 17 Oct",
+   "scene": {
+    "type": "quote",
+    "quote": "The Strait of Hormuz is closed.",
+    "who": "Iran's Revolutionary Guards",
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "President Trump says the US Navy blockade has stopped all Iranian ships crossing the strait.",
+   "src": [
+    5
+   ],
+   "context": false,
+   "note": "Al Jazeera, 17 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "WASHINGTON",
+    "head": "Washington",
+    "notes": [
+     "Trump: blockade stops",
+     "all Iranian ships"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "Reuters counted three ships sunk near Hormuz since the war began.",
+   "src": [
+    6
+   ],
+   "context": false,
+   "note": "Reuters, IMO data, 14 Oct",
+   "scene": {
+    "type": "number",
+    "value": "3",
+    "label": "ships sunk since 28 Feb",
+    "detail": "Reuters, IMO data",
+    "flag": "IR",
+    "grid": {
+     "of": 3,
+     "lit": 3,
+     "cols": 3,
+     "red": true,
+     "caption": "3 sunk since 28 Feb"
+    }
+   }
+  },
+  {
+   "text": "Before the war, a fifth of the world's oil and gas passed through here.",
+   "src": [
+    6
+   ],
+   "context": false,
+   "note": "Reuters",
+   "scene": {
+    "type": "number",
+    "value": "1/5",
+    "label": "of world oil and gas",
+    "detail": "passed here before the war",
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "The National says US crude is now above one hundred dollars a barrel.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "The National, 17 Oct",
+   "scene": {
+    "type": "number",
+    "value": "$100+",
+    "label": "US crude a barrel",
+    "detail": "The National reports",
+    "flag": "US"
+   }
+  },
+  {
+   "text": "Day two hundred and thirty three tomorrow. Will the strait reopen this year, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "REOPEN THIS YEAR?",
+     "YES",
+     "OR NO?"
+    ],
+    "flag": "IR"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "Anadolu Agency",
+   "title": "Iran says oil tanker hit naval mine in Strait of Hormuz",
+   "url": "https://www.aa.com.tr/en"
+  },
+  {
+   "n": 1,
+   "outlet": "Mirror via AOL",
+   "title": "Oil tanker carrying 2 million barrels hit in Strait of Hormuz as IRGC issues warning",
+   "url": "https://www.aol.co.uk/articles/oil-tanker-carrying-2-million-040936000.html"
+  },
+  {
+   "n": 2,
+   "outlet": "Report.az (Tasnim)",
+   "title": "IRGC: Supertanker carrying 2M barrels of oil hits mine in Strait of Hormuz",
+   "url": "https://report.az/en/region/irgc-supertanker-carrying-2m-barrels-of-oil-hits-mine-in-strait-of-hormuz"
+  },
+  {
+   "n": 3,
+   "outlet": "The National",
+   "title": "Oil tanker struck in Strait of Hormuz, says Indian ports minister",
+   "url": "https://www.thenationalnews.com/news/mena/2026/10/16/india-hormuz-strait-tanker-attack/"
+  },
+  {
+   "n": 4,
+   "outlet": "Siasat",
+   "title": "24 Indian sailors safe after tankers hit in Hormuz, Romania",
+   "url": "https://www.siasat.com/24-indian-sailors-safe-after-tankers-hit-in-hormuz-romania-3559839/"
+  },
+  {
+   "n": 5,
+   "outlet": "Al Jazeera",
+   "title": "Iran war live: IRGC says supertanker hit naval mine in Hormuz, catches fire",
+   "url": "https://www.aljazeera.com/news/liveblog/2026/10/17/draft-2"
+  },
+  {
+   "n": 6,
+   "outlet": "Reuters via ThePrint",
+   "title": "Two ships sink near Hormuz after being hit by projectiles amid surge in attacks",
+   "url": "https://theprint.in/world/two-ships-sink-near-hormuz-after-being-hit-by-projectiles-amid-surge-in-attacks/3072080/"
+  }
+ ],
+ "caption": "Hormuz, Iran, supertanker: Iran's Revolutionary Guards say a tanker carrying more than 2 million barrels hit a naval mine in the Strait of Hormuz and caught fire. India says another tanker, MT ST 3, was struck on Friday with all 15 crew safe. Will the strait reopen this year, yes or no?",
+ "hashtags": [
+  "hormuz",
+  "straitofhormuz",
+  "iran",
+  "oiltanker",
+  "outpost"
+ ],
+ "notes_full": [
+  "IRGC mine claim first reported 17 Oct about 01:35 UTC (CGTN), Anadolu 03:19, MEE 02:13; MT ST 3 strike reported by India 16 Oct, The National 20:04 UTC; under 18h at delivery",
+  "Removal-risk: events and statements only, IRGC claim attributed and flagged unconfirmed, no death toll, no future-attack framing, inflammatory part of IRGC quote left out, neutral yes/no",
+  "Globe: 4 places (place limit)"
+ ]
+}
