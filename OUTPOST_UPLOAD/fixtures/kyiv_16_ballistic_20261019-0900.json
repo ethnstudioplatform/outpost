@@ -1,0 +1,61 @@
+{
+ "question": "Will Ukraine get its missile warnings back, yes or no?",
+ "country": "UA",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [[0, 87, 183], [255, 215, 0], [255, 255, 255]],
+ "hook_lines": ["16 BALLISTIC MISSILES AT KYIV", "No warning from partners"],
+ "cover": ["16 MISSILES", "KYIV", "NO WARNING"],
+ "region": "UKRAINE / KYIV",
+ "places": {
+  "KYIV": {"id": "KYIV", "name": "Kyiv", "lat": 50.45, "lon": 30.52},
+  "IRPIN": {"id": "IRPIN", "name": "Irpin", "lat": 50.52, "lon": 30.25},
+  "WASHINGTON": {"id": "WASHINGTON", "name": "Washington", "lat": 38.9, "lon": -77.04}
+ },
+ "lines": [
+  {"text": "Zelensky says Russia fired 16 ballistic missiles at Kyiv and the region overnight.", "src": [0, 1], "context": false, "note": "Zelensky on X, 19 Oct",
+   "scene": {"type": "pin", "place": "KYIV", "head": "Kyiv: 16 ballistic", "notes": ["Kyiv + Kyiv Oblast", "night of 18 to 19 Oct"], "span": 6}},
+  {"text": "And he says that, once again, there was no early warning from partners.", "src": [0], "context": false, "note": "Zelensky on X, via UP",
+   "scene": {"type": "quote", "quote": "once again, there was no early warning from our partners", "who": "Volodymyr Zelensky", "flag": "UA"}},
+  {"text": "Explosions came in waves: just before 11pm, then around 3am and 7am.", "src": [1], "context": false, "note": "The Kyiv Independent",
+   "scene": {"type": "statement", "lines": ["3 WAVES", "11PM, 3AM, 7AM", "Kyiv Independent reports"], "flag": "UA"}},
+  {"text": "The US supplies the intelligence used to track Russian missile launches.", "src": [1, 2], "context": false, "note": "Kyiv Independent, NV",
+   "scene": {"type": "route", "from": "WASHINGTON", "to": "KYIV", "style": "cut", "label": "Launch warnings", "note": "wave 1: none"}},
+  {"text": "The Air Force says partners gave no warning of the first wave, but did for the second.", "src": [1], "context": false, "note": "Yurii Ihnat, Air Force",
+   "scene": {"type": "statement", "lines": ["WAVE 1: NONE", "WAVE 2: WARNED", "Air Force, Yurii Ihnat"], "flag": "UA"}},
+  {"text": "US Secretary of State Marco Rubio said: What happened last night I don't know exactly.", "src": [2], "context": false, "note": "Rubio to RFE/RL, via NV",
+   "scene": {"type": "quote", "quote": "What happened last night I don't know exactly", "who": "Marco Rubio", "flag": "US"}},
+  {"text": "In Kyiv, a 25-storey block was hit and two metro stations shut for repairs.", "src": [1], "context": false, "note": "Klitschko, city officials",
+   "scene": {"type": "pin", "place": "KYIV", "head": "Kyiv damage", "notes": ["25-storey block hit", "2 metro stations shut"], "span": 3}},
+  {"text": "Emergency services say one person was killed and eight injured in the capital.", "src": [1, 3], "context": false, "note": "DSNS via Kyiv Independent",
+   "scene": {"type": "statement", "lines": ["KYIV", "1 KILLED, 8 HURT", "emergency service says"], "flag": "UA"}},
+  {"text": "In nearby Irpin, officials say six were injured, three of them children.", "src": [1], "context": false, "note": "Kyiv regional admin",
+   "scene": {"type": "pin", "place": "IRPIN", "head": "Irpin", "notes": ["6 injured", "incl. 3 children"], "span": 2.5}},
+  {"text": "Operator Datagroup says one of its data centres was destroyed beyond repair.", "src": [4], "context": false, "note": "Datagroup via UA.NEWS",
+   "scene": {"type": "statement", "lines": ["DATAGROUP", "DATA CENTRE LOST", "operator says"], "flag": "UA"}},
+  {"text": "Zelensky says energy sites were hit in 11 regions, and 550,000 families lost power.", "src": [0], "context": false, "note": "Zelensky on X, via UP",
+   "scene": {"type": "number", "value": "550,000", "label": "families without power", "detail": "11 regions, Zelensky says", "flag": "UA"}},
+  {"text": "He says the war continues solely because of Russian strikes.", "src": [1], "context": false, "note": "Zelensky on X",
+   "scene": {"type": "quote", "quote": "it continues solely because of Russian strikes", "who": "Volodymyr Zelensky", "flag": "UA"}},
+  {"text": "Will Ukraine get its missile warnings back, yes or no?", "src": [], "context": false, "note": "",
+   "scene": {"type": "statement", "lines": ["WARNINGS BACK?", "YES", "OR NO?"], "flag": "UA"}}
+ ],
+ "sources": [
+  {"n": 0, "outlet": "Ukrainska Pravda", "title": "Zelenskyy: Russia struck using 16 ballistic missiles overnight", "url": "https://www.pravda.com.ua/eng/news/2026/10/19/8058703/"},
+  {"n": 1, "outlet": "The Kyiv Independent", "title": "3 waves of Russian missiles slam Kyiv overnight, killing at least 1, injuring 8", "url": "https://kyivindependent.com/russian-ballistic-missiles-slam-kyiv-right-as-air-raid-alarms-sound/"},
+  {"n": 2, "outlet": "The New Voice of Ukraine", "title": "Rubio cannot confirm whether Ukraine missed U.S. warning before Kyiv strike", "url": "https://english.nv.ua/nation/rubio-cannot-confirm-reports-of-missed-u-s-ballistic-missile-warning-before-kyiv-attack-50651247.html"},
+  {"n": 3, "outlet": "AP via The Journal", "title": "Russian missiles and drones hit Kyiv overnight, killing 1 and injuring 8", "url": "https://news.google.com/search?q=Russian%20missiles%20and%20drones%20hit%20Kyiv%20overnight%2C%20killing%201%20and%20injuring%208"},
+  {"n": 4, "outlet": "UA.NEWS", "title": "A nighttime ballistic attack destroyed the Datagroup data center", "url": "https://ua.news/en/war-vs-rf/nichna-balistichna-ataka-znishchila-datatsentr-datagrup"}
+ ],
+ "caption": "Kyiv, Zelensky, ballistic missiles: Zelensky says Russia fired 16 ballistic missiles at Kyiv and the region overnight, with no early warning from partners for the first wave. Rubio says he does not know exactly what happened. Will Ukraine get its missile warnings back, yes or no?",
+ "hashtags": ["kyiv", "zelensky", "ballisticmissile", "ukraine", "outpost"],
+ "notes_full": [
+  "Overnight 18 to 19 Oct; first explosions just before 23:00 Kyiv time 18 Oct (20:00 UTC), Kyiv Independent first published 18 Oct 23:20; Zelensky 16-missile post morning 19 Oct; AP 07:28 UTC, Anadolu 06:58 UTC, Rubio (NV) 09:09; under 14h old at delivery",
+  "Removal-risk: one attributed casualty line (line 8, not in hook, first 5s or caption), no future-attack framing, Rubio quote balances Zelensky, neutral yes/no",
+  "Globe: 3 places (place limit)"
+ ]
+}
