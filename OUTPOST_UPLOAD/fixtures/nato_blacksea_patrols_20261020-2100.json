@@ -1,0 +1,60 @@
+{
+ "question": "Will more patrols stop the attacks, yes or no?",
+ "country": "RO",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [[0, 63, 135], [255, 255, 255], [252, 209, 22]],
+ "hook_lines": ["NATO SENDS PLANES TO BLACK SEA", "After drone strikes on ships"],
+ "cover": ["NATO", "SENDS PLANES", "TO BLACK SEA"],
+ "region": "BLACK SEA / NATO",
+ "places": {
+  "BLACKSEA": {"id": "BLACKSEA", "name": "Black Sea", "lat": 43.4, "lon": 31.2},
+  "CONSTANTA": {"id": "CONSTANTA", "name": "Constanta, Romania", "lat": 44.17, "lon": 28.65},
+  "BRUSSELS": {"id": "BRUSSELS", "name": "Brussels, NATO HQ", "lat": 50.85, "lon": 4.35}
+ },
+ "lines": [
+  {"text": "NATO is sending more patrol planes, drones and radar to the Black Sea.", "src": [0, 1, 2], "context": false, "note": "NATO, 20 Oct, via Reuters",
+   "scene": {"type": "pin", "place": "BLACKSEA", "head": "Black Sea: NATO", "notes": ["patrol planes", "drones and radar"], "span": 7}},
+  {"text": "It follows deadly drone strikes on merchant ships.", "src": [0, 1], "context": false, "note": "Reuters",
+   "scene": {"type": "statement", "lines": ["WHY NOW", "DRONE STRIKES", "on merchant ships"], "flag": "RO"}},
+  {"text": "NATO's North Atlantic Council discussed Black Sea security in Brussels on Tuesday.", "src": [0, 1], "context": false, "note": "Reuters, 20 Oct",
+   "scene": {"type": "route", "from": "BRUSSELS", "to": "BLACKSEA", "label": "NATO decision", "note": "Brussels, 20 Oct"}},
+  {"text": "Last week, drones struck two chemical tankers off Romania's coast and set them ablaze.", "src": [0, 1], "context": false, "note": "Reuters",
+   "scene": {"type": "pin", "place": "CONSTANTA", "head": "Off Romania's coast", "notes": ["2 chemical tankers", "set ablaze last week"], "span": 5}},
+  {"text": "At least five other cargo ships were hit near Romania and Bulgaria in the 10 days before.", "src": [0, 1], "context": false, "note": "Reuters",
+   "scene": {"type": "number", "value": "5", "label": "more cargo ships hit", "detail": "near Romania and Bulgaria", "flag": "BG",
+     "grid": {"of": 7, "lit": 7, "cols": 7, "red": true, "caption": "at least 7 ships hit"}}},
+  {"text": "In all, Reuters says at least 23 sailors are missing or dead.", "src": [0], "context": false, "note": "Reuters",
+   "scene": {"type": "number", "value": "23", "label": "sailors missing or dead", "detail": "at least, Reuters says", "flag": "RO"}},
+  {"text": "NATO has not said who carried out the attacks.", "src": [0, 1], "context": false, "note": "Reuters",
+   "scene": {"type": "statement", "lines": ["NATO:", "NO BLAME YET", "no country named"], "flag": "RO"}},
+  {"text": "Military analysts say Russia almost certainly did. Moscow has not acknowledged responsibility.", "src": [0], "context": false, "note": "Reuters",
+   "scene": {"type": "statement", "lines": ["ANALYSTS:", "ALMOST CERTAINLY RUSSIA", "Moscow: no comment"], "flag": "RO"}},
+  {"text": "Colonel Martin O'Donnell says allies are sending teams to test the explosives.", "src": [0, 1], "context": false, "note": "NATO military spokesperson",
+   "scene": {"type": "statement", "lines": ["FORENSIC TEAMS", "TESTING EXPLOSIVES", "NATO spokesperson says"], "flag": "RO"}},
+  {"text": "Spokesperson Allison Hart says NATO has already strengthened its eastern flank, including counter-drone capabilities.", "src": [0, 1], "context": false, "note": "Allison Hart on X",
+   "scene": {"type": "wide"}},
+  {"text": "Her words: we will continue to stand united and ensure that we are ready and able to address any threat.", "src": [0, 1], "context": false, "note": "Allison Hart on X, 20 Oct",
+   "scene": {"type": "quote", "quote": "We will continue to stand united and ensure that we are ready and able to address any threat", "who": "Allison Hart, NATO", "flag": "RO"}},
+  {"text": "Romania and Bulgaria, both NATO members, line the western Black Sea.", "src": [0], "context": false, "note": "NATO members since 2004",
+   "scene": {"type": "statement", "lines": ["ROMANIA + BULGARIA", "BOTH NATO", "western Black Sea"], "flag": "BG"}},
+  {"text": "Will more patrols stop the attacks, yes or no?", "src": [], "context": false, "note": "",
+   "scene": {"type": "statement", "lines": ["WILL PATROLS", "STOP THE ATTACKS?", "YES OR NO"], "flag": "RO"}}
+ ],
+ "sources": [
+  {"n": 0, "outlet": "Reuters via ThePrint", "title": "NATO to send planes and drones to Black Sea after attacks on shipping", "url": "https://theprint.in/world/nato-to-send-planes-and-drones-to-black-sea-after-attacks-on-shipping/3077242/"},
+  {"n": 1, "outlet": "TRT World", "title": "NATO bolsters Black Sea defences after deadly drone attacks on shipping", "url": "https://www.trtworld.com/article/6056ebaead35"},
+  {"n": 2, "outlet": "News.az", "title": "NATO to deploy additional aircraft and drones to Black Sea following deadly shipping attacks", "url": "https://news.az/news/nato-to-deploy-additional-aircraft-and-drones-to-black-sea-following-deadly-shipping-attacks"}
+ ],
+ "caption": "NATO, Black Sea, Romania, Bulgaria: NATO is sending more patrol planes, drones and radar to the Black Sea after drone strikes on merchant ships near Romania and Bulgaria. NATO has not named who is behind them. Will more patrols stop the attacks, yes or no?",
+ "hashtags": ["nato", "blacksea", "romania", "bulgaria", "outpost"],
+ "notes_full": [
+  "NATO announcement Tue 20 Oct after the North Atlantic Council met in Brussels; Al Arabiya 14:13 UTC, Reuters 16:39, TRT 17:42, Guardian 17:44; about 3 to 5h old at render",
+  "Removal-risk: event and statements already made; one attributed toll (line 6, not hook, first 5s or caption); attribution framed as analysts say, NATO names no one; no future-attack framing; neutral yes/no",
+  "Globe: 3 places"
+ ]
+}
