@@ -1,0 +1,62 @@
+{
+ "question": "Will Seoul and Kyiv patch this up, yes or no?",
+ "country": "KR",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [[205, 46, 58], [0, 71, 160], [255, 255, 255]],
+ "hook_lines": ["SEOUL PULLS STAFF FROM KYIV", "Row over North Korean POWs"],
+ "cover": ["SEOUL", "PULLS STAFF", "FROM KYIV"],
+ "region": "SOUTH KOREA / UKRAINE",
+ "places": {
+  "KYIV": {"id": "KYIV", "name": "Kyiv", "lat": 50.45, "lon": 30.52},
+  "SEOUL": {"id": "SEOUL", "name": "Seoul", "lat": 37.57, "lon": 126.98},
+  "KURSK": {"id": "KURSK", "name": "Kursk", "lat": 51.73, "lon": 36.19}
+ },
+ "lines": [
+  {"text": "South Korea is pulling some of its embassy staff out of Kyiv.", "src": [0, 1, 2], "context": false, "note": "S Korea Foreign Ministry, 20 Oct",
+   "scene": {"type": "pin", "place": "KYIV", "head": "Kyiv: Korean embassy", "notes": ["some staff withdrawn", "announced 20 Oct"], "span": 6}},
+  {"text": "Seoul says Ukraine has taken no constructive action since it recalled its ambassador.", "src": [1, 2], "context": false, "note": "Foreign Ministry, via Reuters",
+   "scene": {"type": "quote", "quote": "With Ukraine taking no constructive action following the recall of our ambassador", "who": "S Korea Foreign Ministry", "flag": "KR"}},
+  {"text": "The ministry also cites the continued threat of airstrikes across Ukraine.", "src": [2], "context": false, "note": "Korea JoongAng Daily",
+   "scene": {"type": "statement", "lines": ["REASON GIVEN", "AIRSTRIKE THREAT", "Foreign Ministry says"], "flag": "KR"}},
+  {"text": "All consular staff will stay to protect Korean nationals.", "src": [2], "context": false, "note": "Korea JoongAng Daily",
+   "scene": {"type": "statement", "lines": ["CONSULAR STAFF", "ALL STAY", "charge d'affaires stays"], "flag": "KR"}},
+  {"text": "Ambassador Park Ki-chang was recalled on 8 October and flew home two days later.", "src": [2], "context": false, "note": "Korea JoongAng Daily",
+   "scene": {"type": "route", "from": "KYIV", "to": "SEOUL", "label": "Ambassador recalled", "note": "home 10 Oct"}},
+  {"text": "The row began at the UN, when Zelensky said Ukraine had sent two captured North Korean soldiers to South Korea.", "src": [3], "context": false, "note": "Zelensky at UN, 23 Sep",
+   "scene": {"type": "number", "value": "2", "label": "North Korean POWs sent", "detail": "Zelensky, UN speech", "flag": "UA",
+     "grid": {"of": 2, "lit": 2, "cols": 2, "caption": "2 soldiers to Seoul"}}},
+  {"text": "They were captured in Russia's Kursk region in January 2025.", "src": [3], "context": false, "note": "Al Jazeera",
+   "scene": {"type": "pin", "place": "KURSK", "head": "Kursk, Russia", "notes": ["captured Jan 2025", "first known NK POWs"], "span": 5}},
+  {"text": "Seoul says going public broke a confidentiality deal and put their families in North Korea at risk.", "src": [0, 1], "context": false, "note": "Kyiv Post, AFP",
+   "scene": {"type": "statement", "lines": ["SEOUL:", "DEAL BROKEN", "families at risk"], "flag": "KR"}},
+  {"text": "Kyiv says Seoul was told in advance, and that diplomacy must prevail over emotions.", "src": [0, 1], "context": false, "note": "Ukraine, via AFP",
+   "scene": {"type": "quote", "quote": "diplomacy must prevail over emotions", "who": "Ukraine", "flag": "UA"}},
+  {"text": "President Lee Jae Myung wants an official apology and has warned of further measures.", "src": [0, 1], "context": false, "note": "Kyiv Post, AFP",
+   "scene": {"type": "statement", "lines": ["LEE JAE MYUNG", "WANTS AN APOLOGY", "warns of further measures"], "flag": "KR"}},
+  {"text": "Ukraine says it considers the situation resolved.", "src": [1], "context": false, "note": "AFP",
+   "scene": {"type": "statement", "lines": ["KYIV:", "SITUATION RESOLVED", "Ukraine says"], "flag": "UA"}},
+  {"text": "Seoul and Kyiv estimate North Korea has sent about 15,000 troops to fight for Russia.", "src": [3], "context": false, "note": "Al Jazeera",
+   "scene": {"type": "number", "value": "15,000", "label": "North Korean troops", "detail": "sent since 2024, estimates", "flag": "KR"}},
+  {"text": "Will Seoul and Kyiv patch this up, yes or no?", "src": [], "context": false, "note": "",
+   "scene": {"type": "statement", "lines": ["PATCHED UP?", "YES", "OR NO?"], "flag": "KR"}}
+ ],
+ "sources": [
+  {"n": 0, "outlet": "Kyiv Post", "title": "South Korea to Withdraw More Embassy Staff From Ukraine Amid North Korean POW Dispute", "url": "https://www.kyivpost.com/post/87578"},
+  {"n": 1, "outlet": "AFP via Arab News", "title": "South Korea to withdraw some Ukraine embassy staff after POW row", "url": "https://www.arabnews.com/world/south-korea-to-withdraw-some-ukraine-embassy-staff-after-pow-row-3007260"},
+  {"n": 2, "outlet": "Korea JoongAng Daily", "title": "South Korea to withdraw some embassy staff from Ukraine after ambassador recall", "url": "https://www.koreajoongangdaily.com/korea/seoul-to-withdraw-portion-of-embassy-staff-from-ukraine/12929770"},
+  {"n": 3, "outlet": "Al Jazeera", "title": "Zelenskyy says Ukraine sent two North Korean POWs to South Korea", "url": "https://www.aljazeera.com/news/2026/9/24/zelenskyy-says-ukraine-sent-two-north-korean-pows-to-south-korea"},
+  {"n": 4, "outlet": "Reuters via ThePrint", "title": "South Korea to withdraw more embassy staff from Ukraine after POW dispute", "url": "https://theprint.in/world/south-korea-to-withdraw-more-embassy-staff-from-ukraine-after-pow-dispute/3076607"}
+ ],
+ "caption": "Seoul, Kyiv, North Korean POWs: South Korea is pulling some embassy staff out of Ukraine, saying Kyiv took no constructive action after it recalled its ambassador. The row is over two captured North Korean soldiers sent to Seoul. Will Seoul and Kyiv patch this up, yes or no?",
+ "hashtags": ["southkorea", "kyiv", "northkorea", "ukraine", "outpost"],
+ "notes_full": [
+  "Withdrawal announced by S Korea's Foreign Ministry Tue 20 Oct; Reuters 05:47 UTC, Yonhap 05:58, Korea Times 06:10, AFP, Kyiv Post 06:43; about 3h old at render",
+  "Removal-risk: diplomatic row, statements already made, both sides quoted; no death toll; no future-attack framing; neutral yes/no",
+  "Globe: 3 places"
+ ]
+}
