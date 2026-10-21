@@ -1,0 +1,62 @@
+{
+ "question": "Will Putin accept the Oslo proposals, yes or no?",
+ "country": "RU",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [[0, 87, 183], [255, 215, 0], [213, 43, 30]],
+ "hook_lines": ["WITKOFF LANDS IN ST PETERSBURG", "Oslo plan goes to Putin"],
+ "cover": ["WITKOFF", "LANDS IN", "ST PETERSBURG"],
+ "region": "RUSSIA / UKRAINE / US",
+ "places": {
+  "STPETE": {"id": "STPETE", "name": "St Petersburg, Russia", "lat": 59.94, "lon": 30.31},
+  "OSLO": {"id": "OSLO", "name": "Oslo, Norway", "lat": 59.91, "lon": 10.75},
+  "KYIV": {"id": "KYIV", "name": "Kyiv, Ukraine", "lat": 50.45, "lon": 30.52}
+ },
+ "lines": [
+  {"text": "US envoy Steve Witkoff has landed in St Petersburg for talks with Vladimir Putin.", "src": [0, 1, 2], "context": false, "note": "Reuters, TASS, 21 Oct",
+   "scene": {"type": "pin", "place": "STPETE", "head": "St Petersburg: Witkoff", "notes": ["US envoy lands", "talks with Putin"], "span": 7}},
+  {"text": "He flew in from Oslo, where he met Volodymyr Zelensky on Tuesday.", "src": [0, 2], "context": false, "note": "Oslo talks, 20 Oct",
+   "scene": {"type": "route", "from": "OSLO", "to": "STPETE", "label": "Oslo to St Petersburg", "note": "Oslo talks, 20 Oct"}},
+  {"text": "Russian state media say Putin's envoy Kirill Dmitriev met him at the airport.", "src": [1], "context": false, "note": "TASS, via RT",
+   "scene": {"type": "statement", "lines": ["PULKOVO AIRPORT", "MET BY DMITRIEV", "Russian state media say"], "flag": "RU"}},
+  {"text": "Norway's prime minister says Witkoff is carrying proposals from the Oslo talks.", "src": [2], "context": false, "note": "Jonas Gahr Store, via Kyiv Post",
+   "scene": {"type": "statement", "lines": ["IN HIS BAG", "THE OSLO PROPOSALS", "Norway's PM says"], "flag": "NO"}},
+  {"text": "Zelensky says they include several types of security guarantees, and Kyiv will wait for Putin's answer.", "src": [2], "context": false, "note": "Zelensky, via Kyiv Post",
+   "scene": {"type": "wide"}},
+  {"text": "Before Oslo, Ukraine went a week without US intelligence warnings of Russian strikes.", "src": [2, 3], "context": false, "note": "Kyiv Post, Guardian",
+   "scene": {"type": "number", "value": "7", "label": "days without US warnings", "detail": "before the Oslo talks", "flag": "UA",
+     "grid": {"of": 7, "lit": 7, "cols": 7, "red": true, "caption": "1 week offline"}}},
+  {"text": "Now Zelensky says that sharing is back.", "src": [2, 3], "context": false, "note": "Zelensky, 20 Oct",
+   "scene": {"type": "pin", "place": "KYIV", "head": "Kyiv: warnings back", "notes": ["US intelligence", "sharing resumed"], "span": 7}},
+  {"text": "His words: we are thankful that intelligence works now.", "src": [2], "context": false, "note": "Zelensky, via Kyiv Post",
+   "scene": {"type": "quote", "quote": "We are thankful that intelligence works now", "who": "Volodymyr Zelensky", "flag": "UA"}},
+  {"text": "He expects results on Patriot missiles and Starlink within 48 hours.", "src": [2], "context": false, "note": "Zelensky, via Kyiv Post",
+   "scene": {"type": "number", "value": "48", "label": "hours", "detail": "Patriots and Starlink, Zelensky says", "flag": "UA"}},
+  {"text": "Politico reports the US will offer Putin face to face talks with Trump and Zelensky.", "src": [4], "context": false, "note": "Politico Europe, 20 Oct",
+   "scene": {"type": "statement", "lines": ["ON THE TABLE?", "PUTIN, TRUMP, ZELENSKY", "Politico reports"], "flag": "US"}},
+  {"text": "Russia's foreign minister Sergei Lavrov says any plan should not involve political concessions from Moscow.", "src": [2], "context": false, "note": "Lavrov, via Kyiv Post",
+   "scene": {"type": "quote", "quote": "It should not involve any political concessions on our part", "who": "Sergei Lavrov", "flag": "RU"}},
+  {"text": "The Kremlin says every meeting with Trump's envoys is very important and well timed.", "src": [1], "context": false, "note": "Dmitry Peskov, via RT",
+   "scene": {"type": "statement", "lines": ["KREMLIN:", "VERY IMPORTANT", "and well timed"], "flag": "RU"}},
+  {"text": "Will Putin accept the Oslo proposals, yes or no?", "src": [], "context": false, "note": "",
+   "scene": {"type": "statement", "lines": ["WILL PUTIN", "ACCEPT THE PLAN?", "YES OR NO"], "flag": "RU"}}
+ ],
+ "sources": [
+  {"n": 0, "outlet": "Reuters (headline via Google News)", "title": "US envoy Witkoff arrives in St Petersburg for talks with Putin", "url": "https://www.reuters.com/"},
+  {"n": 1, "outlet": "RT, citing TASS", "title": "Trump envoy Witkoff lands in St. Petersburg for Putin talks", "url": "https://rt-english.com/russia/647462-trump-envoy-witkoff-putin-talks/"},
+  {"n": 2, "outlet": "Kyiv Post", "title": "US Restores Intelligence to Ukraine as Witkoff Carries Peace Proposals to Putin", "url": "https://www.kyivpost.com/post/87670"},
+  {"n": 3, "outlet": "The Guardian", "title": "US has resumed sharing intelligence with Ukraine about Russian strikes, says Zelenskyy", "url": "https://www.theguardian.com/"},
+  {"n": 4, "outlet": "POLITICO Europe", "title": "US to offer Putin face-to-face talks with Zelenskyy and Trump", "url": "https://www.politico.eu/"}
+ ],
+ "caption": "Witkoff, Putin, St Petersburg: US envoy Steve Witkoff has landed in Russia for talks with Putin, straight from meeting Zelensky in Oslo. Zelensky says US intelligence sharing is back after a week. Will Putin accept the Oslo proposals, yes or no?",
+ "hashtags": ["witkoff", "putin", "zelensky", "ukraine", "outpost"],
+ "notes_full": [
+  "Witkoff arrival reported Wed 21 Oct: Reuters 06:11 UTC, Jerusalem Post 05:42, RT/TASS 06:11, Euronews 06:18; Oslo talks Tue 20 Oct; intel sharing resumed reported from 18:56 UTC 20 Oct (LA Times, Kyiv Post, Guardian). All under 14h old at render",
+  "Removal-risk: diplomacy, statements made, both sides quoted; no death toll; no future-attack framing; neutral yes/no",
+  "Globe: 3 places"
+ ]
+}
