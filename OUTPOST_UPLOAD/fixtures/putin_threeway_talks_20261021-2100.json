@@ -1,0 +1,63 @@
+{
+ "question": "Will the talks restart in November, yes or no?",
+ "country": "RU",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [[0, 87, 183], [255, 215, 0], [213, 43, 30]],
+ "hook_lines": ["PUTIN AGREES TO 3-WAY TALKS", "and frees an American"],
+ "cover": ["PUTIN", "SAYS YES TO", "3-WAY TALKS"],
+ "region": "RUSSIA / UKRAINE / US",
+ "places": {
+  "STPETE": {"id": "STPETE", "name": "St Petersburg, Russia", "lat": 59.94, "lon": 30.31},
+  "ABUDHABI": {"id": "ABUDHABI", "name": "Abu Dhabi, UAE", "lat": 24.45, "lon": 54.38},
+  "KYIV": {"id": "KYIV", "name": "Kyiv, Ukraine", "lat": 50.45, "lon": 30.52}
+ },
+ "lines": [
+  {"text": "Vladimir Putin has agreed in principle to restart three way talks with Ukraine and the US.", "src": [0, 1, 2], "context": false, "note": "Kremlin, via Reuters, AP, Axios",
+   "scene": {"type": "pin", "place": "STPETE", "head": "Putin: talks back on", "notes": ["Russia, Ukraine, US", "in principle"], "span": 7}},
+  {"text": "The Kremlin says he told US envoy Steve Witkoff after three hours in St Petersburg.", "src": [1, 3], "context": false, "note": "Kremlin, via AP, PBS",
+   "scene": {"type": "number", "value": "3", "label": "hours with Witkoff", "detail": "Constantine Palace, St Petersburg", "flag": "RU",
+     "grid": {"of": 3, "lit": 3, "cols": 3, "red": true, "caption": "3 hour meeting"}}},
+  {"text": "Putin's adviser Yuri Ushakov says talks could resume around 10 November, possibly in Abu Dhabi.", "src": [2], "context": false, "note": "Yuri Ushakov, via Axios",
+   "scene": {"type": "route", "from": "STPETE", "to": "ABUDHABI", "label": "Next round: Abu Dhabi?", "note": "Around 10 Nov, Ushakov says"}},
+  {"text": "The focus, he says, is building a security system for Russia and Ukraine after the conflict ends.", "src": [3], "context": false, "note": "Yuri Ushakov, via PBS",
+   "scene": {"type": "quote", "quote": "Building a security system for Russia and Ukraine after the conflict ends", "who": "Yuri Ushakov", "flag": "RU"}},
+  {"text": "Before the meeting, Russia freed American Stephen Hubbard, a 74 year old retired teacher.", "src": [2, 4], "context": false, "note": "Axios, BBC, AP",
+   "scene": {"type": "statement", "lines": ["FREED", "STEPHEN HUBBARD", "74, retired teacher"], "flag": "US"}},
+  {"text": "He was held more than four years after Russian troops seized him in eastern Ukraine.", "src": [2], "context": false, "note": "Axios, seized April 2022",
+   "scene": {"type": "number", "value": "4+", "label": "years in Russian custody", "detail": "seized in eastern Ukraine, 2022", "flag": "US",
+     "grid": {"of": 5, "lit": 4, "cols": 5, "red": true, "caption": "more than 4 years"}}},
+  {"text": "Putin announced it himself: he is at Pulkovo Airport.", "src": [2], "context": false, "note": "Putin, via Axios",
+   "scene": {"type": "quote", "quote": "He is at Pulkovo Airport", "who": "Vladimir Putin", "flag": "RU"}},
+  {"text": "Donald Trump says no swap was needed for the release.", "src": [2], "context": false, "note": "Trump, Truth Social",
+   "scene": {"type": "statement", "lines": ["NO SWAP", "NEEDED", "Trump says"], "flag": "US"}},
+  {"text": "Witkoff called Putin a humanitarian. Two Republican senators objected.", "src": [2], "context": false, "note": "Axios: Tillis, Cornyn",
+   "scene": {"type": "statement", "lines": ["A HUMANITARIAN?", "Witkoff's words", "two US senators object"], "flag": "US"}},
+  {"text": "A US official says Ukraine accepted the format in Oslo on Tuesday.", "src": [2], "context": false, "note": "US official, via Axios",
+   "scene": {"type": "pin", "place": "KYIV", "head": "Kyiv: said yes in Oslo", "notes": ["technical talks", "US official says"], "span": 7}},
+  {"text": "Zelensky says a freeze is the minimum needed to end this war.", "src": [3], "context": false, "note": "Zelensky, Fox News",
+   "scene": {"type": "quote", "quote": "Right now, we have to freeze", "who": "Volodymyr Zelensky", "flag": "UA"}},
+  {"text": "But Ushakov says the Oslo talks did not contain much of use.", "src": [2], "context": false, "note": "Yuri Ushakov, via Axios",
+   "scene": {"type": "quote", "quote": "The Oslo talks didn't contain much that was useful", "who": "Yuri Ushakov", "flag": "RU"}},
+  {"text": "Will the talks restart in November, yes or no?", "src": [], "context": false, "note": "",
+   "scene": {"type": "statement", "lines": ["TALKS BY", "NOVEMBER?", "YES OR NO"], "flag": "RU"}}
+ ],
+ "sources": [
+  {"n": 0, "outlet": "Reuters (headline via Google News)", "title": "Putin agrees to resume 3-way peace talks with Ukraine and US", "url": "https://www.reuters.com/"},
+  {"n": 1, "outlet": "AP (via Inquirer)", "title": "Putin agrees to resume three-way talks on Ukraine war with Kyiv and Washington, Kremlin says", "url": "https://www.inquirer.com/news/nation-world/russia-ukraine-peace-talks-negotiations-20261021.html"},
+  {"n": 2, "outlet": "Axios", "title": "Putin tells Witkoff he is ready to resume direct peace talks, Russia releases U.S. detainee", "url": "https://www.axios.com/2026/10/21/russia-ukraine-putin-witkoff-peace"},
+  {"n": 3, "outlet": "PBS NewsHour", "title": "Putin agrees to resume trilateral Russia-Ukraine-U.S. talks next month", "url": "https://www.pbs.org/newshour/amp/world/putin-agrees-to-resume-trilateral-russia-ukraine-u-s-talks-next-month"},
+  {"n": 4, "outlet": "BBC (headline via Google News)", "title": "US citizen Stephen Hubbard freed by Russia as Trump envoy meets Putin", "url": "https://www.bbc.co.uk/news"}
+ ],
+ "caption": "Putin, Witkoff, Ukraine talks: the Kremlin says Putin has agreed in principle to restart three way talks with Ukraine and the US, possibly around 10 November in Abu Dhabi. Russia also freed American Stephen Hubbard after more than four years. Will the talks restart in November, yes or no?",
+ "hashtags": ["putin", "witkoff", "stephenhubbard", "ukraine", "outpost"],
+ "notes_full": [
+  "Agreement first reported Wed 21 Oct from about 15:56 UTC (BBC), Al Jazeera 16:26, Reuters 19:27, Politico 19:13, Axios, AP, PBS. Hubbard release BBC 17:46, AP 20:52. About 5h old at render",
+  "Removal-risk: diplomacy and a prisoner release, statements made, both sides quoted incl. senators' objection; no death toll; no future-attack framing; neutral yes/no",
+  "Globe: 3 places. Follows the 21 Oct 09:00 Witkoff video (its question answered)"
+ ]
+}
