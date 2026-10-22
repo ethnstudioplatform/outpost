@@ -1,0 +1,330 @@
+{
+ "series": "HORMUZ \u00b7 DAY 237",
+ "question": "Will Brent stay above $110 this week, yes or no?",
+ "country": "SA",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   108,
+   53
+  ],
+  [
+   255,
+   255,
+   255
+  ],
+  [
+   218,
+   0,
+   0
+  ]
+ ],
+ "hook_lines": [
+  "OIL PASSES $110 AFTER SAUDI ATTACKS",
+  "US orders staff out of Saudi"
+ ],
+ "cover": [
+  "HORMUZ",
+  "DAY 237",
+  "OIL PAST $110"
+ ],
+ "region": "SAUDI ARABIA / GULF",
+ "places": {
+  "SHAYBAH": {
+   "id": "SHAYBAH",
+   "name": "Shaybah oilfield, Saudi Arabia",
+   "lat": 22.51,
+   "lon": 54.0
+  },
+  "DAMMAM": {
+   "id": "DAMMAM",
+   "name": "Dammam, Saudi Arabia",
+   "lat": 26.47,
+   "lon": 49.8
+  },
+  "RIYADH": {
+   "id": "RIYADH",
+   "name": "Riyadh, Saudi Arabia",
+   "lat": 24.71,
+   "lon": 46.68
+  },
+  "HORMUZ": {
+   "id": "HORMUZ",
+   "name": "Strait of Hormuz",
+   "lat": 26.57,
+   "lon": 56.25
+  }
+ },
+ "lines": [
+  {
+   "text": "Oil has passed one hundred and ten dollars a barrel after new attacks on Saudi Arabia.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "The National, Bloomberg, 22 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "SHAYBAH",
+    "head": "Saudi Arabia: oil $110+",
+    "notes": [
+     "Brent above $110",
+     "after new attacks"
+    ],
+    "span": 9
+   }
+  },
+  {
+   "text": "And the US has ordered non-emergency staff and their families to leave the country.",
+   "src": [
+    2,
+    3
+   ],
+   "context": false,
+   "note": "State Department, via CBS, Al Jazeera",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "US STAFF OUT",
+     "of Saudi Arabia",
+     "State Department order"
+    ],
+    "flag": "US"
+   }
+  },
+  {
+   "text": "Brent reached one hundred and ten dollars sixty three this morning, The National says.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "The National, 22 Oct morning",
+   "scene": {
+    "type": "number",
+    "value": "$110.63",
+    "label": "Brent, a barrel",
+    "detail": "up 1.7%, The National reports",
+    "flag": "SA"
+   }
+  },
+  {
+   "text": "Saudi Arabia says air defences stopped a drone aimed at the Shaybah oilfield.",
+   "src": [
+    0,
+    2
+   ],
+   "context": false,
+   "note": "Saudi Energy Ministry, via The National",
+   "scene": {
+    "type": "pin",
+    "place": "SHAYBAH",
+    "head": "Shaybah oilfield",
+    "notes": [
+     "drone intercepted",
+     "energy ministry says"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "Shaybah pumps about a million barrels a day. Operations were not affected, it says.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "The National",
+   "scene": {
+    "type": "number",
+    "value": "1M",
+    "label": "barrels a day",
+    "detail": "operations unaffected, ministry says",
+    "flag": "SA"
+   }
+  },
+  {
+   "text": "Hours later, Saudi officials say an attack hit Dammam's King Fahd airport.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Saudi civil aviation, via The National",
+   "scene": {
+    "type": "pin",
+    "place": "DAMMAM",
+    "head": "Dammam: airport hit",
+    "notes": [
+     "King Fahd International",
+     "aviation authority says"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "Washington says the order covers Saudi Arabia only.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Tommy Pigott, via CBS News",
+   "scene": {
+    "type": "quote",
+    "quote": "non-emergency U.S. government employees and their family members in Saudi Arabia only",
+    "who": "State Department, Tommy Pigott",
+    "flag": "US"
+   }
+  },
+  {
+   "text": "Other US embassies in the region have cut staff, CBS reports.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "CBS News, 21 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "RIYADH",
+    "head": "Riyadh: embassy",
+    "notes": [
+     "US embassy",
+     "ordered departure"
+    ],
+    "span": 9
+   }
+  },
+  {
+   "text": "CBS says Houthi drones have targeted Saudi airports and oil sites. Iran denies any role.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "CBS News, 21 Oct",
+   "scene": {
+    "type": "wide"
+   }
+  },
+  {
+   "text": "Iran's Revolutionary Guards say seven vessels were hit near Hormuz.",
+   "src": [
+    4
+   ],
+   "context": false,
+   "note": "IRGC Navy, via Reuters",
+   "scene": {
+    "type": "pin",
+    "place": "HORMUZ",
+    "head": "Strait of Hormuz",
+    "notes": [
+     "IRGC: 7 vessels hit",
+     "Reuters, 22 Oct"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "They say four tankers caught fire and three hit mines.",
+   "src": [
+    4
+   ],
+   "context": false,
+   "note": "IRGC Navy, via Reuters",
+   "scene": {
+    "type": "number",
+    "value": "7",
+    "label": "vessels hit, IRGC says",
+    "detail": "4 on fire, 3 hit mines",
+    "flag": "IR",
+    "grid": {
+     "of": 7,
+     "lit": 7,
+     "cols": 7,
+     "red": true,
+     "caption": "4 fires + 3 mines"
+    }
+   }
+  },
+  {
+   "text": "Reuters says the claims are not independently confirmed.",
+   "src": [
+    4
+   ],
+   "context": false,
+   "note": "Reuters: no independent check",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "UNCONFIRMED",
+     "IRGC claims",
+     "no ships named"
+    ],
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "Day two hundred and thirty eight tomorrow. Will Brent stay above one hundred and ten dollars this week, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "BRENT ABOVE $110?",
+     "YES",
+     "OR NO?"
+    ],
+    "flag": "SA"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "The National",
+   "title": "Oil tops $110 as Houthi drone strike near Saudi Shaybah field rattles markets",
+   "url": "https://www.thenationalnews.com/business/energy/2026/10/22/oil-tops-110-as-houthi-drone-strike-near-saudi-shaybah-field-rattles-markets/"
+  },
+  {
+   "n": 1,
+   "outlet": "Bloomberg",
+   "title": "Oil Rises as Deadly Saudi Attack Fans Middle East Supply Fears",
+   "url": "https://www.bloomberg.com/news/articles/2026-10-21/latest-oil-market-news-and-analysis-for-oct-22"
+  },
+  {
+   "n": 2,
+   "outlet": "CBS News",
+   "title": "U.S. ordering some government staff to depart Saudi Arabia",
+   "url": "https://www.cbsnews.com/news/us-saudi-arabia-ordered-departure-houthis/"
+  },
+  {
+   "n": 3,
+   "outlet": "Al Jazeera",
+   "title": "US orders departure of personnel from Saudi Arabia, citing Houthi threat",
+   "url": "https://www.aljazeera.com/news/2026/10/21/us-orders-departure-of-personnel-from-saudi-arabia-citing-houthi-threat"
+  },
+  {
+   "n": 4,
+   "outlet": "Reuters (via TimesLIVE)",
+   "title": "Iran's IRGC navy says seven vessels hit, warns US of wider response",
+   "url": "https://www.timeslive.co.za/news/world/2026-10-22-irans-irgc-navy-says-seven-vessels-hit-warns-us-of-wider-response/"
+  }
+ ],
+ "caption": "Saudi Arabia, Shaybah, Brent oil: oil has passed $110 a barrel after new attacks on Saudi Arabia, and the US has ordered non-emergency staff and their families to leave the country. Iran's Revolutionary Guards say seven vessels were hit near Hormuz. Will Brent stay above $110 this week, yes or no?",
+ "hashtags": [
+  "saudiarabia",
+  "shaybah",
+  "oilprice",
+  "hormuz",
+  "outpost"
+ ],
+ "notes_full": [
+  "Ordered departure first reported 21 Oct 20:58 UTC (FT), CBS 23:28, Al Jazeera 23:22, BBC 01:07; Shaybah strike 21 Oct evening; Brent $110.63 on 22 Oct morning (The National 05:16 UTC); IRGC claim 22 Oct 04:33 to 04:40 UTC (Reuters, Times of Israel). 3 to 12h old at render",
+  "Removal-risk: events and statements only, IRGC claim attributed and flagged unconfirmed, no death toll anywhere, no future-attack framing (Trump 'We may' on Houthi strikes and the IRGC warning left out), Iran's denial included, neutral yes/no",
+  "Globe: 4 places (limit)"
+ ]
+}
