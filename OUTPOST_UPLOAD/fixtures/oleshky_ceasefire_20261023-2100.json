@@ -1,0 +1,350 @@
+{
+ "question": "Will the Oleshky truce hold, yes or no?",
+ "country": "UA",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   87,
+   183
+  ],
+  [
+   255,
+   215,
+   0
+  ],
+  [
+   255,
+   255,
+   255
+  ]
+ ],
+ "hook_lines": [
+  "MELANIA TRUMP SECURES OLESHKY CEASEFIRE",
+  "Aid in, civilians out from 29 Oct"
+ ],
+ "cover": [
+  "OLESHKY",
+  "CEASEFIRE",
+  "FROM 29 OCT"
+ ],
+ "region": "UKRAINE / KHERSON",
+ "places": {
+  "OLESHKY": {
+   "id": "OLESHKY",
+   "name": "Oleshky, Ukraine",
+   "lat": 46.62,
+   "lon": 32.72
+  },
+  "KHERSON": {
+   "id": "KHERSON",
+   "name": "Kherson, Ukraine",
+   "lat": 46.64,
+   "lon": 32.61
+  },
+  "WASHINGTON": {
+   "id": "WASHINGTON",
+   "name": "Washington",
+   "lat": 38.9,
+   "lon": -77.04
+  },
+  "ABUDHABI": {
+   "id": "ABUDHABI",
+   "name": "Abu Dhabi",
+   "lat": 24.45,
+   "lon": 54.38
+  }
+ },
+ "lines": [
+  {
+   "text": "Melania Trump has secured a local ceasefire in Oleshky, the White House says.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "White House, 23 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "OLESHKY",
+    "head": "Oleshky, Ukraine",
+    "notes": [
+     "Melania Trump: truce",
+     "White House says"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "It starts on the twenty ninth of October, to let aid in and civilians out.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "White House statement",
+   "scene": {
+    "type": "number",
+    "value": "29 OCT",
+    "label": "truce starts, White House",
+    "detail": "aid in, civilians out",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Oleshky is Russian-occupied, across the Dnipro River from Kherson.",
+   "src": [
+    0,
+    2
+   ],
+   "context": false,
+   "note": "White House, AP",
+   "scene": {
+    "type": "pin",
+    "place": "KHERSON",
+    "head": "Dnipro River line",
+    "notes": [
+     "Kherson: Ukraine held",
+     "Oleshky: occupied"
+    ],
+    "span": 3
+   }
+  },
+  {
+   "text": "About twenty four thousand people lived there before the war.",
+   "src": [
+    0,
+    2
+   ],
+   "context": false,
+   "note": "White House, AP",
+   "scene": {
+    "type": "number",
+    "value": "24,000",
+    "label": "lived in Oleshky pre-war",
+    "detail": "White House figure",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "The White House says only seventeen hundred to two thousand remain, mostly elderly.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "White House estimate",
+   "scene": {
+    "type": "compare",
+    "a": {
+     "n": 24000,
+     "value": "24,000",
+     "label": "before the war"
+    },
+    "b": {
+     "n": 2000,
+     "value": "~2,000",
+     "label": "left now, WH says"
+    }
+   }
+  },
+  {
+   "text": "AP reports there is no electricity, heat or running water, and food and medicine have been scarce for months.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "AP, 23 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "NO POWER",
+     "no heat, no running water",
+     "AP reports"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "In twenty twenty three, floodwater from the Kakhovka dam swamped the town.",
+   "src": [
+    0,
+    2
+   ],
+   "context": false,
+   "note": "White House, AP",
+   "scene": {
+    "type": "pin",
+    "place": "OLESHKY",
+    "head": "Kakhovka flood, 2023",
+    "notes": [
+     "90% flooded",
+     "White House says"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "Melania Trump calls it a front-line war city on the brink of disaster.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Melania Trump, 23 Oct",
+   "scene": {
+    "type": "quote",
+    "quote": "Oleshky is a front-line war city on the brink of disaster.",
+    "who": "Melania Trump, 23 Oct",
+    "flag": "US"
+   }
+  },
+  {
+   "text": "Ukraine's ombudsman Dmytro Lubinets has confirmed the deal.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "Kyiv Independent, 23 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "KYIV CONFIRMS",
+     "Dmytro Lubinets",
+     "ombudsman, 23 Oct"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "He says the operation will be gradual, and extremely difficult to implement.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "Lubinets, via Kyiv Independent",
+   "scene": {
+    "type": "quote",
+    "quote": "It is extremely difficult to implement.",
+    "who": "Dmytro Lubinets, Kyiv Independent",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "The Kremlin says the Russian military is coordinating the timing.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Peskov, via ABC News",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "KREMLIN AGREES",
+     "military sets timing",
+     "Peskov, 23 Oct"
+    ],
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "Melania Trump says some residents may choose Russia and some Ukraine, and an American media group will go with the teams.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Melania Trump, via ABC News",
+   "scene": {
+    "type": "pin",
+    "place": "WASHINGTON",
+    "head": "White House",
+    "notes": [
+     "some to Russia",
+     "some to Ukraine"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "Separately, the Kremlin says three-way talks with Ukraine and the US are planned in Abu Dhabi in early November.",
+   "src": [
+    4
+   ],
+   "context": false,
+   "note": "Peskov, via Al Jazeera",
+   "scene": {
+    "type": "pin",
+    "place": "ABUDHABI",
+    "head": "Abu Dhabi talks",
+    "notes": [
+     "early November",
+     "Kremlin says"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "Will the Oleshky truce hold, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "TRUCE HOLDS?",
+     "YES",
+     "OR NO?"
+    ],
+    "flag": "UA"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "The White House",
+   "title": "First Lady Melania Trump Secures Ceasefire Between Russia and Ukraine, Localized to Oleshky",
+   "url": "https://www.whitehouse.gov/briefings-statements/2026/10/first-lady-melania-trump-secures-ceasefire-between-russia-and-ukraine-localized-to-oleshky/"
+  },
+  {
+   "n": 1,
+   "outlet": "ABC News",
+   "title": "First lady Melania Trump says she brokered 'temporary' ceasefire in Ukrainian town",
+   "url": "https://abcnews.com/Politics/lady-melania-trump-brokered-temporary-localized-ceasefire-ukraine/story?id=137512833"
+  },
+  {
+   "n": 2,
+   "outlet": "AP (via KCTV5)",
+   "title": "White House announces Melania Trump secured ceasefire in Russian-occupied Ukrainian city",
+   "url": "https://www.kctv5.com/2026/10/23/white-house-announces-melania-trump-secures-ceasefire-russian-occupied-ukrainian-city/"
+  },
+  {
+   "n": 3,
+   "outlet": "Kyiv Independent",
+   "title": "Ukraine, Russia agree to local ceasefire for Russian-occupied Oleshky, mediated by Melania Trump",
+   "url": "https://kyivindependent.com/ukraine-war-latest-ukraine-russia-agree-to-local-ceasefire-for-russian-occupied-oleshky-mediated-by-melania-trump/"
+  },
+  {
+   "n": 4,
+   "outlet": "Al Jazeera",
+   "title": "Russia-Ukraine talks planned for November in UAE: Kremlin",
+   "url": "https://www.aljazeera.com/news/2026/10/23/russia-ukraine-talks-planned-for-november-in-uae-kremlin"
+  }
+ ],
+ "caption": "Oleshky, Melania Trump, Kherson: the White House says Melania Trump has secured a local ceasefire in Russian-occupied Oleshky from 29 October, so aid can get in and civilians can get out. Kyiv and the Kremlin both back it. Will the Oleshky truce hold, yes or no?",
+ "hashtags": [
+  "oleshky",
+  "melaniatrump",
+  "kherson",
+  "ukraine",
+  "outpost"
+ ],
+ "notes_full": [
+  "First reported 23 Oct about 12:00 UTC (Guardian 12:09, WH statement, Reuters, AP, CBS, Kyiv Independent 13:38); about 11h old at render",
+  "Russia's General Staff (RBK via Kyiv Independent) gives 04:00 on 27 Oct as start; WH says 29 Oct; video uses the WH date, attributed",
+  "Removal-risk: events and statements only, all attributed, no death toll (Kakhovka deaths left out), no future-attack framing, both sides' confirmation, neutral yes/no",
+  "Globe: 4 places (limit)"
+ ]
+}
