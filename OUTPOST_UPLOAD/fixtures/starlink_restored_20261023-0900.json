@@ -1,0 +1,321 @@
+{
+ "question": "Will Ukraine's Starlink be fully restored this week, yes or no?",
+ "country": "UA",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   87,
+   183
+  ],
+  [
+   255,
+   215,
+   0
+  ],
+  [
+   255,
+   255,
+   255
+  ]
+ ],
+ "hook_lines": [
+  "TRUMP SAYS MUSK RESTORED STARLINK",
+  "Kyiv: still capped at 161 km/h"
+ ],
+ "cover": [
+  "STARLINK",
+  "RESTORED?",
+  "KYIV: NO"
+ ],
+ "region": "UKRAINE / UNITED STATES",
+ "places": {
+  "KYIV": {
+   "id": "KYIV",
+   "name": "Kyiv",
+   "lat": 50.45,
+   "lon": 30.52
+  },
+  "WASHINGTON": {
+   "id": "WASHINGTON",
+   "name": "Washington",
+   "lat": 38.9,
+   "lon": -77.04
+  },
+  "HAWTHORNE": {
+   "id": "HAWTHORNE",
+   "name": "Hawthorne, California",
+   "lat": 33.92,
+   "lon": -118.33
+  }
+ },
+ "lines": [
+  {
+   "text": "Donald Trump says Elon Musk has restored Ukraine's Starlink access.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Trump, 22 Oct, via Reuters",
+   "scene": {
+    "type": "pin",
+    "place": "KYIV",
+    "head": "Ukraine: Starlink",
+    "notes": [
+     "Trump: Musk restored it",
+     "Kyiv disputes it"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "But Kyiv says its military link is still capped at one hundred and sixty one kilometres an hour.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Ukrainian official, Kyiv Independent",
+   "scene": {
+    "type": "number",
+    "value": "161 km/h",
+    "label": "speed cap, Kyiv says",
+    "detail": "Starshield, military Starlink",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "The Wall Street Journal says Trump called Musk and asked him to lift the limits.",
+   "src": [
+    3,
+    0
+   ],
+   "context": false,
+   "note": "WSJ, via Reuters, 22 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "WASHINGTON",
+    "head": "Washington",
+    "notes": [
+     "WSJ: Trump called Musk",
+     "asked to lift limits"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "Asked if he made that call, Trump said he did not want to comment.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Reuters, 22 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "NO COMMENT",
+     "on a call to Musk",
+     "Trump, 22 Oct"
+    ],
+    "flag": "US"
+   }
+  },
+  {
+   "text": "Then he added: the bottom line, he put it back.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Donald Trump, via Reuters",
+   "scene": {
+    "type": "quote",
+    "quote": "The bottom line, he put it back.",
+    "who": "Donald Trump, 22 Oct",
+    "flag": "US"
+   }
+  },
+  {
+   "text": "The Journal says it worked more normally after the call, citing officials.",
+   "src": [
+    3,
+    0
+   ],
+   "context": false,
+   "note": "WSJ, via Reuters",
+   "scene": {
+    "type": "pin",
+    "place": "HAWTHORNE",
+    "head": "SpaceX, Hawthorne",
+    "notes": [
+     "WSJ: working",
+     "more normally"
+    ],
+    "span": 7
+   }
+  },
+  {
+   "text": "But a Ukrainian official told the Kyiv Independent the reports were false.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Kyiv Independent, 22 Oct",
+   "scene": {
+    "type": "quote",
+    "quote": "Overall, nothing has changed anywhere.",
+    "who": "Ukrainian official, Kyiv Independent",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "President Zelensky also says speeds have not been restored.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Zelensky, 22 Oct, via Reuters",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "NOT RESTORED",
+     "Zelensky says",
+     "22 Oct"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "He says he asked Marco Rubio if it could work at up to four hundred kilometres an hour.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Zelensky, via Kyiv Independent",
+   "scene": {
+    "type": "compare",
+    "a": {
+     "n": 161,
+     "value": "161 km/h",
+     "label": "cap now, Kyiv says"
+    },
+    "b": {
+     "n": 400,
+     "value": "400 km/h",
+     "label": "Zelensky's ask"
+    }
+   }
+  },
+  {
+   "text": "The official says the cap limits mid-range strikes and fast drone interceptions.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Kyiv Independent",
+   "scene": {
+    "type": "pin",
+    "place": "KYIV",
+    "head": "Kyiv",
+    "notes": [
+     "cap limits fast",
+     "drone interceptions"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "Zelensky says Rubio promised him an answer within forty eight hours.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Zelensky, via Kyiv Independent",
+   "scene": {
+    "type": "number",
+    "value": "48h",
+    "label": "for Rubio's answer",
+    "detail": "Zelensky says",
+    "flag": "US"
+   }
+  },
+  {
+   "text": "Rubio says Starlink access is for SpaceX and Musk, not the White House.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Rubio, 21 Oct, via Reuters",
+   "scene": {
+    "type": "pin",
+    "place": "WASHINGTON",
+    "head": "Rubio: up to SpaceX",
+    "notes": [
+     "not the White House",
+     "he says"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "Will Ukraine's Starlink be fully restored this week, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "FULLY RESTORED?",
+     "YES",
+     "OR NO?"
+    ],
+    "flag": "UA"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "Reuters (via The Moscow Times)",
+   "title": "Trump Says Musk Restored Ukraine's Starlink Access, Declines to Say if They Spoke",
+   "url": "https://www.themoscowtimes.com/2026/10/22/trump-asks-musk-to-lift-ukraine-starlink-restrictions-wsj-reports-a94060"
+  },
+  {
+   "n": 1,
+   "outlet": "Al Jazeera",
+   "title": "Trump says Musk restored Ukraine's Starlink access amid Russia war",
+   "url": "https://www.aljazeera.com/news/2026/10/23/trump-says-musk-restored-ukraines-starlink-access-amid-russia-war"
+  },
+  {
+   "n": 2,
+   "outlet": "Kyiv Independent",
+   "title": "Kyiv denies reports that Trump, Musk have restored Starlink speeds in Ukraine",
+   "url": "https://kyivindependent.com/kyiv-denies-reports-that-trump-musk-have-restored-starlink-speeds-in-ukraine/"
+  },
+  {
+   "n": 3,
+   "outlet": "The Wall Street Journal",
+   "title": "Trump Called Musk and Asked Him to Lift Ukraine Starlink Restrictions",
+   "url": "https://www.wsj.com/"
+  }
+ ],
+ "caption": "Starlink, Elon Musk, Donald Trump, Ukraine: Trump says Musk has restored Ukraine's Starlink access. Kyiv says its military link is still capped at 161 km/h and nothing has changed. Will Ukraine's Starlink be fully restored this week, yes or no?",
+ "hashtags": [
+  "starlink",
+  "elonmusk",
+  "starshield",
+  "ukraine",
+  "outpost"
+ ],
+ "notes_full": [
+  "WSJ exclusive 22 Oct (before 19:17 UTC Kyiv Independent denial; WSJ RSS 22:16 UTC); Trump remarks 22 Oct (BBC 21:42 UTC, Reuters); Al Jazeera, NYT, Telegraph 23 Oct morning. About 11 to 15h old at render",
+  "Removal-risk: statements only, all attributed, no death toll, no future-attack framing, both sides' claims given, neutral yes/no",
+  "Third Starlink episode (14 and 15 Oct before); search query 'starshield vs starlink' in Studio top queries 23 Oct",
+  "Globe: 3 places"
+ ]
+}
