@@ -1,0 +1,304 @@
+{
+ "question": "Will Kim meet Trump this year, yes or no?",
+ "country": "KP",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   237,
+   28,
+   39
+  ],
+  [
+   2,
+   79,
+   162
+  ],
+  [
+   255,
+   255,
+   255
+  ]
+ ],
+ "hook_lines": [
+  "KIM CROSSES NEW BRIDGE INTO CHINA",
+  "Met by China's premier"
+ ],
+ "cover": [
+  "KIM JONG UN",
+  "IN CHINA",
+  "NEW BRIDGE"
+ ],
+ "region": "CHINA / NORTH KOREA",
+ "places": {
+  "DANDONG": {
+   "id": "DANDONG",
+   "name": "Dandong",
+   "lat": 40.13,
+   "lon": 124.39
+  },
+  "PYONGYANG": {
+   "id": "PYONGYANG",
+   "name": "Pyongyang",
+   "lat": 39.03,
+   "lon": 125.75
+  },
+  "SHENZHEN": {
+   "id": "SHENZHEN",
+   "name": "Shenzhen",
+   "lat": 22.54,
+   "lon": 114.06
+  }
+ },
+ "lines": [
+  {
+   "text": "Kim Jong Un has crossed into China over the new Yalu River bridge, South Korea says.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Reuters, Yonhap, 24 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "DANDONG",
+    "head": "Dandong, China",
+    "notes": [
+     "Kim Jong Un arrives",
+     "new Yalu River bridge"
+    ],
+    "span": 4
+   }
+  },
+  {
+   "text": "South Korean officials say China's premier, Li Qiang, met him in Dandong.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Reuters, JoongAng Daily",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "MET BY LI QIANG",
+     "China's premier",
+     "Seoul officials say"
+    ],
+    "flag": "CN"
+   }
+  },
+  {
+   "text": "His last known trip to China was in September last year.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Reuters, 24 Oct",
+   "scene": {
+    "type": "number",
+    "value": "SEP 2025",
+    "label": "last known China visit",
+    "detail": "Reuters says",
+    "flag": "KP"
+   }
+  },
+  {
+   "text": "The bridge links Dandong with Sinuiju, and is three kilometres long.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "JoongAng Daily",
+   "scene": {
+    "type": "number",
+    "value": "3 km",
+    "label": "four-lane road bridge",
+    "detail": "Dandong to Sinuiju",
+    "flag": "CN"
+   }
+  },
+  {
+   "text": "It was finished in 2014, but only opened on the fifteenth of October.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "JoongAng Daily",
+   "scene": {
+    "type": "number",
+    "value": "12 YEARS",
+    "label": "finished to opened",
+    "detail": "2014 to 15 Oct 2026",
+    "flag": "KP"
+   }
+  },
+  {
+   "text": "Chinese analyst Lu Chao says it has resolved a major bottleneck in trade.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Lu Chao, via Reuters",
+   "scene": {
+    "type": "quote",
+    "quote": "The opening of the bridge has resolved a major bottleneck in China-North Korea trade logistics.",
+    "who": "Lu Chao, via Reuters",
+    "flag": "CN"
+   }
+  },
+  {
+   "text": "The visit comes a day before the anniversary of China joining the Korean War.",
+   "src": [
+    0,
+    2
+   ],
+   "context": false,
+   "note": "Reuters, Al Jazeera",
+   "scene": {
+    "type": "number",
+    "value": "25 OCT",
+    "label": "China joined Korean War",
+    "detail": "anniversary, 1950",
+    "flag": "CN"
+   }
+  },
+  {
+   "text": "A South Korean source told Yonhap it will be a very brief visit.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Yonhap, via JoongAng Daily",
+   "scene": {
+    "type": "quote",
+    "quote": "This will be a very brief visit.",
+    "who": "South Korean source, via Yonhap",
+    "flag": "KP"
+   }
+  },
+  {
+   "text": "This week, state media said Kim called for the world's strongest armed forces.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "KCNA, via JoongAng Daily",
+   "scene": {
+    "type": "pin",
+    "place": "PYONGYANG",
+    "head": "Pyongyang",
+    "notes": [
+     "military meeting",
+     "KCNA says"
+    ],
+    "span": 4
+   }
+  },
+  {
+   "text": "Seoul's spy agency told lawmakers on Friday that rumours of his death were unfounded.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "NIS, via JoongAng Daily",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "DEATH RUMOURS",
+     "UNFOUNDED",
+     "Seoul's NIS says"
+    ],
+    "flag": "KP"
+   }
+  },
+  {
+   "text": "China hosts the APEC summit in Shenzhen next month, and Donald Trump is expected to attend.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Reuters, 24 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "SHENZHEN",
+    "head": "Shenzhen, APEC",
+    "notes": [
+     "November summit",
+     "Trump expected"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "Reuters says officials see fading chances of a Trump and Kim meeting this year.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Reuters, 23 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "TRUMP-KIM TALKS?",
+     "chances fading",
+     "officials, via Reuters"
+    ],
+    "flag": "US"
+   }
+  },
+  {
+   "text": "Will Kim meet Trump this year, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "KIM MEETS TRUMP?",
+     "YES",
+     "OR NO?"
+    ],
+    "flag": "KP"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "Reuters (via Investing.com)",
+   "title": "North Korea's Kim Jong Un visits China via Dandong bridge, South Korean official says",
+   "url": "https://www.investing.com/news/world-news/north-koreas-kim-jong-un-visits-china-via-dandong-bridge-yonhap-says-4970677"
+  },
+  {
+   "n": 1,
+   "outlet": "Korea JoongAng Daily",
+   "title": "Kim Jong-un makes China visit, is greeted by Chinese Premier Li Qiang",
+   "url": "https://www.koreajoongangdaily.com/korea/kim-jongun-makes-china-visit-is-greeted-by-chinese-premier-li-qiang/12936338"
+  },
+  {
+   "n": 2,
+   "outlet": "Al Jazeera",
+   "title": "North Korea's Kim Jong Un visits China via newly opened bridge",
+   "url": "https://www.aljazeera.com/news/2026/10/24/north-koreas-kim-jong-un-arrives-in-china-south-korean-media-says"
+  }
+ ],
+ "caption": "Kim Jong Un, China, Dandong, Li Qiang: South Korea says Kim has crossed into China over the new Yalu River bridge and was met by China's premier. It is his first known China trip since September 2025. Will Kim meet Trump this year, yes or no?",
+ "hashtags": [
+  "kimjongun",
+  "northkorea",
+  "china",
+  "dandong",
+  "outpost"
+ ],
+ "notes_full": [
+  "First reported 24 Oct about 06:17 UTC (Reuters 06:17, Korea Times 06:31, Kyodo 06:25, DW, AFP, Bloomberg, AP, NYT, Guardian, Al Jazeera); about 5h old at render",
+  "Follow-up to yalu_bridge_20261015-0900 (bridge opening); new event: Kim's crossing and Li Qiang meeting",
+  "Removal-risk: events and statements only, all attributed, no death toll, no future-attack framing, death rumours only as Seoul's denial, neutral yes/no",
+  "Globe: 3 places (place limit; 30 min job limit)"
+ ]
+}
