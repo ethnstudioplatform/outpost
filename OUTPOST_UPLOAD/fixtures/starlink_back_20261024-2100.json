@@ -1,0 +1,344 @@
+{
+ "question": "Will Starlink stay at full speed in Ukraine, yes or no?",
+ "country": "UA",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   87,
+   183
+  ],
+  [
+   255,
+   215,
+   0
+  ],
+  [
+   255,
+   255,
+   255
+  ]
+ ],
+ "hook_lines": [
+  "UKRAINE'S STARLINK BACK AT 400KM/H",
+  "After a 10 day slowdown"
+ ],
+ "cover": [
+  "STARLINK",
+  "BACK ON",
+  "400 KM/H"
+ ],
+ "region": "UKRAINE / UNITED STATES",
+ "places": {
+  "KYIV": {
+   "id": "KYIV",
+   "name": "Kyiv",
+   "lat": 50.45,
+   "lon": 30.52
+  },
+  "WASHINGTON": {
+   "id": "WASHINGTON",
+   "name": "Washington",
+   "lat": 38.9,
+   "lon": -77.04
+  },
+  "HAWTHORNE": {
+   "id": "HAWTHORNE",
+   "name": "Hawthorne, California",
+   "lat": 33.92,
+   "lon": -118.33
+  }
+ },
+ "lines": [
+  {
+   "text": "Ukraine says its military Starlink is back, at over four hundred kilometres an hour.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Ukraine MoD, 24 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "KYIV",
+    "head": "Ukraine: Starlink back",
+    "notes": [
+     "over 400 km/h",
+     "Kyiv says"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "Defence Minister Yevhen Khmara says the connection is stable at that speed.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Khmara, via Interfax-Ukraine",
+   "scene": {
+    "type": "number",
+    "value": "400+ km/h",
+    "label": "stable link, Khmara says",
+    "detail": "Starlink and Starshield",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Kyiv says the link had been dropping at around one hundred and sixty one.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Ukraine MoD sources, 23 Oct",
+   "scene": {
+    "type": "compare",
+    "a": {
+     "n": 161,
+     "value": "161 km/h",
+     "label": "link dropped, Kyiv says"
+    },
+    "b": {
+     "n": 400,
+     "value": "400+ km/h",
+     "label": "now, Khmara says"
+    }
+   }
+  },
+  {
+   "text": "Reuters calls it a ten day disruption.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Reuters, 24 Oct",
+   "scene": {
+    "type": "number",
+    "value": "10 DAYS",
+    "label": "disruption",
+    "detail": "Reuters says",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "On Friday, President Zelensky said speeds were still not restored.",
+   "src": [
+    0,
+    3
+   ],
+   "context": false,
+   "note": "Zelensky, 23 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "FRIDAY:",
+     "NOT RESTORED",
+     "Zelensky said"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Now he says restoration began overnight, and the checks are done.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Zelensky, 24 Oct, via UNN",
+   "scene": {
+    "type": "pin",
+    "place": "KYIV",
+    "head": "Kyiv",
+    "notes": [
+     "restored overnight",
+     "Zelensky says"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "His words: the speed is now what we need.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Zelensky, via UNN",
+   "scene": {
+    "type": "quote",
+    "quote": "The speed is now what we need.",
+    "who": "Volodymyr Zelensky, 24 Oct",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "He says it matters for frontline logistics, and defence against jet powered Shahed drones.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Zelensky, via Interfax-Ukraine",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "FRONTLINE LINK",
+     "logistics and",
+     "jet Shahed defence"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "The Wall Street Journal reported Elon Musk ordered the slowdown, citing US officials.",
+   "src": [
+    3,
+    4
+   ],
+   "context": false,
+   "note": "WSJ, via Mediaite and DW",
+   "scene": {
+    "type": "pin",
+    "place": "HAWTHORNE",
+    "head": "SpaceX, Hawthorne",
+    "notes": [
+     "WSJ: Musk ordered",
+     "the slowdown"
+    ],
+    "span": 7
+   }
+  },
+  {
+   "text": "Radio Free Europe says Musk has said Starshield is controlled by the government.",
+   "src": [
+    4
+   ],
+   "context": false,
+   "note": "RFE/RL, via NewsCord",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "MUSK:",
+     "GOVERNMENT",
+     "CONTROLS STARSHIELD"
+    ],
+    "flag": "US"
+   }
+  },
+  {
+   "text": "The Journal also says Donald Trump called Musk and pressed him to lift the limits.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "WSJ, via Mediaite",
+   "scene": {
+    "type": "pin",
+    "place": "WASHINGTON",
+    "head": "Washington",
+    "notes": [
+     "WSJ: Trump called Musk",
+     "to lift the limits"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "On Friday, Trump said he would sort it out.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "Donald Trump, 23 Oct, via Mediaite",
+   "scene": {
+    "type": "quote",
+    "quote": "If there is a problem, I'll get it straightened out.",
+    "who": "Donald Trump, 23 Oct",
+    "flag": "US"
+   }
+  },
+  {
+   "text": "Zelensky has thanked US lawmakers, the State Department and the President.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Zelensky, 24 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "THANK YOU",
+     "Congress, State Dept",
+     "and the President"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Will Starlink stay at full speed in Ukraine, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "FULL SPEED STAYS?",
+     "YES",
+     "OR NO?"
+    ],
+    "flag": "UA"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "Interfax-Ukraine",
+   "title": "Zelenskyy: Starlink and Starshield services restored at the same speeds as before all restrictions were imposed",
+   "url": "https://en.interfax.com.ua/news/general/1225623.html"
+  },
+  {
+   "n": 1,
+   "outlet": "UNN",
+   "title": "Starlink and Starshield have been restored to their previous operating speed in Ukraine, Zelenskyy",
+   "url": "https://unn.ua/en/news/starlink-and-starshield-have-been-restored-to-their-previous-operating-speed-in-ukraine-zelenskyy"
+  },
+  {
+   "n": 2,
+   "outlet": "Reuters (via Investing.com)",
+   "title": "Ukraine says military Starlink service restored after 10-day disruption",
+   "url": "https://www.investing.com/"
+  },
+  {
+   "n": 3,
+   "outlet": "Mediaite",
+   "title": "Zelensky Says Starlink Service Restored to Normal Speed After Trump Vowed He'd Get Restrictions Straightened Out",
+   "url": "https://www.mediaite.com/media/news/zelensky-says-starlink-service-restored-to-normal-speed-after-trump-vowed-hed-get-restrictions-straightened-out/"
+  },
+  {
+   "n": 4,
+   "outlet": "NewsCord (DW, RFE/RL, CBS compared)",
+   "title": "Ukraine Restores Starlink And Starshield Speed After More Than Week Disruption",
+   "url": "https://newscord.org/article/ukraine-restores-starlink-and-starshield-speed-after-more-than-week-disruption--Story_20261024_UkrainesaysStarlinkabf9cba97"
+  }
+ ],
+ "caption": "Starlink, Starshield, Ukraine, Elon Musk: Kyiv says its military Starlink is back at over 400 km/h after about 10 days of slowdowns. Zelensky says restoration began overnight and thanked Washington. Will Starlink stay at full speed in Ukraine, yes or no?",
+ "hashtags": [
+  "starlink",
+  "starshield",
+  "elonmusk",
+  "ukraine",
+  "outpost"
+ ],
+ "notes_full": [
+  "First reports of restoration 24 Oct about 03:17 UTC (Nasha Niva), Kyiv Independent 07:57, Interfax 08:04, MoD 09:18, Reuters/Investing 09:28, BBC 11:17, Guardian, Sky, Telegraph, Al Jazeera, LBC; about 16 to 17h old at delivery",
+  "Supersedes starlink_restored_20261023-0900v2 (outdated, never posted)",
+  "Removal-risk: statements only, all attributed, no death toll, no future-attack framing, neutral yes/no",
+  "Globe: 3 places"
+ ]
+}
