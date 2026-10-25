@@ -1,0 +1,356 @@
+{
+ "question": "Will the Abu Dhabi talks go ahead, yes or no?",
+ "country": "RU",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   87,
+   183
+  ],
+  [
+   255,
+   215,
+   0
+  ],
+  [
+   255,
+   255,
+   255
+  ]
+ ],
+ "hook_lines": [
+  "RUSSIA SAYS 532 DRONES SHOT DOWN",
+  "One hit Perm, 1,600km deep"
+ ],
+ "cover": [
+  "532",
+  "DRONES",
+  "ONE NIGHT"
+ ],
+ "region": "RUSSIA / UKRAINE",
+ "places": {
+  "MOSCOW": {
+   "id": "MOSCOW",
+   "name": "Moscow",
+   "lat": 55.75,
+   "lon": 37.62
+  },
+  "BEREZNIKI": {
+   "id": "BEREZNIKI",
+   "name": "Berezniki, Perm region",
+   "lat": 59.41,
+   "lon": 56.8
+  },
+  "KYIV": {
+   "id": "KYIV",
+   "name": "Kyiv",
+   "lat": 50.45,
+   "lon": 30.52
+  },
+  "WASHINGTON": {
+   "id": "WASHINGTON",
+   "name": "Washington",
+   "lat": 38.9,
+   "lon": -77.04
+  }
+ },
+ "lines": [
+  {
+   "text": "Russia says it shot down five hundred and thirty two Ukrainian drones overnight.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Russian MoD, via TASS, 25 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "MOSCOW",
+    "head": "Russia: 532 drones",
+    "notes": [
+     "shot down overnight",
+     "Russian MoD says"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "Its list covers twenty three regions, from Belgorod to Perm.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Russian MoD, via TASS",
+   "scene": {
+    "type": "number",
+    "value": "23",
+    "label": "regions, MoD says",
+    "detail": "plus the Sea of Azov",
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "Perm's governor says drones damaged an industrial site, and five people were hurt.",
+   "src": [
+    2,
+    3
+   ],
+   "context": false,
+   "note": "Governor Makhonin, 25 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "BEREZNIKI",
+    "head": "Perm region",
+    "notes": [
+     "5 people hurt",
+     "governor says"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "He says eleven drones were stopped, and the plant kept working.",
+   "src": [
+    2,
+    4
+   ],
+   "context": false,
+   "note": "Makhonin, via UNITED24, Censor",
+   "scene": {
+    "type": "number",
+    "value": "11",
+    "label": "drones downed in Perm",
+    "detail": "governor says",
+    "flag": "RU",
+    "grid": {
+     "of": 11,
+     "lit": 11,
+     "cols": 11,
+     "caption": "Perm governor, 25 Oct"
+    }
+   }
+  },
+  {
+   "text": "Ukrainian media say the target was the AVISMA titanium plant in Berezniki.",
+   "src": [
+    2,
+    4,
+    5
+   ],
+   "context": false,
+   "note": "UNITED24, Charter97, Censor",
+   "scene": {
+    "type": "pin",
+    "place": "BEREZNIKI",
+    "head": "AVISMA, Berezniki",
+    "notes": [
+     "titanium plant",
+     "Ukrainian media say"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "That is over sixteen hundred kilometres from Ukraine, Charter ninety seven says.",
+   "src": [
+    5
+   ],
+   "context": false,
+   "note": "Charter97, 25 Oct",
+   "scene": {
+    "type": "number",
+    "value": "1,600 KM",
+    "label": "from Ukraine",
+    "detail": "Charter97 says",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "US data cited by UNITED24 says VSMPO-AVISMA made ninety six percent of Russia's titanium sponge.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "USGS, via UNITED24",
+   "scene": {
+    "type": "number",
+    "value": "96%",
+    "label": "of Russia's titanium sponge",
+    "detail": "VSMPO-AVISMA, 2024",
+    "flag": "RU",
+    "grid": {
+     "of": 100,
+     "lit": 96,
+     "cols": 20,
+     "caption": "USGS, via UNITED24"
+    }
+   }
+  },
+  {
+   "text": "That metal goes into Su-34 jets and Iskander missiles, it says.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "UNITED24, 25 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "TITANIUM FOR",
+     "Su-34 JETS",
+     "AND ISKANDERS"
+    ],
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "Kyiv has refused to halt long range strikes on Russian energy sites.",
+   "src": [
+    6
+   ],
+   "context": false,
+   "note": "Reuters, 25 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "KYIV",
+    "head": "Kyiv",
+    "notes": [
+     "no halt to",
+     "energy strikes"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "Reuters says that deepened a rift with Donald Trump, who announced an energy ceasefire this month.",
+   "src": [
+    6
+   ],
+   "context": false,
+   "note": "Reuters explainer, 25 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "WASHINGTON",
+    "head": "Washington",
+    "notes": [
+     "energy ceasefire",
+     "announced 11 Oct"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "Zelensky says US officials warned of losing intelligence sharing. A US official disputes that.",
+   "src": [
+    6
+   ],
+   "context": false,
+   "note": "Reuters, 25 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "INTEL SHARING?",
+     "Zelensky: warned",
+     "US official: disputed"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Zelensky says talks in Abu Dhabi should come in the first half of November.",
+   "src": [
+    6
+   ],
+   "context": false,
+   "note": "Zelensky, via Reuters",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "ABU DHABI",
+     "first half",
+     "of November"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Will the Abu Dhabi talks go ahead, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "ABU DHABI TALKS?",
+     "YES",
+     "OR NO?"
+    ],
+    "flag": "UA"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "TASS",
+   "title": "Air defenses down 532 Ukrainian drones over Russian regions overnight",
+   "url": "https://tass.com/defense/2207429"
+  },
+  {
+   "n": 1,
+   "outlet": "Izvestia",
+   "title": "Air defense systems intercepted 532 drones of the Armed Forces of Ukraine over the territory of Russia overnight",
+   "url": "https://en.iz.ru/en/2190214/2026-10-25/air-defense-systems-intercepted-532-drones-armed-forces-ukraine-over-territory-russia-overnight"
+  },
+  {
+   "n": 2,
+   "outlet": "UNITED24 Media",
+   "title": "Drones Strike Russia's Titanium Giant Supplying Su-34 Fighters and Iskander Missiles",
+   "url": "https://united24media.com/war-in-ukraine/drones-strike-russias-titanium-giant-supplying-su-34-fighters-and-iskander-missiles-23781"
+  },
+  {
+   "n": 3,
+   "outlet": "Arab News",
+   "title": "Drone attack injures five people, damages industrial facility in Russia's Perm region, governor says",
+   "url": "https://www.arabnews.com/"
+  },
+  {
+   "n": 4,
+   "outlet": "Censor.NET",
+   "title": "Drones attacked the AVISMA plant in the Perm Krai of the Russian Federation. What is known",
+   "url": "https://censor.net/en/news/4030255/drones-attacked-the-avisma-plant-in-the-perm-krai-of-the-russian-federation-what-is-known"
+  },
+  {
+   "n": 5,
+   "outlet": "Charter'97",
+   "title": "AVISMA Under Fire: Drones Strike A Strategic Russian Plant 1,600 Km From Ukraine",
+   "url": "https://charter97.org/en/news/2026/10/25/703089"
+  },
+  {
+   "n": 6,
+   "outlet": "Reuters (via ThePrint)",
+   "title": "Explainer-How Ukraine's strikes on Russian energy sites deepened the rift with Trump",
+   "url": "https://theprint.in/world/explainer-how-ukraines-strikes-on-russian-energy-sites-deepened-the-rift-with-trump/3081109/"
+  }
+ ],
+ "caption": "Perm, AVISMA, Russia, Ukraine: Russia says it shot down 532 Ukrainian drones overnight, and Perm's governor says an industrial site was damaged and 5 people hurt. Ukrainian media say the target was the AVISMA titanium plant, about 1,600 km from Ukraine. Will the Abu Dhabi talks go ahead, yes or no?",
+ "hashtags": [
+  "perm",
+  "avisma",
+  "drones",
+  "ukraine",
+  "outpost"
+ ],
+ "notes_full": [
+  "Russian MoD 532 claim published 25 Oct about 06:04 UTC (Izvestia 09:04 MSK); Perm attack overnight 25 Oct; Censor 09:34, Arab News 07:38 UTC, Moscow Times 09:01, UNITED24 12:26 local; about 5 to 6h old at delivery",
+  "Governor did not name the plant; AVISMA identification from Exilenova+ OSINT via Ukrainian media, framed as such",
+  "Removal-risk: statements only, all attributed, no death toll, no future-attack framing, neutral yes/no on talks",
+  "Globe: 4 places (limit)"
+ ]
+}
