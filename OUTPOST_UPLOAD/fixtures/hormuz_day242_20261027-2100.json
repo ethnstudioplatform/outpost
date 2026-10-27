@@ -1,0 +1,351 @@
+{
+ "series": "HORMUZ · DAY 242",
+ "question": "Will Sinokor keep sailing Hormuz, yes or no?",
+ "country": "IR",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   122,
+   94
+  ],
+  [
+   255,
+   255,
+   255
+  ],
+  [
+   191,
+   10,
+   48
+  ]
+ ],
+ "hook_lines": [
+  "IRAN BLACKLISTS SINOKOR: 37% OF OIL",
+  "Every ship faces action Nov 1"
+ ],
+ "cover": [
+  "HORMUZ",
+  "DAY 242",
+  "SINOKOR"
+ ],
+ "region": "STRAIT OF HORMUZ / GULF",
+ "places": {
+  "HORMUZ": {
+   "id": "HORMUZ",
+   "name": "Strait of Hormuz",
+   "lat": 26.57,
+   "lon": 56.25
+  },
+  "TEHRAN": {
+   "id": "TEHRAN",
+   "name": "Tehran",
+   "lat": 35.69,
+   "lon": 51.39
+  },
+  "SEOUL": {
+   "id": "SEOUL",
+   "name": "Seoul",
+   "lat": 37.57,
+   "lon": 126.98
+  },
+  "OMAN_GULF": {
+   "id": "OMAN_GULF",
+   "name": "Gulf of Oman",
+   "lat": 24.9,
+   "lon": 58.2
+  }
+ },
+ "lines": [
+  {
+   "text": "Iran has blacklisted Sinokor, whose tankers carried thirty seven percent of Hormuz oil last month.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Bloomberg, 27 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "HORMUZ",
+    "head": "Hormuz: Sinokor listed",
+    "notes": [
+     "37% of Sept crude",
+     "Bloomberg data"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "Its new strait authority says every Sinokor ship will face legal action from the first of November.",
+   "src": [
+    0,
+    2
+   ],
+   "context": false,
+   "note": "PGSA on X, via Reuters",
+   "scene": {
+    "type": "pin",
+    "place": "TEHRAN",
+    "head": "Strait Authority",
+    "notes": [
+     "legal action",
+     "from 1 November"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "It says Sinokor committed the most violations in three months.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "PGSA, via Maritime Executive",
+   "scene": {
+    "type": "quote",
+    "quote": "committed the highest number of passage violations over the past three months",
+    "who": "Persian Gulf Strait Authority, on X",
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "And it says action has already been taken against at least seven of its ships.",
+   "src": [
+    0,
+    2
+   ],
+   "context": false,
+   "note": "PGSA, via Bloomberg",
+   "scene": {
+    "type": "number",
+    "value": "7",
+    "label": "Sinokor ships",
+    "detail": "already acted on, Iran says",
+    "flag": "IR",
+    "grid": {
+     "of": 7,
+     "lit": 7,
+     "cols": 7,
+     "red": true,
+     "caption": "Strait Authority says"
+    }
+   }
+  },
+  {
+   "text": "Maritime Executive says those seven were attacked in the strait.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "Maritime Executive, 27 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "MARITIME EXECUTIVE:",
+     "those 7 ships",
+     "were attacked"
+    ],
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "Sinokor is South Korean. Bloomberg calls it the world's biggest tanker owner.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Bloomberg, 27 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "SEOUL",
+    "head": "Seoul: Sinokor",
+    "notes": [
+     "South Korean shipper",
+     "Bloomberg"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "It moved over one hundred and five million barrels through Hormuz in September, Bloomberg says.",
+   "src": [
+    4
+   ],
+   "context": false,
+   "note": "Bloomberg data, via Seoul Economic",
+   "scene": {
+    "type": "number",
+    "value": "105.6M",
+    "label": "barrels in September",
+    "detail": "Sinokor, via Hormuz",
+    "flag": "KR"
+   }
+  },
+  {
+   "text": "Lloyd's List estimates half of all tankers crossing are now linked to Sinokor.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "Lloyd's List, via Maritime Executive",
+   "scene": {
+    "type": "number",
+    "value": "50%",
+    "label": "of Hormuz tankers",
+    "detail": "Lloyd's List estimate",
+    "flag": "KR",
+    "grid": {
+     "of": 100,
+     "lit": 50,
+     "cols": 20,
+     "caption": "linked to Sinokor"
+    }
+   }
+  },
+  {
+   "text": "Iran's navy also says a tanker hit mines east of the strait and caught fire.",
+   "src": [
+    5,
+    6
+   ],
+   "context": false,
+   "note": "Iran's navy, via Xinhua, 27 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "OMAN_GULF",
+    "head": "Tanker on fire",
+    "notes": [
+     "Iran's navy says",
+     "27 Oct"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "It says the tanker had switched off its tracking.",
+   "src": [
+    5
+   ],
+   "context": false,
+   "note": "Iran's navy, via Xinhua",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "IRAN'S NAVY:",
+     "tracking off,",
+     "hit mines"
+    ],
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "Sinokor has not commented. The US has sanctioned Iran's strait authority.",
+   "src": [
+    2,
+    4
+   ],
+   "context": false,
+   "note": "Reuters; Seoul Economic Daily",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "SINOKOR:",
+     "no comment yet",
+     "US sanctions PGSA"
+    ],
+    "flag": "US"
+   }
+  },
+  {
+   "text": "Iran says it controls who crosses. Washington says the lanes are open.",
+   "src": [
+    3,
+    5
+   ],
+   "context": false,
+   "note": "Xinhua, Maritime Executive",
+   "scene": {
+    "type": "wide"
+   }
+  },
+  {
+   "text": "Day two hundred and forty three tomorrow. Will Sinokor keep sailing Hormuz, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "SINOKOR SAILS ON?",
+     "YES",
+     "OR NO?"
+    ],
+    "flag": "KR"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "Bloomberg (via gCaptain)",
+   "title": "Iran Says It Will Take Action Against Sinokor Ships in Hormuz",
+   "url": "https://gcaptain.com/iran-says-it-will-take-action-against-sinokor-ships-in-hormuz/"
+  },
+  {
+   "n": 1,
+   "outlet": "Bloomberg",
+   "title": "Iran Says It Will Take Action Against Sinokor Ships in Hormuz",
+   "url": "https://www.bloomberg.com/news/articles/2026-10-27/iran-says-it-will-take-action-against-sinokor-ships-in-hormuz"
+  },
+  {
+   "n": 2,
+   "outlet": "Reuters (via Al-Monitor)",
+   "title": "Iranian strait authority says Sinokor vessels will face legal action",
+   "url": "https://www.al-monitor.com/originals/2026/10/iranian-strait-authority-says-sinokor-vessels-will-face-legal-action"
+  },
+  {
+   "n": 3,
+   "outlet": "The Maritime Executive",
+   "title": "Iranian Forces Threaten Sinokor with Legal Action for Hormuz Violations",
+   "url": "https://maritime-executive.com/article/iranian-forces-threaten-sinokor-with-legal-action-for-hormuz-violations"
+  },
+  {
+   "n": 4,
+   "outlet": "Seoul Economic Daily",
+   "title": "Iran Warns of Legal Action Against Korea's Sinokor; 7 Tankers Already Hit",
+   "url": "https://en.sedaily.com/international/2026/10/27/iran-warns-of-legal-action-against-koreas-sinokor-7-tankers"
+  },
+  {
+   "n": 5,
+   "outlet": "Xinhua",
+   "title": "Iran says violating oil tanker caught fire after hitting mines in Hormuz Strait",
+   "url": "https://english.news.cn/20261027/ae8e1326cb8b4d5bbae1fa92fddad086/c.html"
+  },
+  {
+   "n": 6,
+   "outlet": "A News (Anadolu)",
+   "title": "Iran says oil tanker catches fire after hitting naval mine east of Strait of Hormuz",
+   "url": "https://www.anews.com.tr/middle-east/2026/10/27/iran-says-oil-tanker-catches-fire-after-hitting-naval-mine-east-of-strait-of-hormuz"
+  }
+ ],
+ "caption": "Sinokor, Strait of Hormuz, Iran: Iran's strait authority says every ship of Sinokor, the South Korean firm that carried 37% of Hormuz oil last month, faces legal action from 1 November. Iran's navy also says a tanker caught fire after hitting mines east of the strait. Will Sinokor keep sailing Hormuz, yes or no?",
+ "hashtags": [
+  "sinokor",
+  "hormuz",
+  "iran",
+  "tankers",
+  "outpost"
+ ],
+ "notes_full": [
+  "PGSA statement first reported 27 Oct: Bloomberg 09:48 UTC, Mehr 10:39, Tasnim 12:02, Reuters 12:19, FT 15:01, Maritime Executive 17:40, TradeWinds 19:07; about 12h old at delivery. Tanker-mine claim: Iranian navy statement 27 Oct, A News 13:12, Xinhua",
+  "37% = Bloomberg tracking analysis of September crude (105.6M of 286.3M barrels), via Seoul Economic Daily; gCaptain/Bloomberg: nearly 40%",
+  "Removal-risk: statements and reported events only, all attributed, no death toll, no future-attack framing on a country, neutral yes/no about a company",
+  "Globe: 4 places"
+ ]
+}
