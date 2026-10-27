@@ -1,0 +1,354 @@
+{
+ "question": "Will the Oleshky truce hold, yes or no?",
+ "country": "UA",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   87,
+   183
+  ],
+  [
+   255,
+   215,
+   0
+  ],
+  [
+   255,
+   255,
+   255
+  ]
+ ],
+ "hook_lines": [
+  "OLESHKY TRUCE BEGINS AT 3AM",
+  "Kremlin: no violations so far"
+ ],
+ "cover": [
+  "OLESHKY",
+  "TRUCE",
+  "BEGINS"
+ ],
+ "region": "UKRAINE / KHERSON",
+ "places": {
+  "OLESHKY": {
+   "id": "OLESHKY",
+   "name": "Oleshky, Ukraine",
+   "lat": 46.62,
+   "lon": 32.72
+  },
+  "KYIV": {
+   "id": "KYIV",
+   "name": "Kyiv",
+   "lat": 50.45,
+   "lon": 30.52
+  },
+  "WASHINGTON": {
+   "id": "WASHINGTON",
+   "name": "Washington",
+   "lat": 38.9,
+   "lon": -77.04
+  }
+ },
+ "lines": [
+  {
+   "text": "A ceasefire has begun in Russian occupied Oleshky, in southern Ukraine.",
+   "src": [
+    0,
+    1,
+    2
+   ],
+   "context": false,
+   "note": "Kyiv Independent, Reuters, 27 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "OLESHKY",
+    "head": "Oleshky: truce begins",
+    "notes": [
+     "both sides confirm",
+     "Kherson region"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "It started at three a.m. Kyiv time, and is due to last through Saturday.",
+   "src": [
+    0,
+    3
+   ],
+   "context": false,
+   "note": "Kyiv Independent, AP",
+   "scene": {
+    "type": "number",
+    "value": "3AM",
+    "label": "truce began, Kyiv time",
+    "detail": "through Saturday, AP says",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "The Kremlin says so far there have been no reports of violations.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "Kremlin, via AP, 27 Oct",
+   "scene": {
+    "type": "quote",
+    "quote": "So far there have been no reports of violations.",
+    "who": "The Kremlin, via AP",
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "Ukraine's negotiator Dmytro Lubinets says Kyiv is keeping its side.",
+   "src": [
+    0,
+    4
+   ],
+   "context": false,
+   "note": "Lubinets, via Kyiv Independent",
+   "scene": {
+    "type": "quote",
+    "quote": "I confirm that the Ukrainian side is honouring its commitments.",
+    "who": "Dmytro Lubinets, Ukraine",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Oleshky sits on the Dnipro River, across from Ukrainian held Kherson.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Al Jazeera",
+   "scene": {
+    "type": "pin",
+    "place": "OLESHKY",
+    "head": "Dnipro River line",
+    "notes": [
+     "Kherson: Ukraine held",
+     "Oleshky: occupied"
+    ],
+    "span": 3
+   }
+  },
+  {
+   "text": "About twenty four thousand lived there before the war. AP says up to two thousand remain.",
+   "src": [
+    2,
+    3
+   ],
+   "context": false,
+   "note": "Al Jazeera, AP",
+   "scene": {
+    "type": "compare",
+    "a": {
+     "n": 24000,
+     "value": "24,000",
+     "label": "before the war"
+    },
+    "b": {
+     "n": 2000,
+     "value": "2,000",
+     "label": "at most left, AP says"
+    }
+   }
+  },
+  {
+   "text": "The UN says they cannot leave, because of mines and drone attacks.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "UN, via Al Jazeera",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "TRAPPED",
+     "mines and drones",
+     "UN says"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "The BBC reports many residents have been cooking garden weeds to survive.",
+   "src": [
+    4
+   ],
+   "context": false,
+   "note": "BBC, 27 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "COOKING WEEDS",
+     "to survive",
+     "BBC reports"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "It says the town has had no electricity, gas or water for three years.",
+   "src": [
+    4
+   ],
+   "context": false,
+   "note": "BBC, 27 Oct",
+   "scene": {
+    "type": "number",
+    "value": "3 YEARS",
+    "label": "no power, gas or water",
+    "detail": "BBC reports",
+    "flag": "UA",
+    "grid": {
+     "of": 3,
+     "lit": 3,
+     "cols": 3,
+     "red": true,
+     "caption": "three years without"
+    }
+   }
+  },
+  {
+   "text": "Doctors, food and water go in first. Evacuation is planned for Friday.",
+   "src": [
+    3,
+    4
+   ],
+   "context": false,
+   "note": "AP, BBC",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "AID FIRST",
+     "then evacuation",
+     "planned Friday, BBC"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Melania Trump brokered the deal, after Pope Leo urged aid.",
+   "src": [
+    3,
+    2
+   ],
+   "context": false,
+   "note": "AP, Al Jazeera",
+   "scene": {
+    "type": "pin",
+    "place": "WASHINGTON",
+    "head": "Melania Trump brokered",
+    "notes": [
+     "civilian negotiators",
+     "Pope Leo urged aid"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "But the truce is local. Minutes after it began, Russia fired ballistic missiles at Kyiv.",
+   "src": [
+    0,
+    3
+   ],
+   "context": false,
+   "note": "Kyiv Independent, AP",
+   "scene": {
+    "type": "pin",
+    "place": "KYIV",
+    "head": "Kyiv: missiles",
+    "notes": [
+     "minutes after 3am",
+     "truce is local only"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "A Kherson official says it is too early to judge.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "AP, 27 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "TOO EARLY",
+     "to judge",
+     "Kherson official, AP"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Aid goes in this week. Will the Oleshky truce hold, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "TRUCE HOLDS?",
+     "YES",
+     "OR NO?"
+    ],
+    "flag": "UA"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "Kyiv Independent",
+   "title": "Local ceasefire in besieged Oleshky begins, Ukrainian, Russian officials say",
+   "url": "https://kyivindependent.com/local-ceasefire-in-besieged-oleshky-begins-ukrainian-russian-officials-say/"
+  },
+  {
+   "n": 1,
+   "outlet": "Meduza",
+   "title": "Ceasefire takes effect in Russian-occupied Oleshky amid humanitarian catastrophe",
+   "url": "https://meduza.io/en/news/2026/10/27/ceasefire-takes-effect-in-russian-occupied-oleshky-amid-humanitarian-catastrophe"
+  },
+  {
+   "n": 2,
+   "outlet": "Al Jazeera",
+   "title": "Russia halts strikes on Ukraine's Kherson as Oleshky ceasefire takes effect",
+   "url": "https://www.aljazeera.com/news/2026/10/27/russia-halts-strikes-on-ukraines-kherson-as-oleshky-ceasefire-takes-effect"
+  },
+  {
+   "n": 3,
+   "outlet": "AP (via Durango Herald)",
+   "title": "Local ceasefire brokered by Melania Trump starts in southern Ukraine as Russia attacks other area",
+   "url": "https://www.durangoherald.com/articles/associated-press/local-ceasefire-brokered-by-melania-trump-starts-in-southern-ukraine-as-russia-attacks-other-area/"
+  },
+  {
+   "n": 4,
+   "outlet": "BBC",
+   "title": "Truce begins in Ukraine city where residents ate weeds to survive",
+   "url": "bbc.co.uk/news, 27 Oct 2026 02:58 UTC (via Google News)"
+  }
+ ],
+ "caption": "Oleshky, Kherson, Ukraine: a local ceasefire began in Russian-occupied Oleshky at 3am, brokered by Melania Trump, so aid can go in and civilians can get out. The Kremlin says no violations so far, while Russian missiles still hit Kyiv. Will the Oleshky truce hold, yes or no?",
+ "hashtags": [
+  "oleshky",
+  "kherson",
+  "melaniatrump",
+  "ukraine",
+  "outpost"
+ ],
+ "notes_full": [
+  "Truce began 27 Oct 01:00 UTC; first reported about 01:20 UTC (France 24 01:22, Ukrainska Pravda 01:20, NBC 01:42, Reuters 02:00, Al Jazeera 02:34, BBC and Kyiv Independent 02:58); about 10h old at render",
+  "Population: AP and Al Jazeera say up to 2,000 remain; BBC gives Ukraine's estimate of about 6,000 incl. 200 children; video uses the AP figure, attributed",
+  "Removal-risk: events and statements only, all attributed, no death toll (Kyiv and Kharkiv casualties left out), no future-attack framing, both sides quoted, neutral yes/no",
+  "Globe: 3 places"
+ ]
+}
