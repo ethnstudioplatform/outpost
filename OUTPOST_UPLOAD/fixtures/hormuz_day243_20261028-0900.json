@@ -1,0 +1,339 @@
+{
+ "series": "HORMUZ · DAY 243",
+ "question": "Deal or no deal?",
+ "country": "IR",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   122,
+   94
+  ],
+  [
+   255,
+   255,
+   255
+  ],
+  [
+   191,
+   10,
+   48
+  ]
+ ],
+ "hook_lines": [
+  "QATAR HANDS IRAN NEW PEACE DRAFT",
+  "Tehran's answer due this week"
+ ],
+ "cover": [
+  "HORMUZ",
+  "DAY 243",
+  "PEACE DRAFT"
+ ],
+ "region": "STRAIT OF HORMUZ / GULF",
+ "places": {
+  "DOHA": {
+   "id": "DOHA",
+   "name": "Doha",
+   "lat": 25.29,
+   "lon": 51.53
+  },
+  "TEHRAN": {
+   "id": "TEHRAN",
+   "name": "Tehran",
+   "lat": 35.69,
+   "lon": 51.39
+  },
+  "HORMUZ": {
+   "id": "HORMUZ",
+   "name": "Strait of Hormuz",
+   "lat": 26.57,
+   "lon": 56.25
+  },
+  "RAS_TANURA": {
+   "id": "RAS_TANURA",
+   "name": "Ras Tanura",
+   "lat": 26.64,
+   "lon": 50.16
+  }
+ },
+ "lines": [
+  {
+   "text": "Qatar has handed Iran a new draft deal to end the war, Reuters reports.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Reuters, 28 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "DOHA",
+    "head": "Doha: new peace draft",
+    "notes": [
+     "Qatari mediators",
+     "Reuters, 28 Oct"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "An official briefed on the talks says Tehran should reply by the end of this week.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Official, via Reuters",
+   "scene": {
+    "type": "pin",
+    "place": "TEHRAN",
+    "head": "Tehran: reply due",
+    "notes": [
+     "by end of week",
+     "official says"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "Qatari mediators delivered the draft in Tehran on Sunday.",
+   "src": [
+    0,
+    2
+   ],
+   "context": false,
+   "note": "Reuters; Iran foreign ministry",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "DELIVERED",
+     "IN TEHRAN",
+     "ON SUNDAY"
+    ],
+    "flag": "QA"
+   }
+  },
+  {
+   "text": "The Guardian says Gulf states are building a deal in several parts.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "The Guardian, 28 Oct",
+   "scene": {
+    "type": "wide"
+   }
+  },
+  {
+   "text": "Hormuz would reopen within four days of sanctions on Iran being lifted.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "The Guardian, 28 Oct",
+   "scene": {
+    "type": "number",
+    "value": "4 DAYS",
+    "label": "to reopen Hormuz",
+    "detail": "after sanctions lift",
+    "flag": "IR",
+    "grid": {
+     "of": 4,
+     "lit": 4,
+     "cols": 4,
+     "caption": "Guardian: the plan"
+    }
+   }
+  },
+  {
+   "text": "And the Houthis would withdraw substantial forces, it says.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "The Guardian, 28 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "GULF PLAN:",
+     "Houthis pull back",
+     "forces"
+    ],
+    "flag": "YE"
+   }
+  },
+  {
+   "text": "The Guardian says Washington is holding out for one concession.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "The Guardian, 28 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "US:",
+     "holding out for",
+     "a concession"
+    ],
+    "flag": "US"
+   }
+  },
+  {
+   "text": "European powers suggest that could mean UN weapons inspectors back in Iran.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "The Guardian, 28 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "EUROPE:",
+     "UN inspectors",
+     "back in Iran?"
+    ],
+    "flag": "EU"
+   }
+  },
+  {
+   "text": "Qatar says the ball is now in Iran's court.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Qatar foreign ministry, via AFP",
+   "scene": {
+    "type": "quote",
+    "quote": "The ball is now in Iran's court to commit to these principles and demonstrate good faith",
+    "who": "Ibrahim Al-Hashmi, Qatar foreign ministry",
+    "flag": "QA"
+   }
+  },
+  {
+   "text": "Meanwhile the Houthis say a missile hit Saudi Arabia's Ras Tanura refinery.",
+   "src": [
+    4
+   ],
+   "context": false,
+   "note": "Houthis, via Reuters, 27 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "RAS_TANURA",
+    "head": "Ras Tanura refinery",
+    "notes": [
+     "Houthis claim hit",
+     "Saudi: no comment"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "Saudi Arabia has not confirmed it, and Brent crude rose to nearly one hundred and sixteen dollars.",
+   "src": [
+    4,
+    5
+   ],
+   "context": false,
+   "note": "Reuters, 07:35 GMT 28 Oct",
+   "scene": {
+    "type": "number",
+    "value": "$115.90",
+    "label": "Brent, a barrel",
+    "detail": "up 1.8% on Wednesday",
+    "flag": "SA"
+   }
+  },
+  {
+   "text": "A deal could reopen the strait. Without one, the squeeze goes on.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "The Guardian",
+   "scene": {
+    "type": "pin",
+    "place": "HORMUZ",
+    "head": "Strait of Hormuz",
+    "notes": [
+     "day 243",
+     "still squeezed"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "Day two hundred and forty four tomorrow. Will Iran take the deal? Deal or no deal?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "IRAN'S ANSWER:",
+     "DEAL",
+     "OR NO DEAL?"
+    ],
+    "flag": "IR"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "Reuters (via Arab News)",
+   "title": "Qatari mediators present Iran with new deal to end the war, official says",
+   "url": "https://www.arabnews.com/middle-east/qatari-mediators-present-iran-with-new-deal-to-end-the-war-official-says-3008650"
+  },
+  {
+   "n": 1,
+   "outlet": "Reuters (via Times of Israel)",
+   "title": "Qatari mediators presented Iran with new deal to end the war, official says",
+   "url": "https://www.timesofisrael.com/liveblog_entry/qatari-mediators-presented-iran-with-new-deal-to-end-the-war-official-says"
+  },
+  {
+   "n": 2,
+   "outlet": "The Peninsula (AFP)",
+   "title": "Mediator Qatar urges 'good faith' from Iran as talks renew",
+   "url": "https://thepeninsulaqatar.com/article/27/10/2026/mediator-qatar-urges-good-faith-from-iran-as-talks-renew"
+  },
+  {
+   "n": 3,
+   "outlet": "The Guardian (via Hatha Alyoum)",
+   "title": "Gulf states working on multipart peace deal to avert renewal of US-Iran war",
+   "url": "https://en.hathalyoum.net/articles/303747"
+  },
+  {
+   "n": 4,
+   "outlet": "Reuters (via Investing.com)",
+   "title": "Oil prices rise after attack on Saudi Arabian refinery reignites supply concerns",
+   "url": "https://www.investing.com/news/commodities-news/oil-prices-rise-after-attack-on-saudi-arabian-refinery-reignites-supply-concerns-4977369"
+  },
+  {
+   "n": 5,
+   "outlet": "Free Press Journal",
+   "title": "Brent Crude Again Hits $115 As Houthis Claim Saudi Refinery Attack",
+   "url": "https://www.freepressjournal.in/business/brent-crude-again-hits-115-as-houthis-claim-saudi-refinery-attack"
+  }
+ ],
+ "caption": "Qatar, Iran, Strait of Hormuz: Qatari mediators have handed Iran a new draft deal to end the war, and an official says Tehran should answer by the end of the week. The Guardian says the Gulf plan would reopen Hormuz within four days of sanctions being lifted. Deal or no deal?",
+ "hashtags": [
+  "qatar",
+  "iran",
+  "hormuz",
+  "peacedeal",
+  "outpost"
+ ],
+ "notes_full": [
+  "Qatar draft first reported 28 Oct: Reuters via Times of Israel 10:40 local (about 07:40 UTC), Arab News/L'Orient 08:16 UTC; Guardian Gulf plan 28 Oct 05:02 UTC. Draft handed over Sunday 25 Oct but first reported today",
+  "Brent $115.90 at 07:35 GMT 28 Oct, Reuters",
+  "Left out: WSJ report on a possible US strike after the midterms (future-attack framing, removal risk)",
+  "Removal-risk: diplomacy and attributed statements; Houthi claim attributed, Saudi unconfirmed; no death toll; neutral deal or no deal",
+  "Globe: 4 places"
+ ]
+}
