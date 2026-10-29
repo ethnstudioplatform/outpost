@@ -1,0 +1,320 @@
+{
+ "question": "Should EUFOR ground its Chinooks until the inquiry ends, yes or no?",
+ "country": "IT",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   146,
+   70
+  ],
+  [
+   255,
+   255,
+   255
+  ],
+  [
+   206,
+   43,
+   55
+  ]
+ ],
+ "hook_lines": [
+  "ITALIAN CHINOOK CRASHES IN BOSNIA",
+  "EU peacekeeping force aircraft"
+ ],
+ "cover": [
+  "BOSNIA",
+  "CHINOOK",
+  "DOWN"
+ ],
+ "region": "BOSNIA / EUFOR",
+ "places": {
+  "BRCKO": {
+   "id": "BRCKO",
+   "name": "Brcko, Bosnia",
+   "lat": 44.87,
+   "lon": 18.81
+  },
+  "SARAJEVO": {
+   "id": "SARAJEVO",
+   "name": "Sarajevo",
+   "lat": 43.86,
+   "lon": 18.41
+  },
+  "ROME": {
+   "id": "ROME",
+   "name": "Rome",
+   "lat": 41.9,
+   "lon": 12.5
+  }
+ },
+ "lines": [
+  {
+   "text": "An Italian Army Chinook has crashed in Bosnia, near the town of Brcko.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "AP, The Aviationist, 29 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "BRCKO",
+    "head": "Brcko: Chinook down",
+    "notes": [
+     "Italian Army CH-47F",
+     "29 Oct, afternoon"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "It was flying for EUFOR Althea, the European Union's peacekeeping force.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "AP, 29 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "EUFOR ALTHEA",
+     "EU peacekeeping force",
+     "Bosnia and Herzegovina"
+    ],
+    "flag": "EU"
+   }
+  },
+  {
+   "text": "The force says it came down during routine training.",
+   "src": [
+    0,
+    2
+   ],
+   "context": false,
+   "note": "EUFOR statement, via AP",
+   "scene": {
+    "type": "pin",
+    "place": "BRCKO",
+    "head": "Routine training",
+    "notes": [
+     "EUFOR says"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "Local media say it fell near the village of Gorice.",
+   "src": [
+    1,
+    2
+   ],
+   "context": false,
+   "note": "Klix.ba, via The Aviationist",
+   "scene": {
+    "type": "pin",
+    "place": "BRCKO",
+    "head": "Gorice village",
+    "notes": [
+     "Brcko District",
+     "local media say"
+    ],
+    "span": 3
+   }
+  },
+  {
+   "text": "EUFOR says four people were killed and eleven injured, now stable.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "EUFOR statement, via AP",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "4 KILLED, 11 INJURED",
+     "injured now stable",
+     "EUFOR says"
+    ],
+    "flag": "EU"
+   }
+  },
+  {
+   "text": "It says no civilians were hurt and no civilian property was damaged.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "EUFOR statement, via AP",
+   "scene": {
+    "type": "quote",
+    "quote": "there were no injuries to civilians",
+    "who": "EUFOR statement",
+    "flag": "EU"
+   }
+  },
+  {
+   "text": "Witnesses told Bosnian outlet Klix it appeared to spin before going down.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Klix.ba, via Aviacionline",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "SPINNING",
+     "before going down",
+     "witnesses tell Klix"
+    ],
+    "flag": "BA"
+   }
+  },
+  {
+   "text": "Italy's defence ministry calls it serious, and says the cause is under investigation.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "Italian MoD, via LaPresse",
+   "scene": {
+    "type": "pin",
+    "place": "ROME",
+    "head": "Rome: defence ministry",
+    "notes": [
+     "cause under investigation"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "Prime Minister Giorgia Meloni says the government stands with the victims.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "Meloni, via LaPresse",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "MELONI",
+     "deep sorrow",
+     "stands with the victims"
+    ],
+    "flag": "IT"
+   }
+  },
+  {
+   "text": "Foreign Minister Antonio Tajani calls it a terrible tragedy.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "Tajani, via LaPresse",
+   "scene": {
+    "type": "quote",
+    "quote": "A terrible tragedy",
+    "who": "Antonio Tajani, foreign minister",
+    "flag": "IT"
+   }
+  },
+  {
+   "text": "EUFOR has about twelve hundred soldiers, and took over from NATO in two thousand and four.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "AP, 29 Oct",
+   "scene": {
+    "type": "number",
+    "value": "1,200",
+    "label": "EUFOR soldiers",
+    "detail": "took over from NATO, 2004",
+    "flag": "EU"
+   }
+  },
+  {
+   "text": "It operates under a UN Security Council mandate, and promises a thorough and complete investigation.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "EUFOR statement, via AP",
+   "scene": {
+    "type": "pin",
+    "place": "SARAJEVO",
+    "head": "EUFOR inquiry",
+    "notes": [
+     "thorough and complete",
+     "UN mandate"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "Should EUFOR ground its Chinooks until the inquiry ends, yes or no?",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "GROUND THE CHINOOKS?",
+     "UNTIL THE INQUIRY ENDS",
+     "YES OR NO"
+    ],
+    "flag": "IT"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "AP (via Yahoo News)",
+   "title": "A helicopter with the EU force in Bosnia crashes, killing 4 people and injuring 11",
+   "url": "https://www.yahoo.com/news/world/articles/helicopter-eu-force-bosnia-crashes-174849290.html"
+  },
+  {
+   "n": 1,
+   "outlet": "The Aviationist",
+   "title": "Developing: Italian CH-47F Chinook Crashes in Bosnia",
+   "url": "https://theaviationist.com/2026/10/29/developing-italian-ch-47f-chinook-crashes-in-bosnia/"
+  },
+  {
+   "n": 2,
+   "outlet": "Aviacionline",
+   "title": "Italian CH-47 crashes during EUFOR Althea operation in Bosnia and Herzegovina: What we know",
+   "url": "https://www.aviacionline.com/english/accidents-and-incidents/italian-ch-47-crashes-during-eufor-althea-operation-in-bosnia-and-herzegovina-what-we-know_a6ae389131307d7e9b7308404"
+  },
+  {
+   "n": 3,
+   "outlet": "LaPresse",
+   "title": "Italian helicopter crashes in Bosnia and Herzegovina; causes to be determined",
+   "url": "https://uk.lapresse.it/news-en/2026/10/29/italian-helicopter-crashes-in-bosnia-and-herzegovina-causes-to-be-determined/"
+  }
+ ],
+ "caption": "Bosnia, Brcko, EUFOR, Italian Army Chinook: an Italian CH-47 flying for the EU's peacekeeping force has crashed during routine training near Brcko. Italy's defence ministry says the cause is still being investigated. Should EUFOR ground its Chinooks until the inquiry ends, yes or no?",
+ "hashtags": [
+  "bosnia",
+  "eufor",
+  "chinook",
+  "italy",
+  "outpost"
+ ],
+ "notes_full": [
+  "First reported 29 Oct about 16:41 to 16:54 UTC (ItaMilRadar, Klix.ba), then Sarajevo Times, ANSA, AP 17:48, Euronews, Anadolu, Independent, Le Monde; about 3 to 4h old at render",
+  "Toll: EUFOR says 4 killed, 11 injured (AP update); earlier local reports (Brcko mayor) said 3 and 12. Script uses EUFOR's figure, once, attributed, not in hook, first 5s or caption",
+  "Meloni and Tajani lines from LaPresse ticker headlines (19:30 to 19:31 local), paraphrased and attributed; 'A terrible tragedy' verbatim per LaPresse",
+  "Cause unknown; unverified spinning video not described as fact, only witnesses via Klix",
+  "Removal-risk: accident report and official statements; one attributed toll; no graphic detail; no future-attack framing; neutral yes/no",
+  "Globe: 3 places"
+ ]
+}
