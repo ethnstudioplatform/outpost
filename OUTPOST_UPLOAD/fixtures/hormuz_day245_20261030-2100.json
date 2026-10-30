@@ -1,0 +1,326 @@
+{
+ "series": "HORMUZ · DAY 245",
+ "question": "Is Hormuz safe to sail, yes or no?",
+ "country": "IR",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   122,
+   94
+  ],
+  [
+   255,
+   255,
+   255
+  ],
+  [
+   191,
+   10,
+   48
+  ]
+ ],
+ "hook_lines": [
+  "OMAN RESCUES 25 FROM TANKER",
+  "Another tanker hit in Hormuz"
+ ],
+ "cover": [
+  "HORMUZ",
+  "DAY 245",
+  "TANKER FIRE"
+ ],
+ "region": "STRAIT OF HORMUZ / OMAN",
+ "places": {
+  "MUSANDAM": {
+   "id": "MUSANDAM",
+   "name": "Musandam, Oman",
+   "lat": 26.2,
+   "lon": 56.25
+  },
+  "KHASAB": {
+   "id": "KHASAB",
+   "name": "Off Khasab, Oman",
+   "lat": 26.45,
+   "lon": 56.55
+  },
+  "TEHRAN": {
+   "id": "TEHRAN",
+   "name": "Tehran",
+   "lat": 35.69,
+   "lon": 51.39
+  }
+ },
+ "lines": [
+  {
+   "text": "Oman says it has rescued twenty five crew from a burning tanker in the Strait of Hormuz.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Oman MSC, via Al Jazeera",
+   "scene": {
+    "type": "pin",
+    "place": "MUSANDAM",
+    "head": "Oman: 25 crew rescued",
+    "notes": [
+     "burning tanker",
+     "Friday, 30 Oct"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "Euronews says the ship was attacked and caught fire off Oman's Musandam coast.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Euronews, 30 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "MUSANDAM",
+    "head": "Attacked off Musandam",
+    "notes": [
+     "caught fire",
+     "1.6 nautical miles out"
+    ],
+    "span": 4
+   }
+  },
+  {
+   "text": "No injuries were reported, and Oman has not said who did it.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Al Jazeera, Euronews",
+   "scene": {
+    "type": "number",
+    "value": "25",
+    "label": "crew evacuated",
+    "detail": "Oman says",
+    "flag": "OM",
+    "grid": {
+     "of": 25,
+     "lit": 25,
+     "cols": 5,
+     "caption": "no injuries reported"
+    }
+   }
+  },
+  {
+   "text": "On Thursday evening, the tanker Louise One, with twenty seven Indian crew, was hit.",
+   "src": [
+    2,
+    1
+   ],
+   "context": false,
+   "note": "The Week, Euronews",
+   "scene": {
+    "type": "pin",
+    "place": "KHASAB",
+    "head": "Tanker Louise 1 hit",
+    "notes": [
+     "27 Indian crew, safe",
+     "Thursday evening"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "Britain's UKMTO says a small boat attached two explosive devices to its hull.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "UKMTO, via Euronews",
+   "scene": {
+    "type": "number",
+    "value": "2",
+    "label": "devices on the hull",
+    "detail": "UKMTO says",
+    "flag": "GB",
+    "grid": {
+     "of": 2,
+     "lit": 2,
+     "cols": 2,
+     "red": true,
+     "caption": "attached by a small boat"
+    }
+   }
+  },
+  {
+   "text": "The Financial Times reports Iran was behind it. Euronews says that is still unclear.",
+   "src": [
+    3,
+    1
+   ],
+   "context": false,
+   "note": "FT via The Week; Euronews",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "WHO DID IT?",
+     "FT: Iran",
+     "Euronews: unclear"
+    ],
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "Today, Iran's Revolutionary Guard said two tankers on routes it calls unauthorised were halted.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "IRGC, via Al Jazeera",
+   "scene": {
+    "type": "pin",
+    "place": "TEHRAN",
+    "head": "IRGC: 2 tankers halted",
+    "notes": [
+     "'unauthorised' routes",
+     "Friday, 30 Oct"
+    ],
+    "span": 10
+   }
+  },
+  {
+   "text": "It says a supertanker carrying more than two million barrels exploded and caught fire.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "IRGC, via Al Jazeera",
+   "scene": {
+    "type": "number",
+    "value": "2M+",
+    "label": "barrels on board",
+    "detail": "IRGC says",
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "The top US commander, Brad Cooper, says the main transit routes are clear of Iranian sea mines.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Adm Cooper, via Al Jazeera",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "ADM. BRAD COOPER:",
+     "main routes clear",
+     "of sea mines"
+    ],
+    "flag": "US"
+   }
+  },
+  {
+   "text": "US Central Command calls Iran's mine strike claims false.",
+   "src": [
+    4
+   ],
+   "context": false,
+   "note": "CENTCOM on X, 28 Oct",
+   "scene": {
+    "type": "quote",
+    "quote": "These claims are FALSE",
+    "who": "US Central Command",
+    "flag": "US"
+   }
+  },
+  {
+   "text": "Qatari mediators are back in Tehran, pushing a deal to end the war.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Euronews, 30 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "TEHRAN",
+    "head": "Qatari mediators back",
+    "notes": [
+     "revised proposal",
+     "Iran reply due"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "Day two hundred and forty six tomorrow. Is Hormuz safe to sail, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "HORMUZ:",
+     "SAFE TO SAIL?",
+     "YES OR NO"
+    ],
+    "flag": "OM"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "Al Jazeera",
+   "title": "Oman rescues 25 from burning oil tanker in Strait of Hormuz (30 Oct)",
+   "url": "https://www.aljazeera.com/news/2026/10/30/oman-rescues-25-from-burning-oil-tanker-in-strait-of-hormuz"
+  },
+  {
+   "n": 1,
+   "outlet": "Euronews",
+   "title": "Iran's Revolutionary Guard reports tankers on fire in Strait of Hormuz as talks continue (30 Oct)",
+   "url": "https://www.euronews.com/2026/10/30/irans-revolutionary-guard-reports-two-tankers-on-fire-in-strait-of-hormuz-as-talks-continu"
+  },
+  {
+   "n": 2,
+   "outlet": "The Week",
+   "title": "What is a limpet mine? Iran switches to low-cost devices to target tanker in Hormuz; 27 Indians aboard safe (30 Oct)",
+   "url": "https://www.theweek.in/news/middle-east/2026/10/30/mt-louise-1-limpet-mine-attack-oman.html"
+  },
+  {
+   "n": 3,
+   "outlet": "Financial Times",
+   "title": "Iran hits Hormuz tanker with limpet mines in apparent tactical shift (30 Oct)",
+   "url": "https://www.ft.com/"
+  },
+  {
+   "n": 4,
+   "outlet": "Gulf News / CENTCOM",
+   "title": "US military rejects Iranian mine-strike claims, says Hormuz transit lanes remain 'clear'",
+   "url": "https://gulfnews.com/world/mena/us-military-rejects-iranian-mine-strike-claims-says-hormuz-transit-lanes-remain-clear-1.500727648"
+  }
+ ],
+ "caption": "Hormuz, Oman, Musandam: Oman says it rescued 25 crew from a burning tanker attacked off its coast, a day after the tanker Louise 1 was hit by explosives stuck to its hull. Iran's Revolutionary Guard says more tankers were halted today, while the US says the main routes are clear of mines. Is Hormuz safe to sail, yes or no?",
+ "hashtags": [
+  "hormuz",
+  "oman",
+  "tanker",
+  "iran",
+  "outpost"
+ ],
+ "notes_full": [
+  "RITI rescue: Oman Maritime Security Centre statement Fri 30 Oct, first reported about 12:25 UTC (Business Upturn), Al Jazeera, Euronews; about 8h old at render",
+  "IRGC 2 tankers halted + supertanker fire: IRGC statements 30 Oct (Euronews 14:43 UTC, Al Jazeera); count differs (2 vs 3), script attributes 2 halted + 1 supertanker to IRGC",
+  "Louise 1: attacked Thu 29 Oct evening 25nm NE of Khasab, first reported 30 Oct 02:54 UTC (Maritime Executive); used as context, not the lead",
+  "Cooper: Friday 30 Oct, via Al Jazeera; CENTCOM 'These claims are FALSE' on X 28 Oct",
+  "Left out: IRGC 29 Oct three-tankers mine claim and MQM-170 drone claim (first reported 29 Oct, stale); Brent figure (no reliable dated source found)",
+  "Removal-risk: events and attributed claims; no death toll; no future-attack framing; neutral yes/no",
+  "Globe: 3 places"
+ ]
+}
