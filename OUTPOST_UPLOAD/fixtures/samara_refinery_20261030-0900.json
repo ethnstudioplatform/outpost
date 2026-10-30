@@ -1,0 +1,322 @@
+{
+ "question": "Is the refinery pause over, yes or no?",
+ "country": "RU",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   87,
+   183
+  ],
+  [
+   255,
+   215,
+   0
+  ],
+  [
+   255,
+   255,
+   255
+  ]
+ ],
+ "hook_lines": [
+  "DRONES HIT SAMARA REFINERY",
+  "Hours after a reported pause"
+ ],
+ "cover": [
+  "SAMARA",
+  "REFINERY",
+  "HIT"
+ ],
+ "region": "RUSSIA / UKRAINE",
+ "places": {
+  "NOVOKUIBYSHEVSK": {
+   "id": "NOVOKUIBYSHEVSK",
+   "name": "Novokuibyshevsk, Samara",
+   "lat": 53.1,
+   "lon": 49.95
+  },
+  "MOSCOW": {
+   "id": "MOSCOW",
+   "name": "Moscow",
+   "lat": 55.75,
+   "lon": 37.62
+  },
+  "KYIV": {
+   "id": "KYIV",
+   "name": "Kyiv",
+   "lat": 50.45,
+   "lon": 30.52
+  }
+ },
+ "lines": [
+  {
+   "text": "Drones have hit an oil refinery in Russia's Samara region, at Novokuibyshevsk.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Kyiv Independent, Meduza, 30 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "NOVOKUIBYSHEVSK",
+    "head": "Novokuibyshevsk refinery",
+    "notes": [
+     "Samara region",
+     "overnight, 30 Oct"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "Hours earlier, The Wall Street Journal said Ukraine had paused refinery strikes under US pressure.",
+   "src": [
+    0,
+    3
+   ],
+   "context": false,
+   "note": "WSJ via Kyiv Independent",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "PAUSED?",
+     "refinery strikes",
+     "WSJ, 29 Oct"
+    ],
+    "flag": "US"
+   }
+  },
+  {
+   "text": "Drone maker Fire Point says its F P one drones scored numerous hits there, including a diesel unit.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Fire Point, via UNN",
+   "scene": {
+    "type": "pin",
+    "place": "NOVOKUIBYSHEVSK",
+    "head": "Fire Point: FP-1 hits",
+    "notes": [
+     "numerous hits",
+     "diesel unit hit"
+    ],
+    "span": 4
+   }
+  },
+  {
+   "text": "Monitoring channel Exilenova Plus counted at least eleven fires at the site.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Exilenova+, via UNN",
+   "scene": {
+    "type": "number",
+    "value": "11",
+    "label": "fires at the refinery",
+    "detail": "Exilenova+ says",
+    "flag": "UA",
+    "grid": {
+     "of": 11,
+     "lit": 11,
+     "cols": 11,
+     "red": true,
+     "caption": "at least 11 fire hotspots"
+    }
+   }
+  },
+  {
+   "text": "Samara's governor says Ukraine is attacking the region, but gives no details.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Gov. Fedorishchev, via Meduza",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "SAMARA GOVERNOR",
+     "region under attack",
+     "no further details"
+    ],
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "The Rosneft plant refines about eight point eight million tonnes of oil a year.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Kyiv Independent, Meduza",
+   "scene": {
+    "type": "number",
+    "value": "8.8M",
+    "label": "tonnes of oil a year",
+    "detail": "Rosneft refinery",
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "Moscow's mayor says eight hundred and sixty two drones flew at the capital region overnight.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Sobyanin, via Meduza",
+   "scene": {
+    "type": "pin",
+    "place": "MOSCOW",
+    "head": "Moscow: 862 drones",
+    "notes": [
+     "mayor Sobyanin says",
+     "overnight, 29 to 30 Oct"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "He says one hundred and seventy were downed approaching the city.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Sobyanin, via Meduza",
+   "scene": {
+    "type": "number",
+    "value": "170",
+    "label": "downed near Moscow",
+    "detail": "Sobyanin says",
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "On Wednesday, Zelensky said Ukraine had paused refinery strikes for three days, while Russia kept hitting its energy.",
+   "src": [
+    4
+   ],
+   "context": false,
+   "note": "Kyiv Independent, 28 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "KYIV",
+    "head": "Zelensky: 3-day pause",
+    "notes": [
+     "said 28 Oct",
+     "Russia hit energy"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "Earlier this month, Trump said Zelensky better damn well stop the refinery attacks.",
+   "src": [
+    5
+   ],
+   "context": false,
+   "note": "Kyiv Post, Politico, 10 Oct",
+   "scene": {
+    "type": "quote",
+    "quote": "He better damn well stop",
+    "who": "Donald Trump, 10 Oct",
+    "flag": "US"
+   }
+  },
+  {
+   "text": "Now the Journal says this strike ends the pause.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "WSJ, 30 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "PAUSE OVER?",
+     "WSJ: strike ends pause",
+     "30 Oct"
+    ],
+    "flag": "US"
+   }
+  },
+  {
+   "text": "Is the refinery pause over, yes or no?",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "REFINERY PAUSE",
+     "OVER?",
+     "YES OR NO"
+    ],
+    "flag": "UA"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "The Kyiv Independent",
+   "title": "Russian oil refinery reportedly attacked amid renewed Ukrainian strikes on energy infrastructure",
+   "url": "https://kyivindependent.com/russian-oil-refinery-reportedly-attacked-amid-renewed-ukrainian-strikes-on-energy-infrastructure/"
+  },
+  {
+   "n": 1,
+   "outlet": "Meduza",
+   "title": "Moscow mayor says more than 800 Ukrainian drones headed toward Russian capital as reports emerge of fire at Samara region oil refinery",
+   "url": "https://meduza.io/en/news/2026/10/30/moscow-mayor-says-more-than-800-ukrainian-drones-headed-toward-russian-capital-as-reports-emerge-of-fire-at-samara-region-oil-refinery"
+  },
+  {
+   "n": 2,
+   "outlet": "UNN",
+   "title": "Ukrainian military forces struck the Novokuibyshevsk Oil Refinery in Russia with FP-1 drones",
+   "url": "https://unn.ua/en/news/ukrainian-military-forces-struck-the-novokuibyshevsk-oil-refinery-in-russia-with-fp-1-drones"
+  },
+  {
+   "n": 3,
+   "outlet": "The Wall Street Journal",
+   "title": "Ukraine Hits Russian Oil Refinery, Ending Pause and Defying Trump (30 Oct); Ukraine Pauses Strikes on Russian Refineries After Pressure From U.S. (29 Oct)",
+   "url": "https://www.wsj.com/"
+  },
+  {
+   "n": 4,
+   "outlet": "The Kyiv Independent",
+   "title": "Ukraine paused attacks on oil refineries for 3 days as Russia continued strikes on energy infrastructure, Zelensky says (28 Oct)",
+   "url": "https://kyivindependent.com/"
+  },
+  {
+   "n": 5,
+   "outlet": "Kyiv Post / Politico",
+   "title": "'Better Damn Well Stop': Trump Lambasts Kyiv's Refinery Attacks (10 Oct)",
+   "url": "https://www.kyivpost.com/"
+  }
+ ],
+ "caption": "Novokuibyshevsk, Samara, Rosneft: drones have hit a Russian oil refinery, hours after The Wall Street Journal reported Ukraine had paused refinery strikes under US pressure. Drone maker Fire Point says its FP-1 drones hit the plant. Is the refinery pause over, yes or no?",
+ "hashtags": [
+  "samara",
+  "novokuibyshevsk",
+  "rosneft",
+  "ukraine",
+  "outpost"
+ ],
+ "notes_full": [
+  "First reported 30 Oct about 04:06 UTC (ANTIKOR), then Ukrainska Pravda 05:00, RBC-Ukraine, Kyiv Independent 06:01, Meduza 08:29, Euronews, Al Jazeera, WSJ 08:16 (ending pause); about 6h old at render",
+  "WSJ pause exclusive published 29 Oct 23:57 UTC, widely carried (Economic Times, Arab News, Times of India)",
+  "Regional authorities did not confirm the refinery hit (Meduza); governor only said Ukrainian forces attacking region. Hit claims attributed to Fire Point and Exilenova+",
+  "Trump quote from 10 Oct (Kyiv Post, Politico, Kyiv Independent); his 'new president' remark deliberately left out (removal-risk rule)",
+  "Removal-risk: events and attributed claims; no death toll; no future-attack framing; neutral yes/no",
+  "Globe: 3 places"
+ ]
+}
