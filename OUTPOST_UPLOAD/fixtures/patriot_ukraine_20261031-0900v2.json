@@ -1,0 +1,311 @@
+{
+ "question": "Will the Patriots reach Ukraine in time, yes or no?",
+ "country": "UA",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   87,
+   183
+  ],
+  [
+   255,
+   215,
+   0
+  ],
+  [
+   255,
+   255,
+   255
+  ]
+ ],
+ "hook_lines": [
+  "US CLEARS 500 PATRIOTS FOR UKRAINE",
+  "Delivery could take years"
+ ],
+ "cover": [
+  "UKRAINE",
+  "500 PATRIOTS",
+  "YEARS AWAY?"
+ ],
+ "region": "USA / UKRAINE",
+ "places": {
+  "WASHINGTON": {
+   "id": "WASHINGTON",
+   "name": "Washington",
+   "lat": 38.9,
+   "lon": -77.04
+  },
+  "KYIV": {
+   "id": "KYIV",
+   "name": "Kyiv",
+   "lat": 50.45,
+   "lon": 30.52
+  },
+  "BERLIN": {
+   "id": "BERLIN",
+   "name": "Berlin",
+   "lat": 52.52,
+   "lon": 13.4
+  }
+ },
+ "lines": [
+  {
+   "text": "The US has cleared a two point one billion dollar sale of five hundred Patriot missiles to Ukraine.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "US State Dept, 30 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "WASHINGTON",
+    "head": "500 Patriots for Ukraine",
+    "notes": [
+     "$2.1 billion sale",
+     "State Dept, 30 Oct"
+    ],
+    "span": 9
+   }
+  },
+  {
+   "text": "But President Zelensky says the deal states deliveries may begin only in a few years.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Zelensky on X, 30 Oct",
+   "scene": {
+    "type": "quote",
+    "quote": "deliveries may begin ONLY IN A FEW YEARS",
+    "who": "Volodymyr Zelensky",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "They are PAC three MSE interceptors, among the few that can stop Russian ballistic missiles.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Kyiv Post, 30 Oct",
+   "scene": {
+    "type": "pin",
+    "place": "KYIV",
+    "head": "PAC-3 MSE interceptors",
+    "notes": [
+     "stop ballistic missiles",
+     "one of few options"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "The State Department says the sale will improve Ukraine's capability to meet current and future threats.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "US State Dept, via Kyiv Post",
+   "scene": {
+    "type": "quote",
+    "quote": "improve Ukraine's capability to meet current and future threats",
+    "who": "US State Department",
+    "flag": "US"
+   }
+  },
+  {
+   "text": "It says no US money will be used for the purchase.",
+   "src": [
+    1,
+    0
+   ],
+   "context": false,
+   "note": "US State Dept",
+   "scene": {
+    "type": "number",
+    "value": "$0",
+    "label": "US funds used",
+    "detail": "State Dept says",
+    "flag": "US"
+   }
+  },
+  {
+   "text": "Canada, Germany and Norway are paying, with an EU funded loan to Ukraine.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "State Dept, via Kyiv Post",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "WHO PAYS?",
+     "Canada, Germany, Norway",
+     "+ EU loan to Ukraine"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Congress can still review it, and no delivery date was given.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Kyiv Post, 30 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "NEXT STEP:",
+     "Congress review",
+     "no delivery date"
+    ],
+    "flag": "US"
+   }
+  },
+  {
+   "text": "Zelensky asked for one hundred PAC three missiles a month this winter.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Zelensky, via Kyiv Post",
+   "scene": {
+    "type": "number",
+    "value": "100",
+    "label": "PAC-3s a month",
+    "detail": "Kyiv's winter request",
+    "flag": "UA",
+    "grid": {
+     "of": 100,
+     "lit": 100,
+     "cols": 20,
+     "caption": "asked for, per month"
+    }
+   }
+  },
+  {
+   "text": "He wants the US and European allies to send missiles from their own stocks now, and refill them from the new order.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Zelensky, via Kyiv Post",
+   "scene": {
+    "type": "route",
+    "from": "BERLIN",
+    "to": "KYIV",
+    "label": "Allied stocks to Kyiv",
+    "note": "refill from new order"
+   }
+  },
+  {
+   "text": "He says Russia made more than thirty attacks on Ukraine's power grid in the last two weeks of October.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Zelensky, via Kyiv Post",
+   "scene": {
+    "type": "number",
+    "value": "30+",
+    "label": "attacks on power grid",
+    "detail": "Zelensky says",
+    "flag": "UA",
+    "grid": {
+     "of": 30,
+     "lit": 30,
+     "cols": 10,
+     "red": true,
+     "caption": "last 2 weeks of October"
+    }
+   }
+  },
+  {
+   "text": "Lockheed Martin, the main contractor, plans to lift output from about six hundred a year to two thousand by twenty thirty.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Lockheed, via Kyiv Post",
+   "scene": {
+    "type": "compare",
+    "a": {
+     "n": 600,
+     "value": "600",
+     "label": "a year now"
+    },
+    "b": {
+     "n": 2000,
+     "value": "2,000",
+     "label": "a year by 2030"
+    }
+   }
+  },
+  {
+   "text": "Will the Patriots reach Ukraine in time, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "PATRIOTS:",
+     "IN TIME?",
+     "YES OR NO"
+    ],
+    "flag": "UA"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "BBC",
+   "title": "US approves sale of 500 Patriot missiles to Ukraine (31 Oct)",
+   "url": "https://www.bbc.co.uk/news"
+  },
+  {
+   "n": 1,
+   "outlet": "Kyiv Post",
+   "title": "US Approves 500 Patriot Missiles for Ukraine, but Zelensky Warns Deliveries May Not Begin for Years (30 Oct)",
+   "url": "https://www.kyivpost.com/post/88717"
+  },
+  {
+   "n": 2,
+   "outlet": "Reuters",
+   "title": "US approves $2.1 billion Patriot missile sale to Ukraine (30 Oct)",
+   "url": "https://www.reuters.com/"
+  },
+  {
+   "n": 3,
+   "outlet": "The Guardian",
+   "title": "Ukraine's Zelenskyy praises US over $2.1bn Patriot missile deal but warns it could take years (31 Oct)",
+   "url": "https://www.theguardian.com/"
+  }
+ ],
+ "caption": "Patriot missiles, Ukraine, Zelensky: the US State Department has cleared a $2.1 billion sale of 500 PAC-3 interceptors to Ukraine, paid for by allies with no US funds. Zelensky says deliveries may begin only in a few years and wants allied stocks sent now. Will the Patriots reach Ukraine in time, yes or no?",
+ "hashtags": [
+  "patriot",
+  "ukraine",
+  "zelensky",
+  "lockheedmartin",
+  "outpost"
+ ],
+ "notes_full": [
+  "State Dept DSCA notification 30 Oct, first reported about 19:22 UTC (Reuters, Report.az); about 13h old at render; BBC, FT, Al Jazeera, Guardian, Kyiv Post",
+  "Zelensky quote verbatim from X via Kyiv Post; 100/month winter request and 30+ grid attacks per Zelensky via Kyiv Post",
+  "Funding: Canada, Germany, Norway via JUMPSTART + EU Ukraine Support Loan; no US funds (State Dept via Kyiv Post)",
+  "Lockheed capacity 600 to 2,000 by end 2030: Kyiv Post interview with Dan Tenney, 1 Oct",
+  "Removal-risk: an approved sale and statements; no death toll; no future-attack framing; neutral yes/no",
+  "Globe: 3 places",
+  "v2: v1 (run 41182730432) came out 60.1s, lines lengthened to reach the 62 to 66s lock"
+ ]
+}
