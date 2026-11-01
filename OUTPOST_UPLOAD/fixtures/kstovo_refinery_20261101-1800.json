@@ -1,0 +1,321 @@
+{
+ "question": "Will Kstovo be back to full output within a month, yes or no?",
+ "country": "RU",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   255,
+   140,
+   0
+  ],
+  [
+   255,
+   215,
+   0
+  ],
+  [
+   255,
+   255,
+   255
+  ]
+ ],
+ "hook_lines": [
+  "KSTOVO: 3RD REFINERY HIT IN 3 DAYS",
+  "10% of Russia's refining"
+ ],
+ "cover": [
+  "KSTOVO",
+  "3 REFINERIES",
+  "3 DAYS"
+ ],
+ "region": "RUSSIA",
+ "places": {
+  "KSTOVO": {
+   "id": "KSTOVO",
+   "name": "Kstovo",
+   "lat": 56.15,
+   "lon": 44.2
+  },
+  "MOSCOW": {
+   "id": "MOSCOW",
+   "name": "Moscow",
+   "lat": 55.75,
+   "lon": 37.62
+  },
+  "NOVOKUIBYSHEVSK": {
+   "id": "NOVOKUIBYSHEVSK",
+   "name": "Novokuibyshevsk",
+   "lat": 53.1,
+   "lon": 49.95
+  },
+  "UFA": {
+   "id": "UFA",
+   "name": "Ufa",
+   "lat": 54.73,
+   "lon": 55.95
+  }
+ },
+ "lines": [
+  {
+   "text": "Lukoil's Kstovo refinery is on fire after a drone attack, the third Russian refinery hit in three days.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Euromaidan Press, Ukrinform, 1 Nov",
+   "scene": {
+    "type": "pin",
+    "place": "KSTOVO",
+    "head": "Lukoil Kstovo refinery",
+    "notes": [
+     "fire after drone raid",
+     "overnight, 1 Nov"
+    ],
+    "span": 9
+   }
+  },
+  {
+   "text": "The regional governor, Gleb Nikitin, says an industrial facility in the Kstovo district sustained significant damage.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Governor Nikitin, via Ukrinform",
+   "scene": {
+    "type": "quote",
+    "quote": "An industrial facility in the Kstovo district sustained significant damage",
+    "who": "Gov. Gleb Nikitin",
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "He did not name the site and reports no casualties. Ukrainian media say it is Lukoil's refinery.",
+   "src": [
+    1,
+    0
+   ],
+   "context": false,
+   "note": "Ukrinform, Euromaidan Press",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "SITE NOT NAMED",
+     "media: Lukoil refinery",
+     "no casualties: governor"
+    ],
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "He says more than one hundred drones were destroyed over the region.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Governor Nikitin, via Ukrinform",
+   "scene": {
+    "type": "number",
+    "value": "100+",
+    "label": "drones over the region",
+    "detail": "Governor says",
+    "flag": "RU",
+    "grid": {
+     "of": 100,
+     "lit": 100,
+     "cols": 20,
+     "red": true,
+     "caption": "destroyed, governor says"
+    }
+   }
+  },
+  {
+   "text": "Russia's defence ministry says it downed two hundred and thirty five across the country.",
+   "src": [
+    1,
+    0
+   ],
+   "context": false,
+   "note": "Russian MoD, via Ukrinform",
+   "scene": {
+    "type": "number",
+    "value": "235",
+    "label": "drones downed in Russia",
+    "detail": "Defence ministry says",
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "The plant, about seven hundred and eighty kilometres from Ukraine, can process seventeen million tonnes of crude a year.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Euromaidan Press, Ukrinform",
+   "scene": {
+    "type": "number",
+    "value": "17M",
+    "label": "tonnes of crude a year",
+    "detail": "780 km from Ukraine",
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "Ukrinform says it supplies fuel to the Moscow region and to Russia's armed forces.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Ukrinform, 1 Nov",
+   "scene": {
+    "type": "route",
+    "from": "KSTOVO",
+    "to": "MOSCOW",
+    "label": "Fuel to Moscow region",
+    "note": "Ukrinform says"
+   }
+  },
+  {
+   "text": "The regional government urged drivers to fill up as needed, without creating a rush.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Regional govt, via Astra",
+   "scene": {
+    "type": "quote",
+    "quote": "as needed, without creating a rush",
+    "who": "Nizhny Novgorod govt",
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "Since Friday, drones also hit refineries in Novokuibyshevsk and Ufa, media report.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Agentstvo, Astra, via Euromaidan",
+   "scene": {
+    "type": "wide"
+   }
+  },
+  {
+   "text": "Russian outlet Agentstvo says the three plants handle about ten percent of Russia's refining.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Agentstvo, via Euromaidan Press",
+   "scene": {
+    "type": "number",
+    "value": "10%",
+    "label": "of Russia's refining",
+    "detail": "Agentstvo estimate",
+    "flag": "RU",
+    "grid": {
+     "of": 100,
+     "lit": 10,
+     "cols": 20,
+     "red": true,
+     "caption": "3 plants, 3 days"
+    }
+   }
+  },
+  {
+   "text": "On Thursday, the Wall Street Journal reported Ukraine had paused refinery strikes until after the US midterms.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "WSJ, 29 Oct",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "WSJ, 29 OCT:",
+     "strikes paused",
+     "until US midterms"
+    ],
+    "flag": "US"
+   }
+  },
+  {
+   "text": "But Zelensky said his units do not have an order to stop.",
+   "src": [
+    2,
+    0
+   ],
+   "context": false,
+   "note": "Zelensky, 27 Oct, via WSJ",
+   "scene": {
+    "type": "quote",
+    "quote": "do not have an order",
+    "who": "Volodymyr Zelensky",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Will Kstovo be back to full output within a month, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "KSTOVO:",
+     "FULL OUTPUT",
+     "IN A MONTH?"
+    ],
+    "flag": "RU"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "Euromaidan Press",
+   "title": "Three Russian refineries hit since Friday handle roughly 10% of Russia's refining (1 Nov)",
+   "url": "https://euromaidanpress.com/2026/11/01/three-russian-refineries-hit-since-friday-handle-roughly-10-of-russias-refining-and-over-10-of-its-diesel/"
+  },
+  {
+   "n": 1,
+   "outlet": "Ukrinform",
+   "title": "Drones attack Lukoil refinery in Russia (1 Nov)",
+   "url": "https://www.ukrinform.net/rubric-ato/4180179-drones-attack-lukoil-refinery-in-russia.html"
+  },
+  {
+   "n": 2,
+   "outlet": "Wall Street Journal",
+   "title": "Ukraine pauses refinery strikes (29 Oct), as reported by Euromaidan Press",
+   "url": "https://www.wsj.com/"
+  },
+  {
+   "n": 3,
+   "outlet": "Kyiv Independent",
+   "title": "Russian oil refinery in Kstovo ablaze after reported overnight drone strike (1 Nov)",
+   "url": "https://kyivindependent.com/"
+  }
+ ],
+ "caption": "Kstovo, Lukoil, Russia: drones set Lukoil's Kstovo refinery on fire overnight, the third Russian refinery hit in three days after Novokuibyshevsk and Ufa. Russian outlet Agentstvo says the three plants handle about 10% of Russia's refining. Will Kstovo be back to full output within a month, yes or no?",
+ "hashtags": [
+  "kstovo",
+  "lukoil",
+  "refinery",
+  "ukraine",
+  "outpost"
+ ],
+ "notes_full": [
+  "Kstovo fire first reported 1 Nov about 03:00 UTC (UNN, Kyiv Independent 03:25); Ukrinform 07:46; Euronews, Reuters via Arab News; about 15h old at delivery",
+  "Nikitin quote verbatim from Ukrinform translation; 100+ drones and no casualties per Nikitin; MoD 235 per Ukrinform and Euromaidan Press",
+  "17M t/yr Ukrinform; 780 km Euromaidan Press; 10% Agentstvo via Euromaidan Press; fill-up quote via Astra/Euromaidan",
+  "WSJ 29 Oct pause report and Zelensky 'do not have an order' (27 Oct) via Euromaidan Press",
+  "Removal-risk: events and attributed statements; no death toll; no future-attack framing; neutral yes/no",
+  "Globe: 4 places"
+ ]
+}
