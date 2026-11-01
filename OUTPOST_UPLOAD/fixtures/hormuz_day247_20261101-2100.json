@@ -1,0 +1,298 @@
+{
+ "series": "HORMUZ · DAY 247",
+ "question": "Will the talks reopen Hormuz this month, yes or no?",
+ "country": "QA",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   138,
+   21,
+   56
+  ],
+  [
+   255,
+   255,
+   255
+  ],
+  [
+   0,
+   122,
+   94
+  ]
+ ],
+ "hook_lines": [
+  "QATAR GAS TANKER HIT IN GULF",
+  "then a 2nd ship in Hormuz"
+ ],
+ "cover": [
+  "HORMUZ",
+  "DAY 247",
+  "QATAR TANKER HIT"
+ ],
+ "region": "QATAR / STRAIT OF HORMUZ",
+ "places": {
+  "QATAR": {
+   "id": "QATAR",
+   "name": "Qatar",
+   "lat": 25.9,
+   "lon": 51.6
+  },
+  "HORMUZ": {
+   "id": "HORMUZ",
+   "name": "Strait of Hormuz",
+   "lat": 26.57,
+   "lon": 56.25
+  },
+  "TEHRAN": {
+   "id": "TEHRAN",
+   "name": "Tehran",
+   "lat": 35.69,
+   "lon": 51.39
+  }
+ },
+ "lines": [
+  {
+   "text": "Qatar says its gas tanker Al Mayeda was struck by unidentified objects in the Gulf.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Qatar Gas Transport Co, 1 Nov",
+   "scene": {
+    "type": "pin",
+    "place": "QATAR",
+    "head": "Qatar tanker Al Mayeda hit",
+    "notes": [
+     "LNG carrier",
+     "struck Friday evening"
+    ],
+    "span": 9
+   }
+  },
+  {
+   "text": "Today, Britain's UKMTO said another ship was hit by an unknown projectile in the Strait of Hormuz.",
+   "src": [
+    1,
+    2
+   ],
+   "context": false,
+   "note": "UKMTO, via AFP, 1 Nov",
+   "scene": {
+    "type": "pin",
+    "place": "HORMUZ",
+    "head": "2nd ship hit in Hormuz",
+    "notes": [
+     "unknown projectile",
+     "Mayday call, Sunday"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "The owner says no crew were hurt and there was no environmental damage.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Qatar Gas Transport Co",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "AL MAYEDA:",
+     "no crew injured",
+     "no spill reported"
+    ],
+    "flag": "QA"
+   }
+  },
+  {
+   "text": "It says the ship is in a safe condition, operational.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Company statement, via Al Jazeera",
+   "scene": {
+    "type": "quote",
+    "quote": "safe condition, operational",
+    "who": "Qatar Gas Transport Co",
+    "flag": "QA"
+   }
+  },
+  {
+   "text": "Qatar's foreign ministry called it a dangerous act that threatens global energy supplies.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Qatar MFA on X, via Al Jazeera",
+   "scene": {
+    "type": "quote",
+    "quote": "a dangerous act",
+    "who": "Qatar foreign ministry",
+    "flag": "QA"
+   }
+  },
+  {
+   "text": "Saudi Arabia, Kuwait and the Gulf Cooperation Council have condemned the attack.",
+   "src": [
+    3,
+    4
+   ],
+   "context": false,
+   "note": "Al Arabiya, QNA, GCC, 1 Nov",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "CONDEMNED BY:",
+     "Saudi Arabia, Kuwait",
+     "GCC"
+    ],
+    "flag": "SA"
+   }
+  },
+  {
+   "text": "No one has claimed it. Iran says ships need its permission to cross the strait.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "AFP, via Arab News",
+   "scene": {
+    "type": "wide"
+   }
+  },
+  {
+   "text": "Al Jazeera, citing shipping data, says more than one hundred and twenty ships have been hit since the war began.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Al Jazeera, IMO and UKMTO data",
+   "scene": {
+    "type": "number",
+    "value": "120+",
+    "label": "commercial ships hit",
+    "detail": "since the war began in Feb",
+    "flag": "QA"
+   }
+  },
+  {
+   "text": "October was the worst month, with at least twenty nine ships hit, against twenty in March.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Al Jazeera, 1 Nov",
+   "scene": {
+    "type": "compare",
+    "a": {
+     "n": 20,
+     "value": "20",
+     "label": "March"
+    },
+    "b": {
+     "n": 29,
+     "value": "29+",
+     "label": "October"
+    }
+   }
+  },
+  {
+   "text": "Qatar is a mediator. Its delegation arrived in Tehran on Friday to revive US and Iran talks.",
+   "src": [
+    1,
+    5
+   ],
+   "context": false,
+   "note": "AFP, Asharq Al-Awsat",
+   "scene": {
+    "type": "pin",
+    "place": "TEHRAN",
+    "head": "Qatari delegation in Tehran",
+    "notes": [
+     "arrived Friday",
+     "to revive US-Iran talks"
+    ],
+    "span": 9
+   }
+  },
+  {
+   "text": "Day two hundred and forty eight tomorrow. Will the talks reopen Hormuz this month, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "HORMUZ:",
+     "REOPEN THIS MONTH?",
+     "YES OR NO"
+    ],
+    "flag": "QA"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "Al Jazeera",
+   "title": "Qatar LNG carrier struck by 'unidentified objects' in Gulf (1 Nov)",
+   "url": "https://www.aljazeera.com/news/2026/11/1/qatar-lng-carrier-struck-by-unidentified-objects-in-gulf"
+  },
+  {
+   "n": 1,
+   "outlet": "Arab News / AFP",
+   "title": "Vessel struck in Strait of Hormuz: maritime agency (1 Nov)",
+   "url": "https://www.arabnews.com/middle-east/vessel-struck-in-strait-of-hormuz-maritime-agency-3009316"
+  },
+  {
+   "n": 2,
+   "outlet": "Asharq Al-Awsat",
+   "title": "UKMTO: Vessel struck in Strait of Hormuz (1 Nov)",
+   "url": "https://english.aawsat.com/world/5336401-ukmto-vessel-struck-strait-hormuz"
+  },
+  {
+   "n": 3,
+   "outlet": "Al Arabiya English",
+   "title": "Saudi Arabia condemns attack on Qatari LNG tanker in Gulf (1 Nov)",
+   "url": "https://english.alarabiya.net/"
+  },
+  {
+   "n": 4,
+   "outlet": "The Peninsula Qatar / QNA",
+   "title": "GCC Secretary-General condemns attack on Qatari LNG carrier Al Mayeda (1 Nov)",
+   "url": "https://thepeninsulaqatar.com/"
+  },
+  {
+   "n": 5,
+   "outlet": "Middle East Eye",
+   "title": "Vessel struck by unknown projectile in Hormuz, UKMTO says (1 Nov)",
+   "url": "https://www.middleeasteye.net/live-blog/live-blog-update/vessel-struck-unknown-projectile-hormuz-ukmto-says"
+  }
+ ],
+ "caption": "Qatar, Al Mayeda, Hormuz: Qatar says its LNG tanker Al Mayeda was struck by unidentified objects in the Gulf, and tonight UKMTO says another ship was hit by a projectile in the Strait of Hormuz. Al Jazeera says October was the worst month for ship attacks yet. Will the talks reopen Hormuz this month, yes or no?",
+ "hashtags": [
+  "hormuz",
+  "qatar",
+  "lng",
+  "iran",
+  "outpost"
+ ],
+ "notes_full": [
+  "Al Mayeda: struck Fri 31 Oct evening, first reported 1 Nov about 07:50 UTC (QNA via CGTN 07:52, Arab News 07:59, Anadolu 08:21); about 13h old at delivery",
+  "UKMTO second vessel: reported 1 Nov about 18:10 UTC (Devdiscourse 18:14, AFP via Arab News 19:24, Asharq 19:26)",
+  "Crew/no spill/'safe condition, operational': company statement via Al Jazeera; 'dangerous act', 'all necessary measures': Qatar MFA via Al Jazeera",
+  "120+ ships since Feb, Oct at least 29 vs 20 in March: Al Jazeera citing IMO and UKMTO data",
+  "Condemnations: Saudi (Al Arabiya, QNA), Kuwait (Fana), GCC SG (Peninsula); Qatari delegation in Tehran Friday: AFP/Asharq",
+  "Left out: Bloomberg 'had Iranian approval' (single outlet); Windward limpet claim; Axios Trump-Netanyahu call (future-strike framing)",
+  "Removal-risk: events and attributed statements; no death toll; no future-attack framing; neutral yes/no",
+  "Globe: 3 places"
+ ]
+}
