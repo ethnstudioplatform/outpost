@@ -1,0 +1,326 @@
+{
+ "question": "Would you still trust an air raid alert app after this, yes or no?",
+ "country": "UA",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   87,
+   183
+  ],
+  [
+   255,
+   215,
+   0
+  ],
+  [
+   0,
+   200,
+   170
+  ]
+ ],
+ "hook_lines": [
+  "FAKE RADIATION ALERTS HIT UKRAINE",
+  "then Russia's app hacked too"
+ ],
+ "cover": [
+  "UKRAINE",
+  "ALERT APP HACKED",
+  "FAKE RADIATION"
+ ],
+ "region": "UKRAINE / RUSSIA",
+ "places": {
+  "KYIV": {
+   "id": "KYIV",
+   "name": "Kyiv",
+   "lat": 50.45,
+   "lon": 30.52
+  },
+  "MOSCOW": {
+   "id": "MOSCOW",
+   "name": "Moscow",
+   "lat": 55.76,
+   "lon": 37.62
+  },
+  "OLESHKY": {
+   "id": "OLESHKY",
+   "name": "Oleshky",
+   "lat": 46.62,
+   "lon": 32.72
+  }
+ },
+ "lines": [
+  {
+   "text": "Fake radiation alerts flashed on phones across Ukraine after its Air Alert app was hacked.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Ukraine air force, 1 Nov",
+   "scene": {
+    "type": "pin",
+    "place": "KYIV",
+    "head": "Ukraine alert app hacked",
+    "notes": [
+     "fake radiation alerts",
+     "Sunday night"
+    ],
+    "span": 9
+   }
+  },
+  {
+   "text": "Hours later, Russia said its own emergency warnings app was hit by a massive cyberattack.",
+   "src": [
+    0,
+    2
+   ],
+   "context": false,
+   "note": "Russia emergencies ministry, 2 Nov",
+   "scene": {
+    "type": "pin",
+    "place": "MOSCOW",
+    "head": "Russia's alert app hit",
+    "notes": [
+     "emergencies ministry",
+     "Monday"
+    ],
+    "span": 9
+   }
+  },
+  {
+   "text": "People in Kyiv and elsewhere got fake radiation, chemical and street fighting warnings.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "The Statesman, 2 Nov",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "FAKE ALERTS:",
+     "radiation, chemical",
+     "street fighting"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "One message falsely suggested Russia had deployed its Oreshnik missile.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "The Statesman, 2 Nov",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "ALSO FAKE:",
+     "Oreshnik missile",
+     "alert"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Ukraine's air force told people: there is no radiation threat.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Air force on Telegram, via Euronews",
+   "scene": {
+    "type": "quote",
+    "quote": "There is no radiation threat",
+    "who": "Ukraine's air force",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Spokesman Yuriy Ignat confirmed to AFP the app had been hacked.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "AFP, via Euronews",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "AIR FORCE:",
+     "app was hacked"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Ukraine's SPRAVDI centre blamed Russia. Moscow has not said who hacked its app.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Euronews, 2 Nov",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "WHO DID IT?",
+     "Kyiv blames Russia",
+     "Moscow: no name"
+    ],
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "Russia's emergencies ministry said attackers could send false information to the public.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "MChS, via TASS and Euronews",
+   "scene": {
+    "type": "quote",
+    "quote": "false information",
+    "who": "Russia emergencies ministry",
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "Euromaidan Press says the app had twenty four million downloads by late 2024.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "Euromaidan Press, Dec 2024",
+   "scene": {
+    "type": "number",
+    "value": "24M",
+    "label": "Air Alert downloads",
+    "detail": "by December 2024",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "The hacks came as the war's longest truce ended, around Oleshky in Kherson region.",
+   "src": [
+    0,
+    4
+   ],
+   "context": false,
+   "note": "Euronews, AP, 2 Nov",
+   "scene": {
+    "type": "pin",
+    "place": "OLESHKY",
+    "head": "Oleshky truce over",
+    "notes": [
+     "27 Oct to 1 Nov",
+     "humanitarian pause"
+    ],
+    "span": 7
+   }
+  },
+  {
+   "text": "Kyiv says Russia refused to extend the six day pause, brokered by Melania Trump.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Euronews, 2 Nov",
+   "scene": {
+    "type": "number",
+    "value": "6",
+    "label": "days of truce",
+    "detail": "not extended, Kyiv says",
+    "flag": "UA",
+    "grid": {
+     "of": 6,
+     "lit": 6,
+     "cols": 6,
+     "caption": "27 Oct to 1 Nov"
+    }
+   }
+  },
+  {
+   "text": "Kherson's governor told residents to respond immediately to warnings about Russian attacks.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Gov. Prokudin, via Euronews",
+   "scene": {
+    "type": "quote",
+    "quote": "respond immediately to warnings",
+    "who": "Gov. Oleksandr Prokudin",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Would you still trust an air raid alert app after this, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "ALERT APPS:",
+     "STILL TRUST THEM?",
+     "YES OR NO"
+    ],
+    "flag": "UA"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "Euronews",
+   "title": "Ukraine and Russia say air raid alert apps hit by cyberattacks after truce ends (2 Nov)",
+   "url": "https://www.euronews.com/2026/11/02/ukraine-and-russia-say-air-raid-alert-apps-hit-by-cyberattacks-after-truce-ends"
+  },
+  {
+   "n": 1,
+   "outlet": "The Statesman",
+   "title": "Ukraine and Russia report emergency alert app cyberattacks, fake radiation warnings (2 Nov)",
+   "url": "https://www.thestatesman.com/world/ukraine-and-russia-report-emergency-alert-app-cyberattacks-fake-radiation-warnings-1503657877.html"
+  },
+  {
+   "n": 2,
+   "outlet": "Al Jazeera / DW / BBC",
+   "title": "Russia, Ukraine air raid alert apps hit by cyberattacks after truce ends (1-2 Nov)",
+   "url": "https://www.aljazeera.com/"
+  },
+  {
+   "n": 3,
+   "outlet": "Euromaidan Press",
+   "title": "Ajax Systems Air Alert app reaches 24 million downloads (10 Dec 2024)",
+   "url": "https://euromaidanpress.com/2024/12/10/ajax-systems-receives-european-excellence-award-2024-as-its-ukraines-air-alert-app-reaches-24-million-downloads-during-war/"
+  },
+  {
+   "n": 4,
+   "outlet": "AP News",
+   "title": "Civilians in Ukraine's Kherson prepare for the return of war as localized ceasefire ends (2 Nov)",
+   "url": "https://apnews.com/"
+  }
+ ],
+ "caption": "Ukraine, Russia, Air Alert app: hackers sent fake radiation, chemical and street fighting alerts to phones in Ukraine, and hours later Russia said its own emergency app was hit by a massive cyberattack. It happened as the war's longest truce ended around Oleshky. Would you still trust an air raid alert app after this, yes or no?",
+ "hashtags": [
+  "ukraine",
+  "russia",
+  "cyberattack",
+  "kherson",
+  "outpost"
+ ],
+ "notes_full": [
+  "First reported 1 Nov about 22:00 UTC (BBC 22:28, Guardian 04:19, Al Jazeera 04:48, Euronews 06:25 UTC, DW 08:48); Russian app attack early 2 Nov; about 12h old at delivery",
+  "Quotes: 'There is no radiation threat' air force Telegram (Statesman, Euronews); 'false information' MChS via Euronews/TASS; 'respond immediately to warnings' Prokudin via Euronews",
+  "Oreshnik fake message: The Statesman; street fighting/chemical: The Statesman",
+  "24M downloads: Euromaidan Press, Dec 2024 (old figure, stated as dated)",
+  "Removal-risk: events and attributed statements; no death toll; no future-attack framing; fake alerts clearly labelled fake; neutral yes/no",
+  "Globe: 3 places"
+ ]
+}
