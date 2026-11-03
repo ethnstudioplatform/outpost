@@ -1,0 +1,294 @@
+{
+ "series": "HORMUZ · DAY 249",
+ "question": "Will the US and Iran reach a deal this month, yes or no?",
+ "country": "IR",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   122,
+   61
+  ],
+  [
+   255,
+   255,
+   255
+  ],
+  [
+   218,
+   0,
+   0
+  ]
+ ],
+ "hook_lines": [
+  "US STRIKES IRAN'S QESHM ISLAND",
+  "officials call it self-defence"
+ ],
+ "cover": [
+  "HORMUZ",
+  "DAY 249",
+  "US HITS QESHM"
+ ],
+ "region": "IRAN / STRAIT OF HORMUZ",
+ "places": {
+  "QESHM": {
+   "id": "QESHM",
+   "name": "Qeshm Island",
+   "lat": 26.85,
+   "lon": 55.9
+  },
+  "HORMUZ": {
+   "id": "HORMUZ",
+   "name": "Strait of Hormuz",
+   "lat": 26.57,
+   "lon": 56.25
+  },
+  "TEHRAN": {
+   "id": "TEHRAN",
+   "name": "Tehran",
+   "lat": 35.69,
+   "lon": 51.39
+  }
+ },
+ "lines": [
+  {
+   "text": "US officials say the military struck Iran's Qeshm Island in the Strait of Hormuz on Monday.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "2 US officials, via NBC",
+   "scene": {
+    "type": "pin",
+    "place": "QESHM",
+    "head": "US strikes Qeshm Island",
+    "notes": [
+     "Strait of Hormuz",
+     "Monday, US officials say"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "Officials call it self-defence, not a return to major combat.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "US officials, via NBC",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "US OFFICIALS:",
+     "self-defence",
+     "not major combat"
+    ],
+    "flag": "US"
+   }
+  },
+  {
+   "text": "One official says Iran targeted a US aircraft, so the US hit the launcher.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "US official, via NBC",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "THE TARGET:",
+     "missile launcher",
+     "after aircraft targeted"
+    ],
+    "flag": "US"
+   }
+  },
+  {
+   "text": "A third official said: This was a defensive measure.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "3rd US official, via NBC",
+   "scene": {
+    "type": "quote",
+    "quote": "This was a defensive measure",
+    "who": "US official, via NBC",
+    "flag": "US"
+   }
+  },
+  {
+   "text": "Iranian state media reported five explosions on the island.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Iranian state media, via NBC",
+   "scene": {
+    "type": "number",
+    "value": "5",
+    "label": "explosions reported",
+    "detail": "Iranian state media",
+    "flag": "IR",
+    "grid": {
+     "of": 5,
+     "lit": 5,
+     "cols": 5,
+     "red": true,
+     "caption": "Qeshm Island, Monday"
+    }
+   }
+  },
+  {
+   "text": "The Wall Street Journal says it was one of a series of secret strikes.",
+   "src": [
+    1,
+    2
+   ],
+   "context": false,
+   "note": "WSJ, via The National",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "WSJ:",
+     "one of a series",
+     "of secret strikes"
+    ],
+    "flag": "US"
+   }
+  },
+  {
+   "text": "A US naval blockade of Iranian ports continues, NBC says.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "NBC, 3 Nov",
+   "scene": {
+    "type": "wide"
+   }
+  },
+  {
+   "text": "Brent oil rose about two percent to nearly one hundred and seven dollars, The National says.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "The National, 3 Nov",
+   "scene": {
+    "type": "number",
+    "value": "$107",
+    "label": "Brent, per barrel",
+    "detail": "up about 2% on Tuesday",
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "A day earlier it fell over seven percent on hopes of a deal.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "The National, 3 Nov",
+   "scene": {
+    "type": "compare",
+    "a": {
+     "n": 104.77,
+     "value": "$104.77",
+     "label": "Mon close"
+    },
+    "b": {
+     "n": 107,
+     "value": "~$107",
+     "label": "Tue"
+    }
+   }
+  },
+  {
+   "text": "Iran's top negotiator Ghalibaf said the ball is now in America's court to prevent a war.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Ghalibaf, Tue, via NBC",
+   "scene": {
+    "type": "quote",
+    "quote": "the ball is now in America's court",
+    "who": "Ghalibaf, Iran's top negotiator",
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "Trump said on Monday: I don't know if you even call it a war.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Trump speech, Mon, via NBC",
+   "scene": {
+    "type": "quote",
+    "quote": "I don't know if you even call it a war",
+    "who": "Donald Trump, Monday",
+    "flag": "US"
+   }
+  },
+  {
+   "text": "Day two hundred and fifty tomorrow. Will the US and Iran reach a deal this month, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "US AND IRAN:",
+     "DEAL THIS MONTH?",
+     "YES OR NO"
+    ],
+    "flag": "IR"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "NBC News",
+   "title": "U.S. military carries out limited strikes on Iran's Qeshm Island, U.S. officials say (3 Nov)",
+   "url": "https://www.nbcnews.com/world/iran/us-conducted-defensive-strikes-iranian-targets-strait-hormuz-us-offici-rcna607161"
+  },
+  {
+   "n": 1,
+   "outlet": "Reuters",
+   "title": "US carries out 'defensive' strikes on Iran's Qeshm Island, officials say (3 Nov)",
+   "url": "https://www.reuters.com/"
+  },
+  {
+   "n": 2,
+   "outlet": "The National",
+   "title": "Oil prices cross $105 after US strikes on Iran's Qeshm Island (3 Nov)",
+   "url": "https://www.thenationalnews.com/business/energy/2026/11/03/oil-prices-cross-105-after-us-strikes-on-irans-qeshm-island/"
+  }
+ ],
+ "caption": "Qeshm Island, Iran, Hormuz: US officials say the military struck Iran's Qeshm Island on Monday in what they call self-defence after Iran targeted a US aircraft. Iranian state media reported five explosions, and Brent oil rose to nearly 107 dollars. Will the US and Iran reach a deal this month, yes or no?",
+ "hashtags": [
+  "hormuz",
+  "qeshm",
+  "iran",
+  "oil",
+  "outpost"
+ ],
+ "notes_full": [
+  "First reported 2 Nov about 20:50 UTC (WSJ via Forex Factory 20:53, investingLive 21:48), Reuters/CNN/NBC 01:00 to 02:10 UTC 3 Nov; about 15h old at delivery",
+  "Strike details: two and three US officials via NBC (Kube, Alba, Lubold); WSJ 'series of secret strikes' via The National",
+  "Oil: Brent +2.03% near $107, Monday settle $104.77 after 7%+ fall (The National)",
+  "Quotes verbatim via NBC: 'This was a defensive measure'; Ghalibaf 'the ball is now in America's court to prevent a war'; Trump 'I don't know if you even call it a war'",
+  "Left out: IRGC drone shoot-down claims (state media only), Iran claim of attack on 3 ships (single outlet, 11:15 UTC), midterm and post-midterm strike speculation (future-attack framing)",
+  "Removal-risk: events and attributed statements; no death toll; no future-attack framing; neutral yes/no on a deal",
+  "Globe: 3 places"
+ ]
+}
