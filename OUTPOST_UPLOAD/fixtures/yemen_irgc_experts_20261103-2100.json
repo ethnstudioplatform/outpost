@@ -1,0 +1,331 @@
+{
+ "question": "Will the UN act on Yemen's claim, yes or no?",
+ "country": "YE",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   206,
+   17,
+   38
+  ],
+  [
+   240,
+   240,
+   240
+  ],
+  [
+   30,
+   30,
+   30
+  ]
+ ],
+ "hook_lines": [
+  "YEMEN: 21 IRGC, HEZBOLLAH EXPERTS",
+  "directing the Houthis, it says"
+ ],
+ "cover": [
+  "YEMEN",
+  "21 FOREIGN",
+  "EXPERTS"
+ ],
+ "region": "YEMEN / RED SEA",
+ "places": {
+  "SANAA": {
+   "id": "SANAA",
+   "name": "Sanaa",
+   "lat": 15.37,
+   "lon": 44.19
+  },
+  "HODEIDAH": {
+   "id": "HODEIDAH",
+   "name": "Hodeidah",
+   "lat": 14.8,
+   "lon": 42.95
+  },
+  "SAADA": {
+   "id": "SAADA",
+   "name": "Saada",
+   "lat": 16.94,
+   "lon": 43.76
+  },
+  "MANDEB": {
+   "id": "MANDEB",
+   "name": "Bab al-Mandeb",
+   "lat": 12.58,
+   "lon": 43.33
+  }
+ },
+ "lines": [
+  {
+   "text": "Yemen's government says 21 experts from Iran's Revolutionary Guards and Hezbollah are directing Houthi operations.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Yemen Interior Ministry, Tue",
+   "scene": {
+    "type": "pin",
+    "place": "SANAA",
+    "head": "Yemen: 21 experts",
+    "notes": [
+     "IRGC and Hezbollah",
+     "Yemen's govt says"
+    ],
+    "span": 7
+   }
+  },
+  {
+   "text": "Minister Ibrahim Haidan says fourteen are IRGC and seven are Hezbollah.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Interior Minister Ibrahim Haidan",
+   "scene": {
+    "type": "number",
+    "value": "21",
+    "label": "foreign experts",
+    "detail": "14 IRGC, 7 Hezbollah",
+    "flag": "YE",
+    "grid": {
+     "of": 21,
+     "lit": 14,
+     "cols": 7,
+     "red": true,
+     "caption": "lit: 14 IRGC"
+    }
+   }
+  },
+  {
+   "text": "He says support has moved from training to direct supervision.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Haidan statement, via Al Jazeera",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "HAIDAN SAYS:",
+     "not training,",
+     "direct supervision"
+    ],
+    "flag": "YE"
+   }
+  },
+  {
+   "text": "Haidan said: This is not a training mission, but a fully fledged general staff.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Haidan, via The National",
+   "scene": {
+    "type": "quote",
+    "quote": "This is not a training mission, but a fully fledged general staff",
+    "who": "Ibrahim Haidan, Yemen's interior minister",
+    "flag": "YE"
+   }
+  },
+  {
+   "text": "The ministry says eight of them are in the Red Sea port of Hodeidah.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Interior Ministry statement",
+   "scene": {
+    "type": "pin",
+    "place": "HODEIDAH",
+    "head": "Hodeidah: 8 experts",
+    "notes": [
+     "Red Sea port",
+     "ministry says"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "Four each are in Sanaa and Saada, the rest in Hajjah, Amran and Khokha.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Interior Ministry statement",
+   "scene": {
+    "type": "pin",
+    "place": "SAADA",
+    "head": "Saada: 4 experts",
+    "notes": [
+     "Sanaa: 4",
+     "Hajjah, Amran, Khokha"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "It lists ballistic missiles, drones, and choosing commercial ships as targets among their skills.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Interior Ministry, via Al Jazeera",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "CLAIMED SKILLS:",
+     "missiles, drones,",
+     "ship targeting"
+    ],
+    "flag": "YE"
+   }
+  },
+  {
+   "text": "Haidan warned this threatens shipping in the Bab al Mandeb strait and the Red Sea.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Haidan, via Al Jazeera",
+   "scene": {
+    "type": "pin",
+    "place": "MANDEB",
+    "head": "Bab al-Mandeb",
+    "notes": [
+     "shipping threat,",
+     "Haidan warns"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "The ministry did not name the 21 or provide evidence, The National says.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "The National, 3 Nov",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "NOT NAMED,",
+     "NO EVIDENCE GIVEN",
+     "The National"
+    ],
+    "flag": "YE"
+   }
+  },
+  {
+   "text": "Tehran insists the Houthis act independently, and Hezbollah denies a role in Yemen, Al Jazeera says.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Al Jazeera, 3 Nov",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "IRAN:",
+     "Houthis independent",
+     "Hezbollah: no role"
+    ],
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "Four military sources told Reuters on Monday the Houthis are within 80 kilometres of Aden.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Reuters sources, via The National",
+   "scene": {
+    "type": "number",
+    "value": "80km",
+    "label": "Houthis from Aden",
+    "detail": "Reuters sources, Monday",
+    "flag": "YE"
+   }
+  },
+  {
+   "text": "The Houthis say they targeted Saudi Arabia's Abha airport and an air base on Tuesday.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Houthi spokesperson, Tue",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "HOUTHIS SAY:",
+     "Abha airport,",
+     "Khamis Mushait hit"
+    ],
+    "flag": "SA"
+   }
+  },
+  {
+   "text": "Haidan wants the Houthis listed as a terrorist group. Will the UN act on Yemen's claim, yes or no?",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Haidan, via Al Jazeera",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "YEMEN'S CLAIM:",
+     "WILL THE UN ACT?",
+     "YES OR NO"
+    ],
+    "flag": "YE"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "Al Jazeera",
+   "title": "Yemen gov't accuses IRGC, Hezbollah of sending 21 experts to back Houthis (3 Nov)",
+   "url": "https://www.aljazeera.com/news/2026/11/3/yemen-govt-accuses-irgc-hezbollah-of-sending-21-experts-to-back-houthis"
+  },
+  {
+   "n": 1,
+   "outlet": "The National",
+   "title": "Hidden hands behind the Houthis: Yemen claims 21 IRGC and Hezbollah agents are supporting rebels (3 Nov)",
+   "url": "https://www.thenationalnews.com/news/mena/2026/11/03/hidden-hands-behind-the-houthis-yemen-claims-21-irgc-and-hezbollah-agents-are-supporting-rebels/"
+  },
+  {
+   "n": 2,
+   "outlet": "MTV Lebanon / Pakistan Today",
+   "title": "Houthis claim strikes on Abha airport and Khamis Mushait air base (3 Nov)",
+   "url": "https://www.pakistantoday.com.pk/"
+  }
+ ],
+ "caption": "Yemen, Houthis, IRGC, Hezbollah: Yemen's government says 21 experts from Iran's Revolutionary Guards and Hezbollah are directing Houthi operations, 8 of them in Hodeidah. The ministry gave no evidence, and Tehran says the Houthis act independently. Will the UN act on Yemen's claim, yes or no?",
+ "hashtags": [
+  "yemen",
+  "houthis",
+  "irgc",
+  "hezbollah",
+  "outpost"
+ ],
+ "notes_full": [
+  "First reported 3 Nov about 11:45 UTC (South24), The National 15:52, Arab News 16:36, L'Orient 17:10, Al Jazeera 19:13, Asharq Al-Awsat 19:30; about 9h old at delivery",
+  "All expert claims framed as Yemen's Interior Ministry / Haidan; no evidence given (The National); Iran and Hezbollah denials included (Al Jazeera)",
+  "80 km from Aden: Reuters 4 military sources, 2 Nov, via The National 3 Nov (context)",
+  "Abha / Khamis Mushait: Houthi military spokesperson claim 3 Nov 13:15 UTC (MTV Lebanon), also Pakistan Today, Breakingthenews; framed as Houthi claim",
+  "Removal-risk: attributed claims and events; no death toll; no future-attack framing; neutral yes/no on UN action",
+  "Globe: 4 places"
+ ]
+}
