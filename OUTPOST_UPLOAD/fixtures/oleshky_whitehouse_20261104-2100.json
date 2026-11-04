@@ -1,0 +1,317 @@
+{
+ "question": "Will Thursday's White House talks bring another Oleshky truce, yes or no?",
+ "country": "UA",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   87,
+   183
+  ],
+  [
+   255,
+   215,
+   0
+  ],
+  [
+   255,
+   255,
+   255
+  ]
+ ],
+ "hook_lines": [
+  "UKRAINE GIVES MELANIA TRUMP TOP ORDER",
+  "White House talks Thursday"
+ ],
+ "cover": [
+  "OLESHKY",
+  "WHITE HOUSE",
+  "THURSDAY"
+ ],
+ "region": "UKRAINE / KHERSON",
+ "places": {
+  "KYIV": {
+   "id": "KYIV",
+   "name": "Kyiv, Ukraine",
+   "lat": 50.45,
+   "lon": 30.52
+  },
+  "OLESHKY": {
+   "id": "OLESHKY",
+   "name": "Oleshky, Ukraine",
+   "lat": 46.62,
+   "lon": 32.72
+  },
+  "WASHINGTON": {
+   "id": "WASHINGTON",
+   "name": "Washington",
+   "lat": 38.9,
+   "lon": -77.04
+  }
+ },
+ "lines": [
+  {
+   "text": "Ukraine has given Melania Trump its Order of Princess Olga, first class.",
+   "src": [
+    0,
+    1,
+    2
+   ],
+   "context": false,
+   "note": "Decree 1079/2026, via BBC",
+   "scene": {
+    "type": "pin",
+    "place": "KYIV",
+    "head": "Order of Princess Olga",
+    "notes": [
+     "1st class, decree 1079",
+     "Zelensky, 4 Nov"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "The decree cites her significant personal contribution to humanitarian support for Ukraine.",
+   "src": [
+    0,
+    2
+   ],
+   "context": false,
+   "note": "Decree text, via BBC, Ukrinform",
+   "scene": {
+    "type": "quote",
+    "quote": "significant personal contribution to humanitarian support for Ukraine",
+    "who": "Decree No. 1079/2026",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "It follows a five-day ceasefire around Russian-occupied Oleshky, which ended on the first of November.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Kyiv Post, 4 Nov",
+   "scene": {
+    "type": "pin",
+    "place": "OLESHKY",
+    "head": "Oleshky truce",
+    "notes": [
+     "27 Oct to 1 Nov",
+     "Kyiv Post"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "Several hundred civilians were evacuated, the BBC and Kyiv Post report.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "BBC, Kyiv Post",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "SEVERAL HUNDRED",
+     "evacuated from Oleshky",
+     "BBC, Kyiv Post"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "About eighty per cent chose Ukrainian-controlled territory, Kyiv Post reports.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Kyiv Post, 4 Nov",
+   "scene": {
+    "type": "number",
+    "value": "80%",
+    "label": "chose Ukrainian side",
+    "detail": "Kyiv Post reports",
+    "flag": "UA",
+    "grid": {
+     "of": 10,
+     "lit": 8,
+     "cols": 10,
+     "caption": "of evacuees, reportedly"
+    }
+   }
+  },
+  {
+   "text": "Kyiv Post says several hundred, perhaps up to a thousand, still remain in the town.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Kyiv Post, 4 Nov",
+   "scene": {
+    "type": "number",
+    "value": "1,000",
+    "label": "may still remain",
+    "detail": "Kyiv Post: up to",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "On Thursday, Russian and Ukrainian delegations meet at the White House, on Melania Trump's invitation.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "BBC, Kyiv Post",
+   "scene": {
+    "type": "pin",
+    "place": "WASHINGTON",
+    "head": "White House, Thursday",
+    "notes": [
+     "Russia and Ukraine",
+     "remarks 16:00 GMT"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "Ukraine sends ombudsman Dmytro Lubinets and MP Davyd Arakhamia.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "BBC, 4 Nov",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "UKRAINE SENDS:",
+     "Lubinets, Arakhamia",
+     "BBC reports"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "The Kremlin says Russia sends ombudsman Yana Lantratova and Kirill Dmitriev.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Peskov, via BBC",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "RUSSIA SENDS:",
+     "Lantratova, Dmitriev",
+     "Peskov says"
+    ],
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "Lubinets says similar evacuations could be organised every month, Kyiv Post reports.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Lubinets, via Kyiv Post",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "MONTHLY",
+     "evacuations possible",
+     "Lubinets says"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Some Ukrainian soldiers say Russia used the pause to rotate troops. Lubinets disputes that.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Kyiv Post, 4 Nov",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "TRUCE DISPUTE",
+     "troop rotation claim",
+     "Lubinets disputes it"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Lubinets said: There are important meetings ahead.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Lubinets, via BBC",
+   "scene": {
+    "type": "quote",
+    "quote": "There are important meetings ahead.",
+    "who": "Dmytro Lubinets, via BBC",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Will Thursday's White House talks bring another Oleshky truce, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "NEW OLESHKY TRUCE?",
+     "YES",
+     "OR NO"
+    ],
+    "flag": "UA"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "BBC (via Yahoo)",
+   "title": "Zelensky awards Melania Trump Ukraine's highest award after Oleshky ceasefire (4 Nov)",
+   "url": "https://ca.news.yahoo.com/zelensky-awards-melania-trump-ukraines-150114780.html"
+  },
+  {
+   "n": 1,
+   "outlet": "Kyiv Post",
+   "title": "Zelensky Awards Melania Trump Ukraine's Top Order of Princess Olha (4 Nov)",
+   "url": "https://www.kyivpost.com/post/89088"
+  },
+  {
+   "n": 2,
+   "outlet": "Ukrinform",
+   "title": "Zelensky awards Melania Trump Order of Princess Olga (4 Nov)",
+   "url": "https://www.ukrinform.net/amp/rubric-polytics/4181286-zelensky-awards-melania-trump-order-of-princess-olga.html"
+  }
+ ],
+ "caption": "Melania Trump, Ukraine, Oleshky: Zelensky has given Melania Trump Ukraine's Order of Princess Olga after the Oleshky ceasefire let several hundred civilians out. Russian and Ukrainian delegations meet at the White House on Thursday. Will Thursday's talks bring another Oleshky truce, yes or no?",
+ "hashtags": [
+  "melaniatrump",
+  "oleshky",
+  "zelensky",
+  "ukraine",
+  "outpost"
+ ],
+ "notes_full": [
+  "Award decree dated 2 Nov, first reported 4 Nov about 09:00 UTC (Kyiv Post 10:57 Kyiv, Ukrinform 11:37, BBC 15:01 UTC); Peskov naming Russian delegation via BBC 4 Nov; about 12h old at 21:00",
+  "Evacuees: BBC and Kyiv Post say several hundred; 80% chose Ukrainian side and up to 1,000 remain per Kyiv Post",
+  "Left out: unverified 'nearly 800' figure (geo.tv slug only), 20,000 children figure, Abu Dhabi talks",
+  "Removal-risk: events and statements, attributed, no death toll, no future-attack framing, both sides named, neutral yes/no",
+  "Globe: 3 places"
+ ]
+}
