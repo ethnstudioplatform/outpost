@@ -1,0 +1,297 @@
+{
+ "series": "HORMUZ · DAY 250",
+ "question": "Will the Strait of Hormuz reopen this month, yes or no?",
+ "country": "IR",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   122,
+   61
+  ],
+  [
+   255,
+   255,
+   255
+  ],
+  [
+   218,
+   0,
+   0
+  ]
+ ],
+ "hook_lines": [
+  "IRAN: 4 TANKERS HIT HORMUZ MINES",
+  "Revolutionary Guards say"
+ ],
+ "cover": [
+  "HORMUZ",
+  "DAY 250",
+  "4 TANKERS HIT MINES"
+ ],
+ "region": "IRAN / STRAIT OF HORMUZ",
+ "places": {
+  "HORMUZ": {
+   "id": "HORMUZ",
+   "name": "Strait of Hormuz",
+   "lat": 26.57,
+   "lon": 56.25
+  },
+  "LIMAH": {
+   "id": "LIMAH",
+   "name": "Limah, Oman",
+   "lat": 25.94,
+   "lon": 56.42
+  },
+  "QESHM": {
+   "id": "QESHM",
+   "name": "Qeshm Island",
+   "lat": 26.85,
+   "lon": 55.9
+  }
+ },
+ "lines": [
+  {
+   "text": "Iran's Revolutionary Guards say four oil tankers hit naval mines near the Strait of Hormuz.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "IRGC statement, via Reuters",
+   "scene": {
+    "type": "pin",
+    "place": "HORMUZ",
+    "head": "4 tankers hit mines",
+    "notes": [
+     "Strait of Hormuz",
+     "IRGC says, Wednesday"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "The Guards say the tankers took a prohibited route south of the strait, and are still ablaze.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "IRGC statement, via Reuters",
+   "scene": {
+    "type": "number",
+    "value": "4",
+    "label": "tankers ablaze",
+    "detail": "IRGC says",
+    "flag": "IR",
+    "grid": {
+     "of": 4,
+     "lit": 4,
+     "cols": 4,
+     "red": true,
+     "caption": "prohibited route, south"
+    }
+   }
+  },
+  {
+   "text": "They say two more vessels were detained for breaking shipping restrictions.",
+   "src": [
+    0,
+    2
+   ],
+   "context": false,
+   "note": "IRGC statement, via Al Jazeera",
+   "scene": {
+    "type": "number",
+    "value": "2",
+    "label": "vessels detained",
+    "detail": "IRGC says",
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "The claims could not be independently verified, IntelliNews says.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "bne IntelliNews, 4 Nov",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "IRGC CLAIMS:",
+     "not independently",
+     "verified"
+    ],
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "Tehran wants ships to use a northern lane through Iranian waters instead, IntelliNews says.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "bne IntelliNews, 4 Nov",
+   "scene": {
+    "type": "wide"
+   }
+  },
+  {
+   "text": "Separately, UKMTO says two projectiles hit a tanker's engine room off Limah, Oman, on Tuesday. No casualties were reported.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "UKMTO, via Al Jazeera",
+   "scene": {
+    "type": "pin",
+    "place": "LIMAH",
+    "head": "Tanker engine room hit",
+    "notes": [
+     "2 projectiles: UKMTO",
+     "no casualties reported"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "It is unclear whether the two incidents are linked, Al Jazeera says.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Al Jazeera, 4 Nov",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "AL JAZEERA:",
+     "unclear if the",
+     "incidents are linked"
+    ],
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "The Guards also say they shot down a US MQ-9 drone, their fifty-sixth.",
+   "src": [
+    1,
+    2
+   ],
+   "context": false,
+   "note": "IRGC statement, via Al Jazeera",
+   "scene": {
+    "type": "number",
+    "value": "56",
+    "label": "MQ-9 drones downed",
+    "detail": "IRGC's own count",
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "Before the war, about one hundred and forty ships a day crossed. Now it is fewer than ten, IntelliNews says.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "bne IntelliNews, 4 Nov",
+   "scene": {
+    "type": "number",
+    "value": "<10",
+    "label": "ships a day",
+    "detail": "about 140 before the war",
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "Iran's security chief Mohsen Rezaei said: America's response to Iran's rights and demands was not convincing.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Rezaei on X, via Al Jazeera",
+   "scene": {
+    "type": "quote",
+    "quote": "America's response to Iran's rights and demands was not convincing",
+    "who": "Mohsen Rezaei, Iran",
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "Trump called Tuesday's strike on Qeshm Island a minor attack, and said it wasn't war.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Trump to Fox, via Al Jazeera",
+   "scene": {
+    "type": "pin",
+    "place": "QESHM",
+    "head": "Qeshm Island",
+    "notes": [
+     "Trump: a minor attack",
+     "anti-aircraft site hit"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "Day two hundred and fifty one tomorrow. Will the Strait of Hormuz reopen this month, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "HORMUZ:",
+     "REOPEN THIS MONTH?",
+     "YES OR NO"
+    ],
+    "flag": "IR"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "Reuters",
+   "title": "Iran's IRGC says four tankers ablaze after hitting mines near Strait of Hormuz (4 Nov)",
+   "url": "https://theprint.in/world/irans-irgc-says-four-tankers-ablaze-after-hitting-mines-near-strait-of-hormuz/3089920/"
+  },
+  {
+   "n": 1,
+   "outlet": "bne IntelliNews",
+   "title": "Iran's IRGC says four more tankers hit mines in Hormuz, 56th US drone downed (4 Nov)",
+   "url": "https://www.intellinews.com/iran-s-irgc-says-four-more-tankers-hit-mines-in-hormuz-56th-us-drone-downed-481702"
+  },
+  {
+   "n": 2,
+   "outlet": "Al Jazeera",
+   "title": "Iran says US reply to Hormuz plan 'unconvincing'; Trump confirms strikes (4 Nov)",
+   "url": "https://www.aljazeera.com/news/2026/11/4/iran-says-us-reply-to-hormuz-plan-unconvincing-trump-confirms-strikes"
+  }
+ ],
+ "caption": "Strait of Hormuz, Iran, IRGC: Iran's Revolutionary Guards say four oil tankers hit naval mines on a prohibited route south of the strait and are still ablaze, a claim not independently verified. Iran calls the US reply to its seven conditions unconvincing. Will the Strait of Hormuz reopen this month, yes or no?",
+ "hashtags": [
+  "hormuz",
+  "irgc",
+  "iran",
+  "tankers",
+  "outpost"
+ ],
+ "notes_full": [
+  "First reported 4 Nov about 01:30 UTC (3 tankers, Vietnam.vn/bastillepost), Reuters 03:50 UTC (4 tankers), then BBC 07:17, Al Jazeera, MEE, ToI, Anadolu; about 7h old at delivery",
+  "IRGC statement via Defa Press/IRNA; IntelliNews and Al Jazeera: could not be independently verified",
+  "UKMTO: 2 projectiles hit a tanker engine room 14nm NE of Limah, Oman, Tuesday, no casualties (Al Jazeera); link to IRGC claims unclear",
+  "Transits ~140 a day pre-war to fewer than 10 (IntelliNews)",
+  "Quotes verbatim: Rezaei on X via Al Jazeera; Trump 'minor attack', 'wasn't war' via Al Jazeera (Fox)",
+  "Left out: CENTCOM post-midterm strike plans (future-attack framing), IRGC 'final blow' rhetoric, Khamenei target list, Mearsheimer commentary",
+  "Removal-risk: attributed claims with verification caveat; no death toll; no future-attack framing; neutral yes/no on reopening",
+  "Globe: 3 places"
+ ]
+}
