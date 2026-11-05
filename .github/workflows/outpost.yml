@@ -94,7 +94,7 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           RELIEFWEB_APPNAME: ${{ secrets.RELIEFWEB_APPNAME }}
-          AUTOPOST: ${{ inputs.autopost }}
+          AUTOPOST: ${{ inputs.autopost || vars.OUTPOST_AUTOPOST == 'true' }}
           POST_AT: ${{ inputs.post_at }}
         run: |
           if [ "$AUTOPOST" = "true" ]; then
@@ -119,7 +119,8 @@ jobs:
 
       - name: Publish to TikTok via Buffer
         id: publish
-        if: steps.run.outputs.made == 'true' && inputs.autopost && inputs.demo != true
+        # On when the run asks for it, or always once Ethan sets the repo variable OUTPOST_AUTOPOST to true.
+        if: steps.run.outputs.made == 'true' && (inputs.autopost || vars.OUTPOST_AUTOPOST == 'true') && inputs.demo != true
         env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
           BUFFER_CHANNEL_ID: ${{ vars.BUFFER_CHANNEL_ID }}
