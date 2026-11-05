@@ -155,6 +155,17 @@ def create(channel, video_url, text, mode, due_at=None, draft=False):
     return None
 
 
+def delete_post(post_id):
+    for fields in ("deletePost(input: {id: $id}) { __typename }", "deletePost(id: $id) { __typename }"):
+        for t in ("PostId", "String"):
+            d = gql("mutation($id: %s!) { %s }" % (t, fields), {"id": post_id}, quiet=True)
+            if d:
+                print(f"[buffer] deleted post {post_id}: {d}")
+                return "Success" in json.dumps(d)
+    print(f"[buffer] could not delete post {post_id}")
+    return False
+
+
 def notify(text):
     """One line to Ethan's Telegram so he knows the post went out (or that he needs to post by hand)."""
     tok, chat = os.environ.get("TELEGRAM_BOT_TOKEN", ""), os.environ.get("TELEGRAM_CHAT_ID", "")
@@ -184,6 +195,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--probe", action="store_true")
     ap.add_argument("--status", action="store_true")
+    ap.add_argument("--cancel", default="", help="Buffer post id: delete a scheduled post before it goes out")
     ap.add_argument("--draft-test", default="", help="video URL: create a Buffer DRAFT only (never published)")
     ap.add_argument("--video-url", default="")
     ap.add_argument("--caption-file", default="")
@@ -193,19 +205,17 @@ def main():
                     help="seconds to wait for Buffer to confirm a post that is due now")
     a = ap.parse_args()
 
+    if a.cancel:
+        ok = delete_post(a.cancel)
+        notify(f"OUTPOST: scheduled post {a.cancel} {'cancelled' if ok else 'could NOT be cancelled'} by the desk QA")
+        return 0 if ok else 1
+
     if a.draft_test:
         ch = tiktok_channel()
         p = create(ch, a.draft_test, "OUTPOST pipeline test, draft only, do not publish", "addToQueue", draft=True)
         print(f"[buffer] draft test {'OK' if p else 'FAILED'}: {p}")
-        if p:
-            for fields in ("deletePost(input: {id: $id}) { __typename }", "deletePost(id: $id) { __typename }"):
-                d = gql("mutation($id: PostId!) { %s }" % fields, {"id": p["id"]}, quiet=True) or \
-                    gql("mutation($id: String!) { %s }" % fields, {"id": p["id"]}, quiet=True)
-                if d:
-                    print(f"[buffer] test draft deleted: {d}")
-                    break
-            else:
-                print("[buffer] could not delete the test draft: it stays in Buffer Drafts, harmless")
+        if p and not delete_post(p["id"]):
+            print("[buffer] could not delete the test draft: it stays in Buffer Drafts, harmless")
         return 0 if p else 1
 
     if a.probe or a.status:
