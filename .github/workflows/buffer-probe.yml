@@ -7,6 +7,10 @@ on:
         description: "Also make a test video and save it as a Buffer DRAFT (never published), then delete it"
         type: boolean
         default: false
+      cancel_post_id:
+        description: "Delete this scheduled Buffer post before it goes out (desk QA failed)"
+        type: string
+        default: ""
 
 permissions:
   contents: write
@@ -23,6 +27,13 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install requests
+      - name: Cancel a scheduled post
+        if: inputs.cancel_post_id != ''
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python publish.py --cancel "${{ inputs.cancel_post_id }}"
       - name: List the Buffer channels this key can see
         env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
