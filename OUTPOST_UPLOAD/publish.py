@@ -126,7 +126,7 @@ def show(n):
             f"link={n.get('externalLink')} error={err} text={str(n.get('text'))[:60]!r}")
 
 
-def create(channel, video_url, text, mode, due_at=None):
+def create(channel, video_url, text, mode, due_at=None, draft=False):
     q = """mutation($input: CreatePostInput!) {
       createPost(input: $input) {
         ... on PostActionSuccess { post { id dueAt } }
@@ -137,13 +137,34 @@ def create(channel, video_url, text, mode, due_at=None):
            "assets": [{"video": {"url": video_url, "metadata": {"thumbnailOffset": 0}}}]}
     if due_at:
         inp["dueAt"] = due_at
+    if draft:
+        inp["saveToDraft"] = True
+    # TikTok asks creators to label realistic AI audio or video: the narrator is a synthesised voice.
+    if os.environ.get("BUFFER_AI_LABEL", "true").lower() != "false":
+        inp["metadata"] = {"tiktok": {"isAiGenerated": True}}
     d = gql(q, {"input": inp})
+    if not d.get("createPost") and inp.get("metadata"):
+        print("[buffer] retrying without the TikTok metadata")
+        inp.pop("metadata")
+        d = gql(q, {"input": inp})
     res = d.get("createPost") or {}
     if res.get("post"):
         print(f"[buffer] {mode}: post {res['post'].get('id')} due {res['post'].get('dueAt')}")
         return res["post"]
     print(f"[buffer] {mode} refused: {res.get('message') or d}")
     return None
+
+
+def notify(text):
+    """One line to Ethan's Telegram so he knows the post went out (or that he needs to post by hand)."""
+    tok, chat = os.environ.get("TELEGRAM_BOT_TOKEN", ""), os.environ.get("TELEGRAM_CHAT_ID", "")
+    if not (tok and chat):
+        return
+    try:
+        requests.post(f"https://api.telegram.org/bot{tok}/sendMessage",
+                      data={"chat_id": chat, "text": text[:4000], "disable_web_page_preview": True}, timeout=30)
+    except requests.RequestException as e:
+        print(f"[telegram] notify failed: {e}")
 
 
 def watch(channel, post_id, until, every=30):
@@ -163,6 +184,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--probe", action="store_true")
     ap.add_argument("--status", action="store_true")
+    ap.add_argument("--draft-test", default="", help="video URL: create a Buffer DRAFT only (never published)")
     ap.add_argument("--video-url", default="")
     ap.add_argument("--caption-file", default="")
     ap.add_argument("--due-at", default=os.environ.get("POST_AT", "").strip(),
@@ -171,13 +193,28 @@ def main():
                     help="seconds to wait for Buffer to confirm a post that is due now")
     a = ap.parse_args()
 
+    if a.draft_test:
+        ch = tiktok_channel()
+        p = create(ch, a.draft_test, "OUTPOST pipeline test, draft only, do not publish", "addToQueue", draft=True)
+        print(f"[buffer] draft test {'OK' if p else 'FAILED'}: {p}")
+        if p:
+            for fields in ("deletePost(input: {id: $id}) { __typename }", "deletePost(id: $id) { __typename }"):
+                d = gql("mutation($id: PostId!) { %s }" % fields, {"id": p["id"]}, quiet=True) or \
+                    gql("mutation($id: String!) { %s }" % fields, {"id": p["id"]}, quiet=True)
+                if d:
+                    print(f"[buffer] test draft deleted: {d}")
+                    break
+            else:
+                print("[buffer] could not delete the test draft: it stays in Buffer Drafts, harmless")
+        return 0 if p else 1
+
     if a.probe or a.status:
         chans = channels()
         for c in chans:
             print(f"[buffer] channel {c.get('service')}: {c.get('displayName') or c.get('name')} id={c.get('id')} "
                   f"queue_paused={c.get('isQueuePaused')} disconnected={c.get('isDisconnected')} org={c.get('org')}")
         if a.probe:
-            for name in ("CreatePostInput", "PostInputMetaData", "TikTokPostMetadataInput", "Post",
+            for name in ("Mutation", "CreatePostInput", "PostInputMetaData", "TikTokPostMetadataInput", "Post",
                          "PostStatus", "ShareMode", "PostVideoAssetInput", "VideoAssetInput"):
                 print("[buffer] schema " + type_fields(name))
         tt = [c for c in chans if str(c.get("service", "")).lower() == "tiktok"]
@@ -221,6 +258,14 @@ def main():
                               error=(err or {}).get("message") if isinstance(err, dict) else err)
                 if n.get("status") == "error":
                     result["ok"] = False
+    first = (text.splitlines() or [""])[0][:90]
+    if result["ok"] and result.get("status") == "sent":
+        notify(f"OUTPOST posted to TikTok automatically: {first}\n{result.get('link') or ''}")
+    elif result["ok"]:
+        notify(f"OUTPOST scheduled on TikTok for {result.get('buffer_due')} UTC (via Buffer): {first}")
+    else:
+        notify(f"OUTPOST autopost FAILED ({result.get('error') or 'Buffer refused'}). "
+               f"Post the video above by hand: {first}")
     with open(os.path.join(out_dir, "publish_result.json"), "w") as f:
         json.dump(result, f, indent=1)
     print("[publish] " + json.dumps(result))

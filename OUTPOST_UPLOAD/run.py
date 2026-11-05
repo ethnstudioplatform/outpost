@@ -6,6 +6,7 @@
 """
 import argparse
 import json
+import os
 import sys
 from datetime import datetime, timezone
 
@@ -81,7 +82,8 @@ def main():
         sources.save_seen(seen)
     if not args.no_send:
         # Telegram gets the video only, captioned with the post title and hashtags, ready to paste.
-        telegram.send_video(video, (out / "tiktok.txt").read_text())
+        note = os.environ.get("OUTPOST_TG_NOTE", "").strip()   # e.g. "AUTOPOST 09:00 via Buffer, nothing to do"
+        telegram.send_video(video, ((note + "\n\n") if note else "") + (out / "tiktok.txt").read_text())
     (config.ROOT / "out" / "latest.txt").write_text(str(out))
     return 0
 
