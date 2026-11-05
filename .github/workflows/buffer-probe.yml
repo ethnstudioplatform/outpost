@@ -2,6 +2,14 @@ name: Buffer check
 
 on:
   workflow_dispatch:
+    inputs:
+      draft_test:
+        description: "Also make a test video and save it as a Buffer DRAFT (never published), then delete it"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
 
 jobs:
   probe:
@@ -19,3 +27,20 @@ jobs:
         env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
         run: python publish.py --probe
+      - name: Draft test (release URL plus Buffer draft, nothing is published)
+        if: inputs.draft_test
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null
+          ffmpeg -v error -f lavfi -i testsrc2=size=1080x1920:rate=30 -f lavfi -i sine=frequency=440 -t 6 \
+            -c:v libx264 -pix_fmt yuv420p -c:a aac -shortest test.mp4
+          TAG="test-$(date -u +%Y%m%d-%H%M%S)"
+          gh release create "$TAG" test.mp4 --title "Buffer draft test $TAG" --notes "test" --latest=false
+          URL="https://github.com/${{ github.repository }}/releases/download/$TAG/test.mp4"
+          for i in 1 2 3 4 5 6; do curl -fsIL -o /dev/null "$URL" && break; sleep 5; done
+          python publish.py --draft-test "$URL"; RC=$?
+          sleep 20
+          gh release delete "$TAG" --yes --cleanup-tag || true
+          exit $RC

@@ -13,6 +13,14 @@ on:
         description: "Hand-written script file in fixtures/ (optional)"
         type: string
         default: ""
+      autopost:
+        description: "Post to TikTok automatically through Buffer (Ethan, 5 Nov 2026: fully autonomous posting)"
+        type: boolean
+        default: false
+      post_at:
+        description: "Exact post time, ISO UTC like 2026-11-05T09:00:00Z (empty or passed = post as soon as it is ready)"
+        type: string
+        default: ""
 
 permissions:
   contents: write
@@ -86,7 +94,12 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           RELIEFWEB_APPNAME: ${{ secrets.RELIEFWEB_APPNAME }}
+          AUTOPOST: ${{ inputs.autopost }}
+          POST_AT: ${{ inputs.post_at }}
         run: |
+          if [ "$AUTOPOST" = "true" ]; then
+            export OUTPOST_TG_NOTE="AUTOPOST, this one goes to TikTok by itself${POST_AT:+ at $POST_AT}. Nothing to do."
+          fi
           if [ -n "${{ inputs.script }}" ]; then python run.py --script "${{ inputs.script }}";
           elif [ "${{ inputs.demo }}" = "true" ]; then python run.py --demo; else python run.py; fi
           if [ -f out/latest.txt ]; then
@@ -103,6 +116,29 @@ jobs:
           name: outpost-draft
           path: ${{ env.DIR }}
           retention-days: 7
+
+      - name: Publish to TikTok via Buffer
+        id: publish
+        if: steps.run.outputs.made == 'true' && inputs.autopost && inputs.demo != true
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          BUFFER_CHANNEL_ID: ${{ vars.BUFFER_CHANNEL_ID }}
+          BUFFER_AI_LABEL: ${{ vars.BUFFER_AI_LABEL || 'true' }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          POST_AT: ${{ inputs.post_at }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Buffer fetches the video from a public URL: attach the MP4 to a release of this public repo.
+          TAG="post-$(date -u +%Y%m%d-%H%M%S)"
+          gh release create "$TAG" "$DIR/outpost.mp4" --title "OUTPOST $TAG" --notes-file "$DIR/tiktok.txt" --latest=false
+          URL="https://github.com/${{ github.repository }}/releases/download/$TAG/outpost.mp4"
+          for i in 1 2 3 4 5 6; do curl -fsIL -o /dev/null "$URL" && break; echo "waiting for the release file"; sleep 5; done
+          python publish.py --video-url "$URL" --caption-file "$DIR/tiktok.txt"
+          # tidy: keep two weeks of video releases (scheduled posts need theirs until they go out)
+          CUT=$(date -u -d '14 days ago' +%Y-%m-%dT%H:%M:%SZ)
+          gh release list --limit 200 --json tagName,createdAt --jq ".[] | select(.tagName | startswith(\"post-\")) | select(.createdAt < \"$CUT\") | .tagName" \
+            | xargs -r -n1 gh release delete --yes --cleanup-tag || true
 
       - name: Remember used headlines
         if: steps.run.outputs.made == 'true' && inputs.demo != true && inputs.script == ''
