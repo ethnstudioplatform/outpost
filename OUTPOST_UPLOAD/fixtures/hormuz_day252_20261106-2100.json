@@ -1,0 +1,294 @@
+{
+ "series": "HORMUZ · DAY 252",
+ "question": "Will the Strait of Hormuz reopen this month, yes or no?",
+ "country": "IR",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   122,
+   61
+  ],
+  [
+   255,
+   255,
+   255
+  ],
+  [
+   218,
+   0,
+   0
+  ]
+ ],
+ "hook_lines": [
+  "TANKER BLAST 16NM OFF OMAN",
+  "Iran says 2 more ablaze"
+ ],
+ "cover": [
+  "HORMUZ",
+  "DAY 252",
+  "TANKER BLAST OFF OMAN"
+ ],
+ "region": "OMAN / STRAIT OF HORMUZ",
+ "places": {
+  "KHASAB": {
+   "id": "KHASAB",
+   "name": "Khasab, Oman",
+   "lat": 26.18,
+   "lon": 56.25
+  },
+  "HORMUZ": {
+   "id": "HORMUZ",
+   "name": "Strait of Hormuz",
+   "lat": 26.57,
+   "lon": 56.25
+  },
+  "QESHM": {
+   "id": "QESHM",
+   "name": "Qeshm Island",
+   "lat": 26.85,
+   "lon": 55.9
+  }
+ },
+ "lines": [
+  {
+   "text": "A tanker in the Strait of Hormuz reported an explosion sixteen nautical miles east of Khasab, Oman, UKMTO says.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "UKMTO, via Reuters, 6 Nov",
+   "scene": {
+    "type": "pin",
+    "place": "KHASAB",
+    "head": "Tanker blast",
+    "notes": [
+     "16nm east of Khasab, Oman",
+     "UKMTO says, Friday"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "The blast hit its port side waterline. UKMTO says all crew are safe and accounted for.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "UKMTO, via Reuters, 6 Nov",
+   "scene": {
+    "type": "quote",
+    "quote": "safe and accounted for",
+    "who": "UKMTO, on the crew",
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "Iran's Revolutionary Guards say two more oil tankers caught fire after hitting mines.",
+   "src": [
+    2,
+    3
+   ],
+   "context": false,
+   "note": "IRGC statement, via MEE and DW",
+   "scene": {
+    "type": "number",
+    "value": "2",
+    "label": "tankers on fire",
+    "detail": "IRGC says, Friday",
+    "flag": "IR",
+    "grid": {
+     "of": 2,
+     "lit": 2,
+     "cols": 2,
+     "red": true,
+     "caption": "IRGC claim, state media"
+    }
+   }
+  },
+  {
+   "text": "They say the tankers used an unauthorised route with navigation systems off.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "IRGC statement, via MEE",
+   "scene": {
+    "type": "pin",
+    "place": "HORMUZ",
+    "head": "IRGC claim",
+    "notes": [
+     "unauthorised route",
+     "tracking turned off"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "That claim came through Iranian state media, DW reports.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "DW, with Reuters and AFP",
+   "scene": {
+    "type": "wide"
+   }
+  },
+  {
+   "text": "On Thursday, Iranian media said five tankers and a tug caught fire.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "Iranian media, via DW",
+   "scene": {
+    "type": "number",
+    "value": "6",
+    "label": "vessels on fire",
+    "detail": "5 tankers, 1 tug",
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "UKMTO says October saw more than thirty five incidents, the most since the war began.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "UKMTO data, via DW",
+   "scene": {
+    "type": "number",
+    "value": "35+",
+    "label": "incidents in October",
+    "detail": "most of any month: UKMTO",
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "At least five ships have been attacked so far in November.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "UKMTO data, via DW",
+   "scene": {
+    "type": "number",
+    "value": "5",
+    "label": "ships hit in November",
+    "detail": "at least: UKMTO",
+    "flag": "IR",
+    "grid": {
+     "of": 5,
+     "lit": 5,
+     "cols": 5,
+     "red": true,
+     "caption": "so far this month"
+    }
+   }
+  },
+  {
+   "text": "Iran also says it downed a US MQ-1 drone over Qeshm Island. The US has not confirmed it.",
+   "src": [
+    3,
+    4
+   ],
+   "context": false,
+   "note": "Iranian media, via DW",
+   "scene": {
+    "type": "pin",
+    "place": "QESHM",
+    "head": "Qeshm Island",
+    "notes": [
+     "Iran: US MQ-1 downed",
+     "US has not confirmed"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "The Guards say there will be no change until the seven conditions are met.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "IRGC statement, via MEE",
+   "scene": {
+    "type": "quote",
+    "quote": "there will be no change until the seven conditions are met",
+    "who": "IRGC Navy statement",
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "Day two hundred and fifty three tomorrow. Will Hormuz reopen this month, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "HORMUZ:",
+     "REOPEN THIS MONTH?",
+     "YES OR NO"
+    ],
+    "flag": "IR"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "Reuters via Arab News",
+   "title": "Tanker reports explosion near Oman's Khasab while transiting Strait of Hormuz, UKMTO says (6 Nov)",
+   "url": "https://www.arabnews.com/middle-east/tanker-reports-explosion-near-omans-khasab-while-transiting-strait-of-hormuz-ukmto-says-3010151"
+  },
+  {
+   "n": 1,
+   "outlet": "The Times of Israel",
+   "title": "Tanker reports blast near Oman's Khasab while transiting Hormuz (6 Nov)",
+   "url": "https://www.timesofisrael.com/liveblog_entry/tanker-reports-blast-near-omans-khasab-while-transiting-hormuz-british-maritime-agency-says/"
+  },
+  {
+   "n": 2,
+   "outlet": "Middle East Eye",
+   "title": "IRGC says two oil tankers ablaze after collision with mines in Hormuz Strait (6 Nov)",
+   "url": "https://www.middleeasteye.net/live-blog/live-blog-update/irgc-says-two-oil-tankers-ablaze-after-collision-mines-hormuz-strait"
+  },
+  {
+   "n": 3,
+   "outlet": "DW",
+   "title": "Iran war: Gulf tanker attacked, 1 seafarer killed (6 Nov)",
+   "url": "https://p.dw.com/p/5PAFK"
+  },
+  {
+   "n": 4,
+   "outlet": "The Jerusalem Post",
+   "title": "Iran says it downed US MQ-1 drone over Qeshm Island (6 Nov)",
+   "url": "https://www.jpost.com/"
+  }
+ ],
+ "caption": "Strait of Hormuz, Khasab, Oman: a tanker reported an explosion 16 nautical miles east of Khasab, UKMTO says, and all crew are safe. Iran's Revolutionary Guards say two more tankers caught fire after hitting mines. Will the Strait of Hormuz reopen this month, yes or no?",
+ "hashtags": [
+  "hormuz",
+  "khasab",
+  "oman",
+  "iran",
+  "outpost"
+ ],
+ "notes_full": [
+  "Khasab blast first reported 6 Nov about 12:15 UTC (Reuters via Devdiscourse, Al Arabiya, Arab News, ToI); about 9h old at 21:00",
+  "IRGC two-tanker mine claim first reported 6 Nov 07:58 GMT (MEE), Tasnim 08:36; about 13h old at 21:00",
+  "UKMTO October 35+ incidents, at least 5 in November; Thursday 5 tankers and a tug on fire per Iranian media; MQ-1 claim, US not confirmed: all DW with Reuters/AFP",
+  "Left out: Velos Sapphire seafarer death (attack first reported 5 Nov, stale; death toll rule), Trump 'destroy' remarks and strike threats (future-attack framing), Khamenei war-widening warning",
+  "Removal-risk: events and attributed statements; no death toll; no future-attack framing; neutral yes/no",
+  "Globe: 3 places"
+ ]
+}
