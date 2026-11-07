@@ -1,0 +1,318 @@
+{
+ "series": "HORMUZ · DAY 253",
+ "question": "Will Hormuz reopen by New Year, yes or no?",
+ "country": "IR",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   122,
+   61
+  ],
+  [
+   255,
+   255,
+   255
+  ],
+  [
+   218,
+   0,
+   0
+  ]
+ ],
+ "hook_lines": [
+  "IRAN LIFTS 2,000KM MISSILE CAP",
+  "Tanker hits mine in Hormuz"
+ ],
+ "cover": [
+  "HORMUZ",
+  "DAY 253",
+  "IRAN LIFTS MISSILE CAP"
+ ],
+ "region": "IRAN / STRAIT OF HORMUZ",
+ "places": {
+  "TEHRAN": {
+   "id": "TEHRAN",
+   "name": "Tehran, Iran",
+   "lat": 35.69,
+   "lon": 51.39
+  },
+  "HORMUZ": {
+   "id": "HORMUZ",
+   "name": "Strait of Hormuz",
+   "lat": 26.57,
+   "lon": 56.25
+  },
+  "QESHM": {
+   "id": "QESHM",
+   "name": "Qeshm Island",
+   "lat": 26.85,
+   "lon": 55.9
+  }
+ },
+ "lines": [
+  {
+   "text": "Iran's Revolutionary Guards say their two thousand kilometre missile range limit has been lifted.",
+   "src": [
+    0,
+    1,
+    2
+   ],
+   "context": false,
+   "note": "IRGC spokesman, via ToI and AP",
+   "scene": {
+    "type": "pin",
+    "place": "TEHRAN",
+    "head": "Range cap lifted",
+    "notes": [
+     "IRGC says, Saturday",
+     "2,000km limit gone"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "Spokesman Hossein Mohebbi told reporters in Tehran: that restriction has been lifted for us.",
+   "src": [
+    0,
+    2
+   ],
+   "context": false,
+   "note": "Mohebbi, via ToI and AP",
+   "scene": {
+    "type": "quote",
+    "quote": "that restriction has been lifted for us",
+    "who": "IRGC spokesman Hossein Mohebbi",
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "For years, the Guards said they kept their missiles to about two thousand kilometres.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Al Jazeera, 7 Nov",
+   "scene": {
+    "type": "number",
+    "value": "2,000",
+    "label": "km range limit",
+    "detail": "now lifted, IRGC says",
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "He did not say whether Iran has missiles that can fly further.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "The Times of Israel, 7 Nov",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "LONGER RANGE?",
+     "NOT SAID"
+    ],
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "In the strait, Iran's navy says a tanker hit a mine and caught fire.",
+   "src": [
+    1,
+    3
+   ],
+   "context": false,
+   "note": "Iran's navy, via Reuters, Al Jazeera",
+   "scene": {
+    "type": "pin",
+    "place": "HORMUZ",
+    "head": "Tanker on fire",
+    "notes": [
+     "Iran's navy says",
+     "hit a mine, Saturday"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "It says the ship had its transponder off. Washington says the mines have been cleared.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Al Jazeera, 7 Nov",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "IRAN: MINE HIT",
+     "US: MINES CLEARED"
+    ],
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "UKMTO says at least eleven ships were attacked in the week to sixth November. Three sank.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "UKMTO weekly report, via Al Jazeera",
+   "scene": {
+    "type": "number",
+    "value": "11",
+    "label": "ships attacked in a week",
+    "detail": "3 sank: UKMTO",
+    "flag": "IR",
+    "grid": {
+     "of": 11,
+     "lit": 11,
+     "cols": 11,
+     "red": true,
+     "caption": "week to 6 Nov"
+    }
+   }
+  },
+  {
+   "text": "It says traffic through Hormuz is about sixty five percent below pre-war levels.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "UKMTO, via Al Jazeera",
+   "scene": {
+    "type": "number",
+    "value": "-65%",
+    "label": "Hormuz transits",
+    "detail": "vs pre-war: UKMTO",
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "Donald Trump says US forces carried out minor strikes on Qeshm Island.",
+   "src": [
+    4,
+    1
+   ],
+   "context": false,
+   "note": "Trump, via CNBC, Al Jazeera",
+   "scene": {
+    "type": "pin",
+    "place": "QESHM",
+    "head": "Qeshm Island",
+    "notes": [
+     "Trump: minor strikes",
+     "air defence hit"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "Foreign Minister Abbas Araghchi says he spoke with twelve foreign ministers in forty eight hours.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Araghchi, via Al Jazeera",
+   "scene": {
+    "type": "number",
+    "value": "12",
+    "label": "ministers in 48 hours",
+    "detail": "Araghchi says",
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "He says he set out Iran's seven conditions to reopen the strait.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Araghchi, via Al Jazeera",
+   "scene": {
+    "type": "number",
+    "value": "7",
+    "label": "conditions to reopen",
+    "detail": "Iran's demands",
+    "flag": "IR",
+    "grid": {
+     "of": 7,
+     "lit": 7,
+     "cols": 7,
+     "red": false,
+     "caption": "Iran's demands"
+    }
+   }
+  },
+  {
+   "text": "Day two hundred and fifty four tomorrow. Will Hormuz reopen by New Year, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "HORMUZ:",
+     "OPEN BY NEW YEAR?",
+     "YES OR NO"
+    ],
+    "flag": "IR"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "The Times of Israel",
+   "title": "IRGC claims a self-imposed limit on ballistic missile range 'has been lifted' (7 Nov)",
+   "url": "https://www.timesofisrael.com/irgc-says-its-self-imposed-limit-on-ballistic-missile-range-has-been-lifted/"
+  },
+  {
+   "n": 1,
+   "outlet": "Al Jazeera",
+   "title": "Qeshm island and Hormuz hit, as mediators try to prevent US-Iran escalation (7 Nov)",
+   "url": "https://www.aljazeera.com/news/2026/11/7/qeshm-island-and-hormuz-hit-as-mediators-try-to-prevent-us-iran-escalation"
+  },
+  {
+   "n": 2,
+   "outlet": "AP via CP24",
+   "title": "Iran says it has lifted its self-imposed limit on missile ranges (7 Nov)",
+   "url": "https://www.cp24.com/news/world/2026/11/07/iran-says-it-has-lifted-its-self-imposed-limit-on-missile-ranges-and-other-mideast-news/"
+  },
+  {
+   "n": 3,
+   "outlet": "Reuters via Al Arabiya",
+   "title": "Iran navy says tanker hits mine, catches fire in Hormuz (7 Nov)",
+   "url": "https://english.alarabiya.net/News/middle-east/2026/11/07/iran-navy-says-tanker-hits-mine-catches-fire-in-hormuz"
+  },
+  {
+   "n": 4,
+   "outlet": "CNBC",
+   "title": "Trump says U.S. carried out 'minor strikes' on Iran (7 Nov)",
+   "url": "https://www.cnbc.com/2026/11/07/trump-us-minor-strikes-iran-qeshm-island.html"
+  }
+ ],
+ "caption": "Iran, IRGC, Strait of Hormuz: Iran's Revolutionary Guards say their 2,000 km limit on missile range has been lifted. Iran's navy says a tanker hit a mine and caught fire in the strait. Will Hormuz reopen by New Year, yes or no?",
+ "hashtags": [
+  "iran",
+  "hormuz",
+  "irgc",
+  "missiles",
+  "outpost"
+ ],
+ "notes_full": [
+  "IRGC range claim: Mohebbi press conference Saturday 7 Nov, first reports about 16:00 UTC (AP 16:15, UkrMedia 16:24, Asharq Al-Awsat 17:05, ToI 18:07); about 5h old at 21:00",
+  "Tanker mine fire: Iran's navy via Iranian media, first reports 7 Nov about 10:00 UTC (Iran International 10:02, L'Orient 10:31, ToI 10:42, Reuters via Al Arabiya); about 11h old",
+  "UKMTO weekly (11 ships attacked week to 6 Nov, 3 sank, transits about 65% below pre-conflict) and Araghchi 12 ministers in 48h: Al Jazeera 7 Nov",
+  "Trump minor strikes on Qeshm: said late Friday US time, reported 7 Nov from about 07:00 UTC (Al Jazeera, CNBC, MEE)",
+  "Left out: NBC report on a window to resume war before January (future-attack framing, unconfirmed), Mohebbi 'demonstrate in practice' and 'surprising achievements' quotes (threat framing), Diego Garcia, Europe reach, nuclear doctrine remark, Task Force Iron Gate (length)",
+  "Removal-risk: events and attributed statements; no death toll; no future-attack framing; neutral yes/no",
+  "Globe: 3 places"
+ ]
+}
