@@ -1,0 +1,326 @@
+{
+ "series": "HORMUZ · DAY 254",
+ "question": "Will Iraq's oil deal hold, yes or no?",
+ "country": "IQ",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   206,
+   17,
+   38
+  ],
+  [
+   255,
+   255,
+   255
+  ],
+  [
+   0,
+   122,
+   61
+  ]
+ ],
+ "hook_lines": [
+  "IRAQ SAYS WAR COST IT $60B",
+  "US deal on Hormuz oil route"
+ ],
+ "cover": [
+  "HORMUZ",
+  "DAY 254",
+  "IRAQ: $60B LOST"
+ ],
+ "region": "IRAQ / STRAIT OF HORMUZ",
+ "places": {
+  "BASRA": {
+   "id": "BASRA",
+   "name": "Basra, Iraq",
+   "lat": 30.51,
+   "lon": 47.78
+  },
+  "HORMUZ": {
+   "id": "HORMUZ",
+   "name": "Strait of Hormuz",
+   "lat": 26.57,
+   "lon": 56.25
+  },
+  "OMANLANE": {
+   "id": "OMANLANE",
+   "name": "Lane near Oman",
+   "lat": 26.3,
+   "lon": 56.6
+  },
+  "BORDER": {
+   "id": "BORDER",
+   "name": "Iraq-Iran border",
+   "lat": 33.0,
+   "lon": 46.0
+  }
+ },
+ "lines": [
+  {
+   "text": "Iraq says the Iran war has cost it sixty billion dollars.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Iraq's FM, via Reuters, JPost",
+   "scene": {
+    "type": "pin",
+    "place": "BASRA",
+    "head": "$60bn lost",
+    "notes": [
+     "Iraq's FM says, Sunday",
+     "war and oil disruption"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "Foreign Minister Fuad Hussein says Iraq has reached an understanding with Washington to export oil through Hormuz.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Hussein to Al Jazeera, via Reuters",
+   "scene": {
+    "type": "pin",
+    "place": "HORMUZ",
+    "head": "Oil route deal",
+    "notes": [
+     "Iraq and US agree",
+     "exports via Hormuz"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "He says Iraqi oil will move through a shipping lane near Oman.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Hussein, via JPost, Al-Monitor",
+   "scene": {
+    "type": "route",
+    "from": "BASRA",
+    "to": "OMANLANE",
+    "label": "Lane near Oman",
+    "note": "Hussein says"
+   }
+  },
+  {
+   "text": "Iraqi officials say exports recovered in October, to about three point five million barrels a day.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Iraqi energy officials, via JPost",
+   "scene": {
+    "type": "number",
+    "value": "3.5m",
+    "label": "barrels a day, October",
+    "detail": "Iraqi officials",
+    "flag": "IQ"
+   }
+  },
+  {
+   "text": "That is up from two point six five million in September.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Iraqi energy officials, via JPost",
+   "scene": {
+    "type": "number",
+    "value": "2.65m",
+    "label": "barrels a day, September",
+    "detail": "Iraqi officials",
+    "flag": "IQ"
+   }
+  },
+  {
+   "text": "Hussein says the US Treasury asked Iraq to close all but two of its border crossings with Iran.",
+   "src": [
+    0,
+    2
+   ],
+   "context": false,
+   "note": "Hussein, via Reuters, Arab News",
+   "scene": {
+    "type": "pin",
+    "place": "BORDER",
+    "head": "Border crossings",
+    "notes": [
+     "US asks: close most",
+     "2 to stay open"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "One of the two would stay open in the Kurdistan Region.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "The Jerusalem Post, 8 Nov",
+   "scene": {
+    "type": "number",
+    "value": "2",
+    "label": "crossings to stay open",
+    "detail": "1 in Kurdistan Region",
+    "flag": "IQ",
+    "grid": {
+     "of": 2,
+     "lit": 2,
+     "cols": 2,
+     "red": false,
+     "caption": "US request"
+    }
+   }
+  },
+  {
+   "text": "Iraq has already closed some crossings, including Al-Sheeb in the south.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "The Jerusalem Post, 8 Nov",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "AL-SHEEB",
+     "ALREADY CLOSED"
+    ],
+    "flag": "IQ"
+   }
+  },
+  {
+   "text": "Tehran criticised that, saying Baghdad gave no advance notice.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "The Jerusalem Post, 8 Nov",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "IRAN:",
+     "NO NOTICE GIVEN"
+    ],
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "In the strait, Iran's navy says another oil tanker hit a mine and caught fire on Sunday.",
+   "src": [
+    0,
+    3
+   ],
+   "context": false,
+   "note": "Iran's navy, via MEE, JPost",
+   "scene": {
+    "type": "pin",
+    "place": "HORMUZ",
+    "head": "Tanker on fire",
+    "notes": [
+     "Iran's navy says",
+     "east of strait, Sunday"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "Donald Trump told CNN renewed attacks on Iran are highly unlikely if talks show progress.",
+   "src": [
+    4,
+    5
+   ],
+   "context": false,
+   "note": "Trump to CNN, via Reuters",
+   "scene": {
+    "type": "quote",
+    "quote": "highly unlikely",
+    "who": "Donald Trump, to CNN",
+    "flag": "US"
+   }
+  },
+  {
+   "text": "Day two hundred and fifty five tomorrow. Will Iraq's oil deal hold, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "IRAQ OIL DEAL:",
+     "WILL IT HOLD?",
+     "YES OR NO"
+    ],
+    "flag": "IQ"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "The Jerusalem Post (Reuters)",
+   "title": "Iraq says it lost $60b from Iran war, reaches understandings with US on Hormuz oil route (8 Nov)",
+   "url": "https://www.jpost.com/middle-east/article-914263"
+  },
+  {
+   "n": 1,
+   "outlet": "Al-Monitor",
+   "title": "Iraq has reached understandings with US to allow oil exports through Hormuz, minister says (8 Nov)",
+   "url": "https://news.google.com/search?q=Iraq%20understandings%20US%20oil%20exports%20Hormuz%20Al-Monitor"
+  },
+  {
+   "n": 2,
+   "outlet": "Reuters via Arab News",
+   "title": "US asks Iraq to shut most Iran border crossings, Iraqi foreign minister says (8 Nov)",
+   "url": "https://news.google.com/search?q=US%20asks%20Iraq%20to%20shut%20most%20Iran%20border%20crossings"
+  },
+  {
+   "n": 3,
+   "outlet": "Middle East Eye",
+   "title": "Iran says oil tanker on fire after striking a mine near Hormuz (8 Nov)",
+   "url": "https://news.google.com/search?q=Iran%20says%20oil%20tanker%20on%20fire%20after%20striking%20a%20mine%20near%20Hormuz"
+  },
+  {
+   "n": 4,
+   "outlet": "CNN",
+   "title": "Trump says renewed attacks on Iran 'highly unlikely' if talks show progress (8 Nov)",
+   "url": "https://news.google.com/search?q=Trump%20renewed%20attacks%20Iran%20highly%20unlikely%20CNN"
+  },
+  {
+   "n": 5,
+   "outlet": "Reuters",
+   "title": "Trump says he is unlikely to order Iran attack if talks progress, CNN reports (8 Nov)",
+   "url": "https://news.google.com/search?q=Trump%20unlikely%20to%20order%20Iran%20attack%20Reuters"
+  }
+ ],
+ "caption": "Iraq, Fuad Hussein, Strait of Hormuz: Iraq's foreign minister says the Iran war has cost Iraq $60 billion, and that Washington has agreed a Hormuz route for Iraqi oil near Oman. Will the deal hold, yes or no?",
+ "hashtags": [
+  "iraq",
+  "hormuz",
+  "oil",
+  "iran",
+  "outpost"
+ ],
+ "notes_full": [
+  "Iraq FM Fuad Hussein interview with Al Jazeera, first reported 8 Nov from about 19:00 UTC (Reuters 19:01 border crossings, Al-Monitor 19:25, JPost/Reuters 19:35); about 2h old at 21:00",
+  "Tanker mine fire Sunday east of Hormuz: Iran's navy, reported 8 Nov from about 16:40 UTC (Deccan Herald, JPost, MEE)",
+  "Trump CNN 'highly unlikely': first reported 8 Nov 17:28 UTC (CNN, Reuters, Haaretz, ToI)",
+  "Left out: Trump threats on infrastructure and carriers, Rosstat death-toll leak, three-tanker claim and US strike on bulker (Saturday evening, over 18h), Katz 'mission not complete'",
+  "Removal-risk: events and attributed statements; no death toll; no future-attack framing; neutral yes/no",
+  "Globe: 4 places (v2: Baghdad pin dropped for the 4-place limit, v1 run 42517831674 cancelled)"
+ ]
+}
