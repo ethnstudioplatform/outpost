@@ -1,0 +1,326 @@
+{
+ "series": "HORMUZ · DAY 256",
+ "question": "Will oil stay under $90, yes or no?",
+ "country": "QA",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   138,
+   21,
+   56
+  ],
+  [
+   255,
+   255,
+   255
+  ],
+  [
+   0,
+   115,
+   47
+  ]
+ ],
+ "hook_lines": [
+  "HORMUZ: OIL FALLS BELOW $90",
+  "LNG at wartime high"
+ ],
+ "cover": [
+  "HORMUZ",
+  "DAY 256",
+  "OIL UNDER $90"
+ ],
+ "region": "STRAIT OF HORMUZ / GULF",
+ "places": {
+  "HORMUZ": {
+   "id": "HORMUZ",
+   "name": "Strait of Hormuz",
+   "lat": 26.57,
+   "lon": 56.25
+  },
+  "RASLAFFAN": {
+   "id": "RASLAFFAN",
+   "name": "Ras Laffan, Qatar",
+   "lat": 25.92,
+   "lon": 51.53
+  },
+  "DAS": {
+   "id": "DAS",
+   "name": "Das Island, UAE",
+   "lat": 25.15,
+   "lon": 52.87
+  }
+ },
+ "lines": [
+  {
+   "text": "Brent crude has fallen below ninety dollars a barrel, its lowest since August.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "The Guardian, City AM, 10 Nov",
+   "scene": {
+    "type": "pin",
+    "place": "HORMUZ",
+    "head": "Brent under $90",
+    "notes": [
+     "Tuesday morning",
+     "lowest since August"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "The Guardian says it hit eighty nine dollars sixty six on Tuesday morning.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "The Guardian, 10 Nov",
+   "scene": {
+    "type": "number",
+    "value": "$89.66",
+    "label": "Brent, a barrel",
+    "detail": "lowest since 31 Aug",
+    "flag": "GB"
+   }
+  },
+  {
+   "text": "That came after Donald Trump said the war on Iran is effectively over.",
+   "src": [
+    0,
+    1
+   ],
+   "context": true,
+   "note": "Trump, via The Guardian, City AM",
+   "scene": {
+    "type": "quote",
+    "quote": "effectively over",
+    "who": "Donald Trump, White House",
+    "flag": "US"
+   }
+  },
+  {
+   "text": "City AM says Brent is now more than twenty five percent below its late October peak of one hundred and seventeen dollars.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "City AM, 10 Nov",
+   "scene": {
+    "type": "number",
+    "value": "$117",
+    "label": "late October peak",
+    "detail": "now 25% lower",
+    "flag": "GB"
+   }
+  },
+  {
+   "text": "In the strait itself, more gas is moving.",
+   "src": [
+    2,
+    3
+   ],
+   "context": false,
+   "note": "Reuters, Al-Monitor",
+   "scene": {
+    "type": "pin",
+    "place": "HORMUZ",
+    "head": "LNG wartime high",
+    "notes": [
+     "October tally",
+     "S&P Global data"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "Reuters says thirty one loaded LNG tankers left Hormuz in October, the most since the war began.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "S&P Global, via Reuters",
+   "scene": {
+    "type": "number",
+    "value": "31",
+    "label": "LNG tankers, October",
+    "detail": "most since war began",
+    "flag": "QA"
+   }
+  },
+  {
+   "text": "That is up from twenty three in September, S&P Global data shows.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "S&P Global, via Reuters",
+   "scene": {
+    "type": "number",
+    "value": "23",
+    "label": "LNG tankers, September",
+    "detail": "S&P Global data",
+    "flag": "QA"
+   }
+  },
+  {
+   "text": "Twenty three of October's cargoes were loaded at Ras Laffan in Qatar.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "S&P Global, via Reuters",
+   "scene": {
+    "type": "pin",
+    "place": "RASLAFFAN",
+    "head": "23 from Ras Laffan",
+    "notes": [
+     "Qatar, October",
+     "S&P Global data"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "Eight came from Das Island in the UAE.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "S&P Global, via Reuters",
+   "scene": {
+    "type": "route",
+    "from": "DAS",
+    "to": "HORMUZ",
+    "label": "8 tankers, October",
+    "note": "S&P Global data"
+   }
+  },
+  {
+   "text": "An S&P analyst says the UAE is back to pre-war levels, and Qatar is above thirty percent.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Eric Yep, S&P, via Reuters",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "UAE: PRE-WAR LEVELS",
+     "QATAR: OVER 30%"
+    ],
+    "flag": "AE"
+   }
+  },
+  {
+   "text": "But Iran's Revolutionary Guards claimed on Tuesday that three tankers hit mines and caught fire.",
+   "src": [
+    4,
+    5
+   ],
+   "context": false,
+   "note": "IRGC, via Anadolu, Arab News",
+   "scene": {
+    "type": "pin",
+    "place": "HORMUZ",
+    "head": "Tankers on fire",
+    "notes": [
+     "IRGC navy says",
+     "eastern strait, Tuesday"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "They say the ships used routes Iran has not authorised.",
+   "src": [
+    4
+   ],
+   "context": false,
+   "note": "IRGC, via Anadolu, 10 Nov",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "IRGC:",
+     "UNAUTHORISED ROUTES"
+    ],
+    "flag": "IR"
+   }
+  },
+  {
+   "text": "Day two hundred and fifty seven tomorrow. Will oil stay under ninety dollars, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "OIL UNDER $90:",
+     "WILL IT STAY?",
+     "YES OR NO"
+    ],
+    "flag": "US"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "The Guardian",
+   "title": "Oil prices fall to lowest since August as Trump says Iran war is 'effectively over' (10 Nov)",
+   "url": "https://www.aol.co.uk/articles/oil-prices-fall-lowest-since-095247000.html"
+  },
+  {
+   "n": 1,
+   "outlet": "City AM",
+   "title": "Oil prices fall below $90 for first time since August (10 Nov)",
+   "url": "https://www.cityam.com/oil-prices-dip-below-90-dollars/"
+  },
+  {
+   "n": 2,
+   "outlet": "Reuters via Business Recorder",
+   "title": "Hormuz LNG traffic hits highest in October since Iran war began (10 Nov)",
+   "url": "https://www.brecorder.com/news/40448237/hormuz-lng-traffic-hits-highest-in-october-since-iran-war-began"
+  },
+  {
+   "n": 3,
+   "outlet": "Al-Monitor",
+   "title": "Hormuz LNG shipments hit wartime high, but Qatar lags (10 Nov)",
+   "url": "https://news.google.com/search?q=Hormuz%20LNG%20shipments%20hit%20wartime%20high%20Qatar%20lags"
+  },
+  {
+   "n": 4,
+   "outlet": "Anadolu",
+   "title": "Iran says 3rd oil tanker explodes after hitting naval mine in Strait of Hormuz (10 Nov)",
+   "url": "https://www.anews.com.tr/middle-east/2026/11/10/iran-says-3rd-oil-tanker-explodes-after-hitting-naval-mine-in-strait-of-hormuz"
+  },
+  {
+   "n": 5,
+   "outlet": "Arab News",
+   "title": "Iran says three oil tankers on fire in Hormuz (10 Nov)",
+   "url": "https://news.google.com/search?q=Iran%20says%20three%20oil%20tankers%20on%20fire%20in%20Hormuz"
+  }
+ ],
+ "caption": "Strait of Hormuz, Brent crude, Qatar LNG: oil has fallen below $90 for the first time since August, and LNG tankers leaving Hormuz hit a wartime high in October. Iran's Revolutionary Guards say three tankers hit mines on Tuesday. Will oil stay under $90, yes or no?",
+ "hashtags": [
+  "hormuz",
+  "oil",
+  "lng",
+  "iran",
+  "outpost"
+ ],
+ "notes_full": [
+  "Brent below $90: Tuesday 10 Nov morning (Guardian 09:52 UTC, City AM 13:49, CNBC)",
+  "LNG October tally: Reuters 10 Nov 04:26 UTC (S&P Global, Kpler), Al-Monitor 16:39",
+  "IRGC tanker mine claims: 10 Nov (Anadolu 11:29 and 20:28 local, IranWire, TradeWinds, Arab News)",
+  "Left out: Trump 'locked and loaded', Rubio 'devastating costs', Houthi strikes on Saudi, missile city",
+  "Removal-risk: events and attributed claims; no death toll; no future-attack framing; neutral yes/no",
+  "Globe: 3 places"
+ ]
+}
