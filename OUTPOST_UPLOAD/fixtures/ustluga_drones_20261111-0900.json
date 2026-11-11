@@ -1,0 +1,345 @@
+{
+ "question": "Will the Abu Dhabi talks stop the drone war, yes or no?",
+ "country": "RU",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   87,
+   183
+  ],
+  [
+   255,
+   215,
+   0
+  ],
+  [
+   255,
+   255,
+   255
+  ]
+ ],
+ "hook_lines": [
+  "DRONES HIT RUSSIA'S UST-LUGA PORT",
+  "146 downed, governor says"
+ ],
+ "cover": [
+  "UST-LUGA",
+  "146",
+  "DRONES"
+ ],
+ "region": "BALTIC SEA / RUSSIA",
+ "places": {
+  "USTLUGA": {
+   "id": "USTLUGA",
+   "name": "Ust-Luga port",
+   "lat": 59.68,
+   "lon": 28.4
+  },
+  "STPETE": {
+   "id": "STPETE",
+   "name": "St Petersburg",
+   "lat": 59.94,
+   "lon": 30.31
+  },
+  "RIGA": {
+   "id": "RIGA",
+   "name": "Riga, Latvia",
+   "lat": 56.95,
+   "lon": 24.11
+  },
+  "HELSINKI": {
+   "id": "HELSINKI",
+   "name": "Helsinki, Finland",
+   "lat": 60.17,
+   "lon": 24.94
+  }
+ },
+ "lines": [
+  {
+   "text": "Drones have hit Russia's Ust-Luga port on the Baltic Sea, and a fire broke out, the regional governor says.",
+   "src": [
+    0,
+    1,
+    2
+   ],
+   "context": false,
+   "note": "Gov. Drozdenko, via TASS, Reuters",
+   "scene": {
+    "type": "pin",
+    "place": "USTLUGA",
+    "head": "Fire at Ust-Luga port",
+    "notes": [
+     "overnight, 11 Nov",
+     "Leningrad governor says"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "Governor Alexander Drozdenko says one hundred and forty six drones were downed over the Leningrad region.",
+   "src": [
+    0,
+    3
+   ],
+   "context": false,
+   "note": "Drozdenko, via TASS, Al Jazeera",
+   "scene": {
+    "type": "number",
+    "value": "146",
+    "label": "drones downed, he says",
+    "detail": "Leningrad region",
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "He wrote that the counter-action is ongoing.",
+   "src": [
+    0,
+    3
+   ],
+   "context": false,
+   "note": "Drozdenko, via TASS",
+   "scene": {
+    "type": "quote",
+    "quote": "The counter-action is ongoing",
+    "who": "Alexander Drozdenko, governor",
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "He says three workers were injured, and a transformer substation lost power.",
+   "src": [
+    1,
+    2,
+    5
+   ],
+   "context": false,
+   "note": "Drozdenko, via Reuters, TASS",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "3 WORKERS INJURED",
+     "SUBSTATION BLACKOUT"
+    ],
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "Reuters says Ust-Luga is a major export outlet for oil, oil products and grain.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Reuters, via APA",
+   "scene": {
+    "type": "pin",
+    "place": "USTLUGA",
+    "head": "Oil export hub",
+    "notes": [
+     "oil, fuel, grain",
+     "Reuters says"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "It sits near the Estonian border, about a hundred and ten kilometres west of Saint Petersburg.",
+   "src": [
+    4
+   ],
+   "context": false,
+   "note": "Kyiv Independent; distance by map",
+   "scene": {
+    "type": "route",
+    "from": "USTLUGA",
+    "to": "STPETE",
+    "label": "about 110 km",
+    "note": "near Estonian border"
+   }
+  },
+  {
+   "text": "Ukrainian monitoring channels say Ukrainian drones struck the port. Kyiv has not commented.",
+   "src": [
+    4,
+    2
+   ],
+   "context": false,
+   "note": "Kyiv Independent, LIGA",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "KYIV:",
+     "NO COMMENT YET"
+    ],
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "In September, drones hit the Novatek complex at the same port, the Kyiv Independent reports.",
+   "src": [
+    4
+   ],
+   "context": true,
+   "note": "Kyiv Independent, 11 Nov",
+   "scene": {
+    "type": "number",
+    "value": "1 Sept",
+    "label": "last strike on Ust-Luga",
+    "detail": "Novatek complex",
+    "flag": "UA"
+   }
+  },
+  {
+   "text": "Next door, Latvia and Lithuania told residents to take shelter from drones entering their airspace.",
+   "src": [
+    3,
+    1
+   ],
+   "context": false,
+   "note": "Al Jazeera, Reuters",
+   "scene": {
+    "type": "pin",
+    "place": "RIGA",
+    "head": "Baltic drone alerts",
+    "notes": [
+     "Latvia, Lithuania",
+     "shelter warnings"
+    ],
+    "span": 8
+   }
+  },
+  {
+   "text": "The Baltic states say NATO air defences and fighter jets were activated.",
+   "src": [
+    3
+   ],
+   "context": false,
+   "note": "Baltic states, via Al Jazeera",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "NATO JETS",
+     "ACTIVATED"
+    ],
+    "flag": "LV"
+   }
+  },
+  {
+   "text": "Reuters says Finland brought in temporary curbs on parts of its airspace and waters.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Reuters, via APA",
+   "scene": {
+    "type": "pin",
+    "place": "HELSINKI",
+    "head": "Finland curbs airspace",
+    "notes": [
+     "temporary, partial",
+     "Reuters says"
+    ],
+    "span": 7
+   }
+  },
+  {
+   "text": "It comes as Russian and Ukrainian negotiators meet for US-backed talks in Abu Dhabi.",
+   "src": [
+    6,
+    7
+   ],
+   "context": true,
+   "note": "BBC, Le Monde",
+   "scene": {
+    "type": "wide"
+   }
+  },
+  {
+   "text": "Will the Abu Dhabi talks stop the drone war, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "ABU DHABI TALKS:",
+     "DRONE WAR OVER?",
+     "YES OR NO"
+    ],
+    "flag": "AE"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "TASS",
+   "title": "Fire breaks out after drone attack in Ust-Luga port zone, governor (11 Nov)",
+   "url": "https://tass.com/emergencies/2215825"
+  },
+  {
+   "n": 1,
+   "outlet": "Reuters via APA",
+   "title": "Drone attack causes fire in Russia's Baltic Sea port of Ust-Luga, governor says (11 Nov)",
+   "url": "https://en.apa.az/cis-countries/drone-attack-causes-fire-in-russias-baltic-sea-port-of-ust-luga-governor-says-535373"
+  },
+  {
+   "n": 2,
+   "outlet": "LIGA.net",
+   "title": "Russia reports attack on its largest Baltic port (11 Nov)",
+   "url": "https://news.liga.net/en/politics/news/russia-reports-attack-on-its-largest-baltic-port-fire-detected-from-space-image"
+  },
+  {
+   "n": 3,
+   "outlet": "Al Jazeera",
+   "title": "Russia claims interception of 146 drones in Leningrad region (11 Nov)",
+   "url": "https://www.aljazeera.com/news/2026/11/11/russia-claims-interception-of-146-drones-in-leningrad-region"
+  },
+  {
+   "n": 4,
+   "outlet": "Kyiv Independent",
+   "title": "Ukraine reportedly strikes Ust-Luga Baltic Sea port (11 Nov)",
+   "url": "https://kyivindependent.com/ukraine-reportedly-strikes-ust-luga-baltic-sea-port-as-drones-attack-regions-across-russia/"
+  },
+  {
+   "n": 5,
+   "outlet": "TASS",
+   "title": "Number of drones downed near St Petersburg reaches 146 (11 Nov)",
+   "url": "https://tass.com/emergencies/2215815"
+  },
+  {
+   "n": 6,
+   "outlet": "BBC",
+   "title": "First day of Ukraine peace talks constructive, Zelensky says (10 Nov)",
+   "url": "https://news.google.com/search?q=First%20day%20of%20Ukraine%20peace%20talks%20constructive%20Zelensky%20says"
+  },
+  {
+   "n": 7,
+   "outlet": "Le Monde",
+   "title": "Russia-Ukraine talks in Abu Dhabi make little progress (11 Nov)",
+   "url": "https://news.google.com/search?q=Russia-Ukraine%20talks%20in%20Abu%20Dhabi%20make%20little%20progress"
+  }
+ ],
+ "caption": "Ust-Luga, Leningrad region, Baltic Sea: drones have hit Russia's Ust-Luga port and started a fire, the regional governor says, and he says 146 drones were downed. Latvia and Lithuania issued drone shelter warnings and Finland curbed parts of its airspace. Will the Abu Dhabi talks stop the drone war, yes or no?",
+ "hashtags": [
+  "ustluga",
+  "leningrad",
+  "balticsea",
+  "ukraine",
+  "outpost"
+ ],
+ "notes_full": [
+  "First reported 10 Nov 22:58 UTC (Ukrainska Pravda), Kyiv Independent 00:59 UTC 11 Nov, TASS, Reuters/Bloomberg, Al Jazeera 04:34 UTC; about 10h old at slot",
+  "146 is Drozdenko's quoted figure (TASS, Al Jazeera); Reuters/LIGA report 150; script uses 146",
+  "Ukraine has not officially claimed the strike; monitoring channels (Exilenova Plus) via Kyiv Independent",
+  "Left out: Kirishi refinery death (Al Jazeera), LIGA unsourced 'largest Baltic port' claim",
+  "Removal-risk: events and attributed claims; no death toll; no future-attack framing; neutral yes/no",
+  "Globe: 4 places; distance Ust-Luga to St Petersburg about 110 km computed from coordinates"
+ ]
+}
