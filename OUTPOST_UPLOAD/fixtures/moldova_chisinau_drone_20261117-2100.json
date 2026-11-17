@@ -1,0 +1,311 @@
+{
+ "question": "Should Moldova expel Russia's ambassador, yes or no?",
+ "country": "MD",
+ "voice_speed": 0.95,
+ "gap": 0.4,
+ "hook": true,
+ "style": "globe",
+ "qa": true,
+ "palette": "colour",
+ "accents": [
+  [
+   0,
+   70,
+   174
+  ],
+  [
+   255,
+   210,
+   0
+  ],
+  [
+   204,
+   9,
+   47
+  ]
+ ],
+ "hook_lines": [
+  "DRONE FLIES OVER MOLDOVA'S CAPITAL",
+  "7 drones in, airspace shut"
+ ],
+ "cover": [
+  "CHISINAU",
+  "7",
+  "DRONES"
+ ],
+ "region": "MOLDOVA / UKRAINE BORDER",
+ "places": {
+  "CHISINAU": {
+   "id": "CHISINAU",
+   "name": "Chisinau, Moldova",
+   "lat": 47.01,
+   "lon": 28.86
+  },
+  "OCNITA": {
+   "id": "OCNITA",
+   "name": "Ocnita",
+   "lat": 48.38,
+   "lon": 27.44
+  },
+  "LEOVA": {
+   "id": "LEOVA",
+   "name": "Leova",
+   "lat": 46.48,
+   "lon": 28.25
+  }
+ },
+ "lines": [
+  {
+   "text": "A drone has flown over Moldova's capital, Chisinau, and Moldova closed its airspace.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Moldova MoD, via Reuters",
+   "scene": {
+    "type": "pin",
+    "place": "CHISINAU",
+    "head": "Drone over Chisinau",
+    "notes": [
+     "17 Nov, evening",
+     "airspace closed"
+    ],
+    "span": 6
+   }
+  },
+  {
+   "text": "President Maia Sandu says it was a Russian drone, one of several to violate Moldovan airspace this evening.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Sandu on X, via Reuters",
+   "scene": {
+    "type": "quote",
+    "quote": "Several Russian drones violated our airspace",
+    "who": "Maia Sandu, president",
+    "flag": "MD"
+   }
+  },
+  {
+   "text": "The Defence Ministry says seven drones crossed into Moldova during Russia's latest attack on Ukraine.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Moldova MoD, via Kyiv Independent",
+   "scene": {
+    "type": "number",
+    "value": "7",
+    "label": "drones in Moldovan airspace",
+    "detail": "Defence Ministry says",
+    "flag": "MD",
+    "grid": {
+     "of": 7,
+     "lit": 7,
+     "cols": 7,
+     "red": true,
+     "caption": "drones detected, 17 Nov"
+    }
+   }
+  },
+  {
+   "text": "It says five crashed near villages, one just eleven kilometres from Chisinau. No casualties were reported.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "MoD, via Kyiv Independent",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "5 DRONES CRASHED",
+     "NO CASUALTIES REPORTED"
+    ],
+    "flag": "MD"
+   }
+  },
+  {
+   "text": "A possible sixth impact was reported in the Ocnita district, in the north.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Kyiv Independent",
+   "scene": {
+    "type": "pin",
+    "place": "OCNITA",
+    "head": "Possible 6th impact",
+    "notes": [
+     "Ocnita district",
+     "near Ukraine border"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "The seventh vanished from monitoring near the town of Leova.",
+   "src": [
+    1
+   ],
+   "context": false,
+   "note": "Kyiv Independent",
+   "scene": {
+    "type": "pin",
+    "place": "LEOVA",
+    "head": "7th drone lost",
+    "notes": [
+     "off monitoring",
+     "near Leova"
+    ],
+    "span": 5
+   }
+  },
+  {
+   "text": "Moldova shut all its airspace at four twenty seven, Ukrainska Pravda says.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Ukrainska Pravda",
+   "scene": {
+    "type": "number",
+    "value": "16:27",
+    "label": "all airspace closed",
+    "detail": "17 Nov, local time",
+    "flag": "MD"
+   }
+  },
+  {
+   "text": "Border police then shut six crossings with Ukraine, including Ocnita and Otaci.",
+   "src": [
+    2
+   ],
+   "context": false,
+   "note": "Newsmaker, via Ukrainska Pravda",
+   "scene": {
+    "type": "number",
+    "value": "6",
+    "label": "border crossings shut",
+    "detail": "with Ukraine, temporary",
+    "flag": "MD",
+    "grid": {
+     "of": 6,
+     "lit": 6,
+     "cols": 6,
+     "red": true,
+     "caption": "crossings closed"
+    }
+   }
+  },
+  {
+   "text": "Sandu says Moldova does not have the defence capabilities to protect itself from drones.",
+   "src": [
+    0,
+    1
+   ],
+   "context": false,
+   "note": "Sandu, via Reuters, Kyiv Indep.",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "NO DRONE DEFENCES",
+     "SANDU SAYS"
+    ],
+    "flag": "MD"
+   }
+  },
+  {
+   "text": "She says Moldova will keep pushing for sanctions on Moscow.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Sandu on X, via Reuters",
+   "scene": {
+    "type": "quote",
+    "quote": "We'll keep pushing for sanctions on Moscow",
+    "who": "Maia Sandu, president",
+    "flag": "MD"
+   }
+  },
+  {
+   "text": "Russia rejects the accusations, saying Moldova has no proof the drones are Russian.",
+   "src": [
+    0
+   ],
+   "context": false,
+   "note": "Reuters",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "MOSCOW:",
+     "NO PROOF DRONES ARE OURS"
+    ],
+    "flag": "RU"
+   }
+  },
+  {
+   "text": "Reuters says drones have rarely come this close to the capital.",
+   "src": [
+    0
+   ],
+   "context": true,
+   "note": "Reuters",
+   "scene": {
+    "type": "wide"
+   }
+  },
+  {
+   "text": "Should Moldova expel Russia's ambassador, yes or no?",
+   "src": [],
+   "context": false,
+   "note": "",
+   "scene": {
+    "type": "statement",
+    "lines": [
+     "EXPEL RUSSIA'S",
+     "AMBASSADOR?",
+     "YES OR NO"
+    ],
+    "flag": "MD"
+   }
+  }
+ ],
+ "sources": [
+  {
+   "n": 0,
+   "outlet": "Reuters via US News",
+   "title": "Moldovan President Says Russian Drone Flew Over Capital (17 Nov)",
+   "url": "https://www.usnews.com/news/world/articles/2026-11-17/moldovan-president-says-russian-drone-flew-over-capital"
+  },
+  {
+   "n": 1,
+   "outlet": "Kyiv Independent",
+   "title": "7 drones cross into Moldovan airspace, 1 spotted over Chisinau (17 Nov)",
+   "url": "https://kyivindependent.com/7-drones-cross-into-moldovan-airspace-during-latest-russian-attack-against-ukraine-1-spotted-over-chisinau/"
+  },
+  {
+   "n": 2,
+   "outlet": "Ukrainska Pravda",
+   "title": "Moldova shuts six border crossings after Russian drones enter airspace (17 Nov)",
+   "url": "https://www.pravda.com.ua/eng/news/2026/11/17/8063332/"
+  }
+ ],
+ "caption": "Chisinau, Moldova: a drone flew over Moldova's capital and the country shut its airspace. President Maia Sandu says it was Russian, and the Defence Ministry says 7 drones crossed in. Should Moldova expel Russia's ambassador, yes or no?",
+ "hashtags": [
+  "moldova",
+  "chisinau",
+  "maiasandu",
+  "shahed",
+  "outpost"
+ ],
+ "notes_full": [
+  "First reported 17 Nov about 14:44 UTC (ipn.md), Moldova 1 15:42, Reuters, Kyiv Independent 18:37 UTC, Ukrainska Pravda 18:00 UTC; about 6h old at slot",
+  "Reuters: MoD recorded two violations; Kyiv Independent: MoD says seven drones, five crashed; script attributes 7 to the ministry",
+  "Sandu quotes verbatim from Reuters ('several Russian drones violated our airspace', 'We'll keep pushing for sanctions on Moscow')",
+  "Removal-risk: events and attributed claims; no death toll; no future-attack framing; neutral yes/no on a diplomatic step Reuters raises",
+  "Runner-up: Crimean Bridge collapse (first reported 00:40 UTC, over 18h at slot); Hormuz Day 263 US strikes on Qeshm and Iran on Bahrain (fast-moving, unverified numbers)"
+ ]
+}
